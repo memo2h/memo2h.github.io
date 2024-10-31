@@ -212,7 +212,7 @@
                 <input type="text" name="entry.1966342366" placeholder="Describe el experimento">
             </div>
 
-            <button type="button" onclick="document.getElementById('instrucciones').style.display='block'">Seguir</button>
+            <button type="button" onclick="showInstructions()">Seguir</button>
 
         </form>
 
@@ -220,6 +220,13 @@
     </div>
 
     <script>
+        
+            function showInstructions() {
+        document.getElementById('instrucciones').style.display = 'block';
+    }
+
+
+        
         document.getElementById('medicacion_cronica').addEventListener('change', function() {
             var detalleMedicacion = document.getElementById('detalle_medicacion_block');
             detalleMedicacion.style.display = this.value === 'SI' ? 'block' : 'none';
