@@ -1,266 +1,239 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
-  <body style="background-color: rgb(180, 171, 171)">
-
-    <div id="countdown" style="display: none; font-size: 20px; white-space: pre-wrap;"> 
-    </div>
-    <center>
-      <div>
-        <div id="denuevo" style="display: none;">
-          Solo se puede participar una vez en esta tarea, y el video no puede verse de nuevo.
-           Si desea participar de otro de nuestros experimentos o tiene consultas,
-          puede dirigirse a la pagina del Laboratorio de sueño y memoria, haciendo click en el siguiente
-          enlace:
-          <br>
-          <br>
-          <a href="https://zaap.bio/labsuenoymemoria"> Pagina del laboratorio</a>
-
-        </div>
-        <div id="instrucciones">
-         <br>
-         <br>
-         <br>
-         <br>
-          Por favor, antes de ver el video compruebe que su audio funciona correctamente presionando el siguiente boton. 
-          <br> Deberia escuchar el sonido de una campana durante 10 segundos.
-          <br>
-          <br>
-          <br>
-          <br> 
-          <button onclick="playAud()" type="button" id="botonaudio" style="display: block;">Probar sonido</button>
-          <br>
-          <br>
-          <br>
-          <br>
-
-          Si el audio funcionó correctamente, presione el boton de abajo para pasar al video
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <button onclick="presentarvideo()" type="button" id="botonseguir" style="display: block;">Pasar al video</button>
-
-
-        </div>
-
-        <audio id="audio">
-          <source  src="prueba.mp3" type="audio/mpeg"  >
-          Tu navegador no soporta la reproducción de audio.
-        </audio>
-        <script>
-          var aud = document.getElementById("audio");
-          function playAud() { 
-            aud.play() }
-
-
-        </script>
-  </div>
-  </center>
-    <center>
-      <div id="dada" style="display: none;">
-      <br>
-      <br>
-      <br>
-      <br>
-      <div>
-      Para continuar con el experimento, hace click en este enlace:
-      </div>
-      <br>
-      <br>
-      <br>
-      <div id="a">
-        <a href="https://forms.gle/Yb56bUQk36UyQ2vt6">Haga click aqui para acceder al cuestionario</a>
-
-      </div>
-    
-    </div>
-      
-      <video id="myVideo" width="70%" height="70%" style="display: none;">
-        <source src="video.mp4" type="video/mp4" />
-
-        Your browser does not support HTML5 video.
-      </video>
-    </center>
-    <script>
-       if (localStorage.getItem("visita")) {
-        if (localStorage.getItem("visita")=="realizada") {
-
-          document.getElementById("denuevo").style.display = "block";
-
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Participación</title>
+    <style>
+        /* General styling for the form */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            flex-direction: column;
+            align-items: center;
         }
-        document.getElementById("instrucciones").style.display = "none";
-        
-        
-      }
+        .form-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #673ab7;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        .sub {
+            font-size: 12px;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        .question-block {
+            background-color: #f9f9f9;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        input[type="text"], input[type="email"], input[type="time"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="time"]:focus, select:focus {
+            border-color: #673ab7;
+            outline: none;
+        }
+        button {
+            background-color: #673ab7;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #311b92;
+        }
 
-      var vid = document.getElementById("myVideo");
-      function presentarvideo () {
-        var aud = document.getElementById("audio");
-    
-            aud.pause(); 
+        a {
+            color: #673ab7;
+            text-decoration: none;
+        }
 
-      if (localStorage.getItem("visita")=="realizada") {
-        alert("Este video solo puede verse una vez");
-        
-      } else {
-        document.getElementById("instrucciones").style.display = "none";
-        document.getElementById("myVideo").style.display = "block";
-        document.getElementById("boton").style.display = "block";
-        document.addEventListener("contextmenu", (event) =>
-          event.preventDefault()
-        );
-       
-        
-      } }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="title">Formulario de Participación</div>
+        <div class="sub">
+            <h2 style="font-size: 24px; margin-bottom: 10px;">¡Hola!</h2>
+            <p style="margin-bottom: 12px;">Este cuestionario forma parte de una investigación sobre memoria del Laboratorio de Sueño y Memoria (ITBA). Se debe realizar exclusivamente en computadora.</p>
+            <ul style="margin: 12px 0; padding-left: 20px;">
+                <li><strong>Requisitos:</strong> Tener entre 18 y 45 años, no consumir psicofármacos, y no tener desordenes de sueño diagnosticados.</li>
+                <li><strong>Duración:</strong> El experimento se divide en dos partes. Esta primera parte lleva aproximadamente 15 minutos. La segunda parte se realiza dentro de tres días y también lleva aprox 15 minutos. Para la 2° parte te enviaremos un mail con el link a otro formulario el mismo día.</li>
+                <li><strong>Más información:</strong> Para información más detallada sobre el experimento, puedes entrar <a href="https://docs.google.com/document/d/1g5QwHSANbOnDlkUWZ_CWHMzIVfoIfdyzMeYulCRHoPk/edit?usp=sharing" target="_blank">aquí</a>.</li>
+            </ul>
+            <p style="margin-bottom: 12px;">Este protocolo fue aprobado por el Comité de ética Alberto Taquini (UBA).</p>
+            <p style="margin-bottom: 12px;">Para consultas, comunicarse al mail: <a href="mailto:furreta@itba.edu.ar">furreta@itba.edu.ar</a></p>
+            <p style="margin-bottom: 12px;">Investigadora responsable: Dra. Cecilia Forcato. Mail: <a href="mailto:cforcato@itba.edu.ar">cforcato@itba.edu.ar</a></p>
+        </div>
 
+        <form action="https://docs.google.com/forms/d/e/1FAIpQLSea8DuymVGIJkCHowl6AdBsixKDpiBty7pS98X_33xQtsiY4w/formResponse" method="POST" target="hidden_iframe" onsubmit="return submitForm();">
+            <div class="question-block">
+                <label class="question" for="email">Dirección de correo electrónico</label>
+                <input type="email" id="email" name="entry.1190073540" placeholder="Ingresa tu correo electrónico" required>
+            </div>
 
-        
+            <div class="question-block">
+                <label class="question">¿Desde qué dispositivo estás realizando esta tarea?</label>
+                <select name="entry.2120654582" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Computadora">Computadora</option>
+                    <option value="Telefono">Teléfono</option>
+                    <option value="Tablet">Tablet</option>
+                </select>
+            </div>
 
+            <div class="question-block">
+                <label class="question">¿Das tu consentimiento para participar?</label>
+                <select name="entry.402678851" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
 
+            <div class="question-block">
+                <label class="question" for="nombre">Nombre y apellido</label>
+                <input type="text" id="nombre" name="entry.543210643" placeholder="Ingresa tu nombre completo" required>
+            </div>
 
-        
-       
+            <div class="question-block">
+                <label class="question" for="edad">Edad</label>
+                <input type="number" id="edad" name="entry.165872651" placeholder="Ingresa tu edad" required>
+            </div>
 
-        function playVid() {
+            <div class="question-block">
+                <label class="question">Género</label>
+                <select name="entry.843997443" required>
+                    <option value="" disabled selected>Selecciona tu género</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
 
-            vid.play();
+            <div class="question-block">
+                <label class="question">¿Cuál es tu nivel educativo actual?</label>
+                <select name="entry.2121646283" required>
+                    <option value="" disabled selected>Selecciona tu nivel educativo</option>
+                    <option value="Posgrado completo">Posgrado completo</option>
+                    <option value="Secundario completo">Secundario completo</option>
+                    <option value="Secundario incompleto">Secundario incompleto</option>
+                    <option value="Universitario completo">Universitario completo</option>
+                    <option value="Posgrado incompleto">Posgrado incompleto</option>
+                    <option value="Universitario incompleto">Universitario incompleto</option>
+                    <option value="Terciario incompleto">Terciario incompleto</option>
+                    <option value="Terciario completo">Terciario completo</option>
+                </select>
+            </div>
 
-            localStorage.setItem("visita", "realizada");
-            document.getElementById("boton").style.display = "none";
+            <div class="question-block">
+                <label class="question">¿A qué hora te despertaste hoy?</label>
+                <input type="time" name="entry.810565752" required>
+            </div>
 
-            document.getElementById("myVideo").addEventListener("ended", myHandler, false);}
-          
-if (localStorage.getItem("visita")=="2") {
-  contador();
-        
-      }
+            <div class="question-block">
+                <label class="question">¿Consumes alguna medicación de forma crónica?</label>
+                <select name="entry.221114551" id="medicacion_cronica" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
 
-function myHandler(e) {
-  document.getElementById('myVideo').style.display = 'none';
-  
-  localStorage.setItem("visita", "2");
-  contador();
- 
-}
+            <div class="question-block" id="detalle_medicacion_block" style="display: none;">
+                <label class="question">En caso de que consumas medicación de forma crónica, ¿Cuál/es?</label>
+                <input type="text" name="entry.315741378" placeholder="Especifica la medicación">
+            </div>
 
+            <div class="question-block">
+                <label class="question">¿Sufres algún trastorno o desorden del sueño?</label>
+                <select name="entry.1140039148" id="trastorno_sueno" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
 
-function startCountdown(storedEndTime) {
-console.log(storedEndTime);
-  if (storedEndTime=="no") {
-  const twoHours = 24 * 60 * 60 * 1000; // dos horas en milisegundos
-  const endTime = Date.now() + twoHours; // tiempo de finalización en milisegundos
-  console.log(endTime);
-  const countdownElement = document.getElementById("countdown");
-  setInterval(intervalId(endTime),1000);
-}
-else{
-  const endTime =storedEndTime;
-  const countdownElement = document.getElementById("countdown");
-  setInterval(intervalId(endTime),1000);
-}
+            <div class="question-block" id="detalle_trastorno_block" style="display: none;">
+                <label class="question">Si respondiste "Sí" en la pregunta anterior, ¿Cuál es el trastorno o desorden?</label>
+                <input type="text" name="entry.830809876" placeholder="Describe el trastorno">
+            </div>
 
-  
+            <div class="question-block">
+                <label class="question">¿Participaste en otro experimento de memoria anteriormente?</label>
+                <select name="entry.1546566797" id="experimento_anterior" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
 
-  function intervalId (endTime)  {
-    setInterval(() => {
+            <div class="question-block" id="detalle_experimento_block" style="display: none;">
+                <label class="question">Si respondiste "Sí" a la pregunta anterior, contanos de qué se trataba el experimento</label>
+                <input type="text" name="entry.1966342366" placeholder="Describe el experimento">
+            </div>
 
-    
-    const countdownElement = document.getElementById("countdown");
-    console.log(endTime);
-    const remainingTime = endTime - Date.now(); // tiempo restante en milisegundos
+            <button type="submit">Enviar</button>
+        </form>
 
-    if (remainingTime <= 0) {
-      clearInterval(intervalId);
-      countdownElement.textContent = "¡Listo!";
-      //localStorage.removeItem("countdownEndTime");
-      document.getElementById('dada').style.display = 'block';
-      // mostrar el enlace al cuestionario aquí
-    } else {
-      const remainingHours = Math.floor(remainingTime / (60*60*1000));
-      const remainingMinutes = Math.floor((remainingTime / ( 60 *1000))-60*remainingHours);
-      const remainingSeconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
-      
-      countdownElement.style.display = "block";
-      countdownElement.style.textAlign= "center";
-      countdownElement.textContent = `
-      
-      
-      El enlace para la segunda parte aparecerá en esta pagina dentro de 24 horas.
-      Tambien te va a llegar el mismo enlace por mail, por si necesitas hacerlo desde otro lado o cerraste la pestaña. 
-      Por favor, intentá realizar la tarea inmediatamente despues de obtener el enlace. 
-      
-      
-      Tiempo restante:${remainingHours}: ${remainingMinutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-      localStorage.setItem("countdownEndTime", endTime);
-    }
-  
-  }, 1000);
-  
-  
-  }
-  
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
+    </div>
 
-}
-
-function contador() {
-  const storedEndTime = localStorage.getItem("countdownEndTime");
-  if (storedEndTime) {
-    const remainingTime = storedEndTime - Date.now();
-    if (remainingTime <= 0) {
-      document.getElementById('dada').style.display = 'block';
-      // mostrar el enlace al cuestionario aquí
-    } else {
-      console.log(storedEndTime);
-      startCountdown(storedEndTime);
-      
-    }
-  } else {
-    const storedEndTime="no";
-    console.log(storedEndTime);
-    startCountdown(storedEndTime);
-    
-  }
-};
-        
-      
-    </script>
-    <center>
-      <button onclick="playVid()" type="button" id="boton" style="display: none;">Reproducir</button>
-      
-    </center>
     <script>
-      if (localStorage.getItem("visita")) {
-        document.getElementById("boton").style.display = "none";
-      }
+        document.getElementById('medicacion_cronica').addEventListener('change', function() {
+            var detalleMedicacion = document.getElementById('detalle_medicacion_block');
+            detalleMedicacion.style.display = this.value === 'SI' ? 'block' : 'none';
+        });
+
+        document.getElementById('trastorno_sueno').addEventListener('change', function() {
+            var detalleTrastorno = document.getElementById('detalle_trastorno_block');
+            detalleTrastorno.style.display = this.value === 'SI' ? 'block' : 'none';
+        });
+
+        document.getElementById('experimento_anterior').addEventListener('change', function() {
+            var detalleExperimento = document.getElementById('detalle_experimento_block');
+            detalleExperimento.style.display = this.value === 'SI' ? 'block' : 'none';
+        });
     </script>
-
-  <style>
-a {
-  
-  border: 3px solid green;
-  float: center;
-}
-instrucciones {
-  
-  border: 3px solid green;
-  float: center;
-}
-
-#denuevo {
-  margin: auto;
-  width: 50%;
-  background-color: white;
-  border: 3px solid rgb(128, 0, 11);
-  padding: 100px;
-}
-  </style>
-  </body>
+</body>
 </html>
+
