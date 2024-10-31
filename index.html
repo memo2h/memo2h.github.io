@@ -91,8 +91,8 @@
 </head>
 <body>
    
-    <div class="form-container">
-         <div  id="titulos">
+    <div class="form-container" id="contenedorForm">
+         
         <div class="title">Formulario de Participación</div>
         <div class="sub">
             <h2 style="font-size: 24px; margin-bottom: 10px;">¡Hola!</h2>
@@ -106,7 +106,7 @@
             <p style="margin-bottom: 12px;">Para consultas, comunicarse al mail: <a href="mailto:furreta@itba.edu.ar">furreta@itba.edu.ar</a></p>
             <p style="margin-bottom: 12px;">Investigadora responsable: Dra. Cecilia Forcato. Mail: <a href="mailto:cforcato@itba.edu.ar">cforcato@itba.edu.ar</a></p>
         </div>
-    </div>
+    
 
         <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSea8DuymVGIJkCHowl6AdBsixKDpiBty7pS98X_33xQtsiY4w/formResponse" method="POST">
             <div class="question-block">
@@ -227,7 +227,7 @@
             function showInstructions() {
         document.getElementById('instrucciones').style.display = 'block';
         document.getElementById('mainForm').style.display = 'none';
-        document.getElementById('titulos').style.display = 'none';
+        document.getElementById('contenedorForm').style.display = 'none';
     }
 
 
