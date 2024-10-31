@@ -331,7 +331,162 @@
         Your browser does not support HTML5 video.
       </video>
     </center>
-</div>    
+</div>
+
+
+<script>
+       if (localStorage.getItem("visita")) {
+        if (localStorage.getItem("visita")=="realizada") {
+
+          document.getElementById("denuevo").style.display = "block";
+
+
+        }
+        document.getElementById("instrucciones").style.display = "none";
+        
+        
+      }
+
+      var vid = document.getElementById("myVideo");
+      function presentarvideo () {
+        var aud = document.getElementById("audio");
+    
+            aud.pause(); 
+
+      if (localStorage.getItem("visita")=="realizada") {
+        alert("Este video solo puede verse una vez");
+        
+      } else {
+        document.getElementById("instrucciones").style.display = "none";
+        document.getElementById("myVideo").style.display = "block";
+        document.getElementById("boton").style.display = "block";
+        document.addEventListener("contextmenu", (event) =>
+          event.preventDefault()
+        );
+       
+        
+      } }
+
+
+        
+
+
+
+        
+       
+
+        function playVid() {
+
+            vid.play();
+
+            localStorage.setItem("visita", "realizada");
+            document.getElementById("boton").style.display = "none";
+
+            document.getElementById("myVideo").addEventListener("ended", myHandler, false);}
+          
+if (localStorage.getItem("visita")=="2") {
+  contador();
+        
+      }
+
+function myHandler(e) {
+  document.getElementById('myVideo').style.display = 'none';
+  
+  localStorage.setItem("visita", "2");
+  contador();
+ 
+}
+
+
+function startCountdown(storedEndTime) {
+console.log(storedEndTime);
+  if (storedEndTime=="no") {
+  const twoHours = 24 * 60 * 60 * 1000; // dos horas en milisegundos
+  const endTime = Date.now() + twoHours; // tiempo de finalización en milisegundos
+  console.log(endTime);
+  const countdownElement = document.getElementById("countdown");
+  setInterval(intervalId(endTime),1000);
+}
+else{
+  const endTime =storedEndTime;
+  const countdownElement = document.getElementById("countdown");
+  setInterval(intervalId(endTime),1000);
+}
+
+  
+
+  function intervalId (endTime)  {
+    setInterval(() => {
+
+    
+    const countdownElement = document.getElementById("countdown");
+    console.log(endTime);
+    const remainingTime = endTime - Date.now(); // tiempo restante en milisegundos
+
+    if (remainingTime <= 0) {
+      clearInterval(intervalId);
+      countdownElement.textContent = "¡Listo!";
+      //localStorage.removeItem("countdownEndTime");
+      document.getElementById('dada').style.display = 'block';
+      // mostrar el enlace al cuestionario aquí
+    } else {
+      const remainingHours = Math.floor(remainingTime / (60*60*1000));
+      const remainingMinutes = Math.floor((remainingTime / ( 60 *1000))-60*remainingHours);
+      const remainingSeconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
+      
+      countdownElement.style.display = "block";
+      countdownElement.style.textAlign= "center";
+      countdownElement.textContent = `
+      
+      
+      El enlace para la segunda parte aparecerá en esta pagina dentro de 24 horas.
+      Tambien te va a llegar el mismo enlace por mail, por si necesitas hacerlo desde otro lado o cerraste la pestaña. 
+      Por favor, intentá realizar la tarea inmediatamente despues de obtener el enlace. 
+      
+      
+      Tiempo restante:${remainingHours}: ${remainingMinutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+      localStorage.setItem("countdownEndTime", endTime);
+    }
+  
+  }, 1000);
+  
+  
+  }
+  
+
+}
+
+function contador() {
+  const storedEndTime = localStorage.getItem("countdownEndTime");
+  if (storedEndTime) {
+    const remainingTime = storedEndTime - Date.now();
+    if (remainingTime <= 0) {
+      document.getElementById('dada').style.display = 'block';
+      // mostrar el enlace al cuestionario aquí
+    } else {
+      console.log(storedEndTime);
+      startCountdown(storedEndTime);
+      
+    }
+  } else {
+    const storedEndTime="no";
+    console.log(storedEndTime);
+    startCountdown(storedEndTime);
+    
+  }
+};
+        
+      
+    </script>
+    <center>
+      <button onclick="playVid()" type="button" id="boton" style="display: none;">Reproducir</button>
+      
+    </center>
+    <script>
+      if (localStorage.getItem("visita")) {
+        document.getElementById("boton").style.display = "none";
+      }
+    </script>
 </body>
 </html>
 
