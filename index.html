@@ -105,7 +105,7 @@
             <p style="margin-bottom: 12px;">Investigadora responsable: Dra. Cecilia Forcato. Mail: <a href="mailto:cforcato@itba.edu.ar">cforcato@itba.edu.ar</a></p>
         </div>
 
-        <form action="https://docs.google.com/forms/d/e/1FAIpQLSea8DuymVGIJkCHowl6AdBsixKDpiBty7pS98X_33xQtsiY4w/formResponse" method="POST">
+        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSea8DuymVGIJkCHowl6AdBsixKDpiBty7pS98X_33xQtsiY4w/formResponse" method="POST">
             <div class="question-block">
                 <label class="question" for="email">Dirección de correo electrónico</label>
                 <input type="email" id="email" name="entry.1190073540" placeholder="Ingresa tu correo electrónico" required>
@@ -223,6 +223,7 @@
         
             function showInstructions() {
         document.getElementById('instrucciones').style.display = 'block';
+        document.getElementById('mainForm').style.display = 'none';
     }
 
 
