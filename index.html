@@ -90,7 +90,7 @@
     </style>
 </head>
 <body>
-   
+  <iframe name="formTarget" style="display:none;"></iframe>
     <div class="form-container" id="contenedorForm">
          
         <div class="title">Formulario de Participación</div>
@@ -108,7 +108,8 @@
         </div>
     
 
-        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSea8DuymVGIJkCHowl6AdBsixKDpiBty7pS98X_33xQtsiY4w/formResponse" method="POST">
+        <form id="mainForm" action="" method="POST" target="formTarget">
+
             <div class="question-block">
                 <label class="question" for="email">Dirección de correo electrónico</label>
                 <input type="email" id="email" name="entry.1190073540" placeholder="Ingresa tu correo electrónico" required>
@@ -223,29 +224,81 @@
     </div>
 
     <script>
-        
-            function showInstructions() {
-        document.getElementById('instrucciones').style.display = 'block';
-        document.getElementById('mainForm').style.display = 'none';
-        document.getElementById('contenedorForm').style.display = 'none';
+let grupoAleatorio = Math.floor(Math.random() * 4) + 1;
+let horasEspera = (grupoAleatorio === 1) ? 0.0005 : (grupoAleatorio === 2) ? 0.5 : (grupoAleatorio === 3) ? 2 : 24;
+// Select the form element
+const form = document.getElementById("mainForm");
+
+// Assign the action URL based on the formOption value
+switch (grupoAleatorio) {
+  case 1:
+    form.action = "https://docs.google.com/forms/d/e/1FAIpQLSea8DuymVGIJkCHowl6AdBsixKDpiBty7pS98X_33xQtsiY4w/formResponse";
+    break;
+  case 2:
+    form.action = "https://docs.google.com/forms/d/e/1FAIpQLSfb75iQZ0YKzrMbX0-nRsMuh2MzeG8XMJ1ahBjbUaKifu947w/formResponse";
+    break;
+  case 3:
+    form.action = "https://docs.google.com/forms/d/e/1FAIpQLScEX8Sz6sNEKRXMZ1EVLhFBftakmSW-lhAjendzvSpF_E8awQ/formResponse";
+    break;
+  case 4:
+    form.action = "https://docs.google.com/forms/d/e/1FAIpQLScrDEljcZ7ukYn-rATFsdjFwCmSVhXg0hKCqGbb1tDJLS2sVw/formResponse";
+    break;
+  default:
+    console.error("Invalid form option");
+}
+
+
+
+console.log(horasEspera);
+
+    function showInstructions() {
+        // Call the validation function
+        if (validateForm()) {
+            // Hide the form and display the instructions only if validation passes
+            document.getElementById('instrucciones').style.display = 'block';
+            document.getElementById('mainForm').style.display = 'none';
+            document.getElementById('contenedorForm').style.display = 'none';
+        } else {
+            alert('Por favor, completa todos los campos obligatorios antes de continuar.');
+        }
     }
 
+    function validateForm() {
+        // Select all required fields
+        const requiredFields = document.querySelectorAll('#mainForm [required]');
+        let allFilled = true;
 
+        // Check each required field
+        requiredFields.forEach(field => {
+            if (!field.value) {
+                allFilled = false;
+                // Highlight empty fields (optional)
+                field.style.borderColor = 'red';
+            } else {
+                // Reset the border color if filled
+                field.style.borderColor = '#dadce0';
+            }
+        });
+        allFilled = true;
+
+        return allFilled;
+    }
         
-        document.getElementById('medicacion_cronica').addEventListener('change', function() {
-            var detalleMedicacion = document.getElementById('detalle_medicacion_block');
-            detalleMedicacion.style.display = this.value === 'SI' ? 'block' : 'none';
-        });
+    // Event listeners for conditional fields
+    document.getElementById('medicacion_cronica').addEventListener('change', function() {
+        var detalleMedicacion = document.getElementById('detalle_medicacion_block');
+        detalleMedicacion.style.display = this.value === 'Si' ? 'block' : 'none';
+    });
 
-        document.getElementById('trastorno_sueno').addEventListener('change', function() {
-            var detalleTrastorno = document.getElementById('detalle_trastorno_block');
-            detalleTrastorno.style.display = this.value === 'SI' ? 'block' : 'none';
-        });
+    document.getElementById('trastorno_sueno').addEventListener('change', function() {
+        var detalleTrastorno = document.getElementById('detalle_trastorno_block');
+        detalleTrastorno.style.display = this.value === 'Si' ? 'block' : 'none';
+    });
 
-        document.getElementById('experimento_anterior').addEventListener('change', function() {
-            var detalleExperimento = document.getElementById('detalle_experimento_block');
-            detalleExperimento.style.display = this.value === 'SI' ? 'block' : 'none';
-        });
+    document.getElementById('experimento_anterior').addEventListener('change', function() {
+        var detalleExperimento = document.getElementById('detalle_experimento_block');
+        detalleExperimento.style.display = this.value === 'Si' ? 'block' : 'none';
+    });
     </script>
 
 
@@ -312,14 +365,11 @@
       <br>
       <br>
       <br>
-      <div>
-      Para continuar con el experimento, hace click en este enlace:
-      </div>
       <br>
       <br>
       <br>
       <div id="a">
-        <a href="https://forms.gle/Yb56bUQk36UyQ2vt6">Haga click aqui para acceder al cuestionario</a>
+        <p id="continuationLink" style="display: none;">hi</p>
 
       </div>
     
@@ -335,6 +385,17 @@
 
 
 <script>
+
+   // Define el enlace de continuación según el grupo
+   let continuationLink;
+   let continuacion1= "https://docs.google.com/forms/d/e/1FAIpQLSegJ6b_Oo-Xbu3ItukjYFgftdsIB2xXabWENVzoduNJnbry8Q/viewform?usp=sf_link"
+   let continuacion2="https://docs.google.com/forms/d/e/1FAIpQLScZRROV95DD7gc0Kaa7BH37Cg1XXvpAaXHcnktDE1at5gzO7Q/viewform?usp=sf_link"
+   let continuacion3="https://docs.google.com/forms/d/e/1FAIpQLSdOq4dzUhshVgBzk7EhgOeokkiz-0bJjHjdn1DB7Wit584iuw/viewform?usp=sf_link"
+   let continuacion4="https://docs.google.com/forms/d/e/1FAIpQLSdS-0YCQVv6inDa_DMh9yY_sJAbYSwud7CTxdqZ9qPaTCsOjQ/viewform?usp=sf_link"
+
+
+
+
        if (localStorage.getItem("visita")) {
         if (localStorage.getItem("visita")=="realizada") {
 
@@ -343,6 +404,7 @@
 
         }
         document.getElementById("instrucciones").style.display = "none";
+        document.getElementById("contenedorForm").style.display = "none";
         
         
       }
@@ -378,11 +440,40 @@
         function playVid() {
 
             vid.play();
+            
 
             localStorage.setItem("visita", "realizada");
             document.getElementById("boton").style.display = "none";
 
-            document.getElementById("myVideo").addEventListener("ended", myHandler, false);}
+            document.getElementById("myVideo").addEventListener("ended", myHandler, false);
+          
+          
+              // Poner el video en pantalla completa
+    if (vid.requestFullscreen) {
+        vid.requestFullscreen();
+    } else if (vid.mozRequestFullScreen) { // Firefox
+        vid.mozRequestFullScreen();
+    } else if (vid.webkitRequestFullscreen) { // Chrome, Safari y Opera
+        vid.webkitRequestFullscreen();
+    } else if (vid.msRequestFullscreen) { // IE/Edge
+        vid.msRequestFullscreen();
+    }
+
+    // Agregar un listener para salir de pantalla completa cuando el video termine
+    vid.addEventListener("ended", function() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { // Firefox
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { // Chrome, Safari y Opera
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { // IE/Edge
+            document.msExitFullscreen();
+        }
+    }, false);
+          
+          
+          }
           
 if (localStorage.getItem("visita")=="2") {
   contador();
@@ -401,7 +492,7 @@ function myHandler(e) {
 function startCountdown(storedEndTime) {
 console.log(storedEndTime);
   if (storedEndTime=="no") {
-  const twoHours = 24 * 60 * 60 * 1000; // dos horas en milisegundos
+  const twoHours = horasEspera * 60 * 60 * 1000; // dos horas en milisegundos
   const endTime = Date.now() + twoHours; // tiempo de finalización en milisegundos
   console.log(endTime);
   const countdownElement = document.getElementById("countdown");
@@ -427,7 +518,34 @@ else{
       clearInterval(intervalId);
       countdownElement.textContent = "¡Listo!";
       //localStorage.removeItem("countdownEndTime");
+
+
+
+      switch (grupoAleatorio) {
+            case 1:
+                continuationLink = continuacion1;
+                break;
+            case 2:
+                continuationLink = continuacion2;
+                break;
+            case 3:
+                continuationLink = continuacion3;
+                break;
+            case 4:
+                continuationLink = continuacion4;
+                break;
+            default:
+                continuationLink = "#";
+        }
+
+        localStorage.setItem("Link",continuationLink);
+
+
+
+      
+      document.getElementById('continuationLink').innerHTML = `Para continuar con el experimento, haz clic en el siguiente enlace: <a href="${continuationLink}" target="_blank">Continuar</a>`;
       document.getElementById('dada').style.display = 'block';
+      document.getElementById('continuationLink').style.display = 'block';
       // mostrar el enlace al cuestionario aquí
     } else {
       const remainingHours = Math.floor(remainingTime / (60*60*1000));
@@ -436,21 +554,19 @@ else{
       
       countdownElement.style.display = "block";
       countdownElement.style.textAlign= "center";
-    const mainForm = document.getElementById('mainForm');
-            
-    mainForm.submit();
-      
 
-        
+
+      document.getElementById('dada').style.display = 'none'; 
       countdownElement.textContent = `
 
-      El enlace para la segunda parte aparecerá en esta pagina dentro de 24 horas.
+      El enlace para la segunda parte aparecerá en esta pagina cuando termine el tiempo de espera.
       Tambien te va a llegar el mismo enlace por mail, por si necesitas hacerlo desde otro lado o cerraste la pestaña. 
       Por favor, intentá realizar la tarea inmediatamente despues de obtener el enlace. 
       
       
       Tiempo restante:${remainingHours}: ${remainingMinutes}:${remainingSeconds.toString().padStart(2, "0")}`;
       localStorage.setItem("countdownEndTime", endTime);
+
     }
   
   }, 1000);
@@ -463,6 +579,12 @@ else{
 
 function contador() {
   const storedEndTime = localStorage.getItem("countdownEndTime");
+  
+  const Link = localStorage.getItem("Link");
+  console.log(Link);
+  document.getElementById('continuationLink').innerHTML = `Para continuar con el experimento, haz clic en el siguiente enlace: <a href="${Link}" target="_blank">Continuar</a>`;
+  document.getElementById('dada').style.display = 'block';
+  
   if (storedEndTime) {
     const remainingTime = storedEndTime - Date.now();
     if (remainingTime <= 0) {
@@ -477,11 +599,37 @@ function contador() {
     const storedEndTime="no";
     console.log(storedEndTime);
     startCountdown(storedEndTime);
-    
+    sendAnswers();
+
+              
   }
 };
         
-      
+    // Check localStorage to see if the form has already been submitted
+    const formSubmitted = localStorage.getItem('formSubmitted') === 'true';
+
+    const video = document.getElementById('yourVideoElementId');
+
+    video.addEventListener('ended', () => {
+        // Only submit if it hasn't been submitted before
+        if (!formSubmitted) {
+            const mainForm = document.getElementById('mainForm');
+            mainForm.submit();
+            // Store submission status in localStorage
+            localStorage.setItem('formSubmitted', 'true');
+        }
+    });
+
+
+function sendAnswers(){
+  const mainForm = document.getElementById('mainForm');
+            
+            mainForm.submit();
+
+}
+
+
+
     </script>
     <center>
       <button onclick="playVid()" type="button" id="boton" style="display: none;">Reproducir</button>
@@ -491,7 +639,16 @@ function contador() {
       if (localStorage.getItem("visita")) {
         document.getElementById("boton").style.display = "none";
       }
+
+
+
+
+
+
+
+
     </script>
 </body>
 </html>
+
 
