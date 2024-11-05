@@ -434,17 +434,20 @@ console.log(horasEspera);
       function rotateVideo() {
     const video = document.getElementById("myVideo");
 
-    // Asegúrate de que el video existe antes de aplicar el estilo
+    // Ensure the video element exists before applying transformations
     if (video) {
-        // Aplica la rotación de 90 grados usando CSS
+        // Apply 90-degree rotation using CSS
         video.style.transform = "rotate(90deg)";
         
-        // Ajusta el origen de transformación para que el video se centre en su contenedor
+        // Set the transform origin to center the rotation within the container
         video.style.transformOrigin = "center center";
         
-        // Opcional: ajusta el tamaño del video si es necesario
-        video.style.width = "auto";
-        video.style.height = "100%";
+        // Adjust the dimensions to fit the rotated video within its container
+        video.style.width = "100%"; // Set width to 100% to scale proportionally
+        video.style.height = "auto"; // Set height to auto to maintain aspect ratio
+        
+        // Ensure the container allows overflow if necessary
+        video.parentElement.style.overflow = "hidden";
     }
 }
 
@@ -462,11 +465,8 @@ if (esDispositivoMovil()) {
 
  
 
-function ajustarMedidas() {
-        vid.style.heigh = window.innerWidth -100+ 'px';
-        vid.style.width = window.innerHeight -100+ 'px';
-    }
-       
+
+    
 
         function playVid() {
 
@@ -474,7 +474,7 @@ function ajustarMedidas() {
             
 if(esDispositivoMovil()){
   rotateVideo();
-  ajustarMedidas();
+
 }
    
 
