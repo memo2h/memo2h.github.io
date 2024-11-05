@@ -460,7 +460,12 @@ if (esDispositivoMovil()) {
   console.log("Estás visitando la página desde un dispositivo de escritorio.");
 }
 
-        
+ 
+
+function ajustarMedidas() {
+        vid.style.width = window.innerWidth + 'px';
+        vid.style.height = window.innerHeight + 'px';
+    }
        
 
         function playVid() {
@@ -469,7 +474,7 @@ if (esDispositivoMovil()) {
             
 if(esDispositivoMovil()){
   rotateVideo();
-
+  ajustarMedidas();
 }
    
 
