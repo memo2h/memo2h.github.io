@@ -449,16 +449,11 @@ console.log(horasEspera);
         // Ensure the container allows overflow if necessary
         video.parentElement.style.overflow = "hidden";
 
-        // Center the video within its container
+        // Position the video and add margin to the left
         video.style.position = "absolute"; // Allow positioning within the container
         video.style.top = "50%"; // Center vertically
-        video.style.left = "50%"; // Center horizontally
-
-        // Adjust the transform to include centering and scaling
-        video.style.transform = "translate(-50%, -50%) rotate(90deg)";
-
-        // Optional: add some margin adjustment to prevent clipping on the left
-        video.style.marginLeft = "-10%"; // Adjust as necessary
+        video.style.left = "calc(50% + 20px)"; // Center horizontally and add 20px margin
+        video.style.transform = "translate(-50%, -50%) rotate(90deg)"; // Adjust transform to include centering
     }
 }
 
