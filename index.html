@@ -279,7 +279,7 @@ console.log(horasEspera);
                 field.style.borderColor = '#dadce0';
             }
         });
-        allFilled = true;
+        
 
         return allFilled;
     }
@@ -302,48 +302,46 @@ console.log(horasEspera);
     </script>
 
 
+<div id="denuevo" style="display: none;" class="form-container">
+  <p class="question-block">
+  Solo se puede participar una vez en esta tarea, y el video no puede verse de nuevo.
+   Si desea participar de otro de nuestros experimentos o tiene consultas,
+  puede dirigirse a la pagina del Laboratorio de sueño y memoria, haciendo click en el siguiente
+  enlace:
+  <br>
+  <br>
+  <a href="https://zaap.bio/labsuenoymemoria"> Pagina del laboratorio</a>
+</p>
+</div>
+
+
   <div id="countdown" style="display: none; font-size: 20px; white-space: pre-wrap;"> 
     </div>
     <div id="instrucciones" style="display:none;">
     <center>
       
-        <div id="denuevo" style="display: none;">
-          Solo se puede participar una vez en esta tarea, y el video no puede verse de nuevo.
-           Si desea participar de otro de nuestros experimentos o tiene consultas,
-          puede dirigirse a la pagina del Laboratorio de sueño y memoria, haciendo click en el siguiente
-          enlace:
-          <br>
-          <br>
-          <a href="https://zaap.bio/labsuenoymemoria"> Pagina del laboratorio</a>
 
-        </div>
-        <div id="instrucciones">
-         <br>
-         <br>
-         <br>
-         <br>
-          Por favor, antes de ver el video compruebe que su audio funciona correctamente presionando el siguiente boton. 
-          <br> Deberia escuchar el sonido de una campana durante 10 segundos.
-          <br>
-          <br>
-          <br>
-          <br> 
-          <button onclick="playAud()" type="button" id="botonaudio" style="display: block;">Probar sonido</button>
-          <br>
-          <br>
-          <br>
-          <br>
-
-          Si el audio funcionó correctamente, presione el boton de abajo para pasar al video
-          <br>
-          <br>
-          <br>
-          <br>
-          <br>
-          <button onclick="presentarvideo()" type="button" id="botonseguir" style="display: block;">Pasar al video</button>
-
-
-        </div>
+      <div id="instrucciones">
+        <p>¡Gracias por responder!</p>
+        <p>A continuación, deberá observar un video con sonido que durará aproximadamente un minuto y medio.</p>
+    
+        <ol style="text-align: left;">
+            <li>Recomendamos que utilice auriculares y pruebe que el sonido funcione correctamente antes de comenzar.</li>
+            <li>El video solo puede verse una vez; no debe pausarse, retrocederse ni alterarse de ninguna forma.</li>
+            <li>Una vez que presione el botón “reproducir,” el video puede tardar algunos segundos en comenzar, dependiendo de su conexión a internet.</li>
+            <li>No abandone la pestaña al concluir el video, ya que algunos segundos después se le dara información para continuar con el experimento.</li>
+        </ol>
+    
+        <p>Por favor, antes de ver el video, compruebe que su audio funciona correctamente presionando el siguiente botón.</p>
+        <p>Debería escuchar el sonido de una campana durante 10 segundos.</p>
+        
+        <button onclick="playAud()" type="button" id="botonaudio">Probar sonido</button>
+    
+        <p>Si el audio funcionó correctamente, presione el botón de abajo para pasar al video:</p>
+        
+        <button onclick="presentarvideo()" type="button" id="botonseguir">Pasar al video</button>
+    </div>
+    
 
         <audio id="audio">
           <source  src="prueba.mp3" type="audio/mpeg"  >
@@ -369,7 +367,7 @@ console.log(horasEspera);
       <br>
       <br>
       <div id="a">
-        <p id="continuationLink" style="display: none;">hi</p>
+        <p id="continuationLink" style="display: none;" ></p>
 
       </div>
     
@@ -386,6 +384,15 @@ console.log(horasEspera);
 
 <script>
 
+if (localStorage.getItem("Link") !== null) {
+    console.log("La variable 'Link' existe en el local storage.");
+
+    
+      document.getElementById('dada').style.display = 'block';
+      document.getElementById('continuationLink').style.display = 'block';
+      // mostrar el enlace al cuestionario aquí
+}
+
    // Define el enlace de continuación según el grupo
    let continuationLink;
    let continuacion1= "https://docs.google.com/forms/d/e/1FAIpQLSegJ6b_Oo-Xbu3ItukjYFgftdsIB2xXabWENVzoduNJnbry8Q/viewform?usp=sf_link"
@@ -400,6 +407,7 @@ console.log(horasEspera);
         if (localStorage.getItem("visita")=="realizada") {
 
           document.getElementById("denuevo").style.display = "block";
+          console.log("denuevo")
 
 
         }
@@ -562,7 +570,7 @@ else{
 
 
       
-      document.getElementById('continuationLink').innerHTML = `Para continuar con el experimento, haz clic en el siguiente enlace: <a href="${continuationLink}" target="_blank">Continuar</a>`;
+      document.getElementById('continuationLink').innerHTML = `Para continuar con el experimento, haz clic en el siguiente enlace. Simultaneamente, este enlace sera enviado a tu correo electronico : <a href="${continuationLink}" target="_blank">Continuar</a>`;
       document.getElementById('dada').style.display = 'block';
       document.getElementById('continuationLink').style.display = 'block';
       // mostrar el enlace al cuestionario aquí
@@ -601,7 +609,7 @@ function contador() {
   
   const Link = localStorage.getItem("Link");
   console.log(Link);
-  document.getElementById('continuationLink').innerHTML = `Para continuar con el experimento, haz clic en el siguiente enlace: <a href="${Link}" target="_blank">Continuar</a>`;
+  document.getElementById('continuationLink').innerHTML = `Para continuar con el experimento, haz clic en el siguiente enlace. Simultaneamente, este enlace sera enviado a tu correo electronico: <a href="${Link}" target="_blank">Continuar</a>`;
   document.getElementById('dada').style.display = 'block';
   
   if (storedEndTime) {
