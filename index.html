@@ -434,22 +434,24 @@ console.log(horasEspera);
       function rotateVideo() {
     const video = document.getElementById("myVideo");
 
-    // Ensure the video element exists before applying transformations
+    // Ensure the video element exists
     if (video) {
-        // Apply 90-degree rotation using CSS
+        // Apply the 90-degree rotation
         video.style.transform = "rotate(90deg)";
-        
-        // Set the transform origin to center the rotation within the container
         video.style.transformOrigin = "center center";
-        
-        // Adjust the dimensions to fit the rotated video within its container
-        video.style.width = "100%"; // Set width to 100% to scale proportionally
-        video.style.height = "auto"; // Set height to auto to maintain aspect ratio
-        
-        // Ensure the container allows overflow if necessary
-        video.parentElement.style.overflow = "hidden";
+
+        // Adjust size based on the rotation
+        video.style.width = "100%";
+        video.style.height = "auto";
+
+        // Optional: Add a resize event listener to adjust the video size if the window changes
+        window.addEventListener("resize", () => {
+            video.style.width = "100%";
+            video.style.height = "auto";
+        });
     }
 }
+
 
 
 function esDispositivoMovil() {
