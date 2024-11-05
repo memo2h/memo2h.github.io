@@ -431,8 +431,34 @@ console.log(horasEspera);
 
 
         
+      function rotateVideo() {
+    const video = document.getElementById("myVideo");
+
+    // Asegúrate de que el video existe antes de aplicar el estilo
+    if (video) {
+        // Aplica la rotación de 90 grados usando CSS
+        video.style.transform = "rotate(90deg)";
+        
+        // Ajusta el origen de transformación para que el video se centre en su contenedor
+        video.style.transformOrigin = "center center";
+        
+        // Opcional: ajusta el tamaño del video si es necesario
+        video.style.width = "auto";
+        video.style.height = "100%";
+    }
+}
 
 
+function esDispositivoMovil() {
+  return /Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+}
+
+// Uso de la función
+if (esDispositivoMovil()) {
+  console.log("Estás visitando la página desde un dispositivo móvil.");
+} else {
+  console.log("Estás visitando la página desde un dispositivo de escritorio.");
+}
 
         
        
@@ -441,37 +467,18 @@ console.log(horasEspera);
 
             vid.play();
             
+if(esDispositivoMovil()){
+  rotateVideo();
+
+}
+   
 
             localStorage.setItem("visita", "realizada");
             document.getElementById("boton").style.display = "none";
 
             document.getElementById("myVideo").addEventListener("ended", myHandler, false);
           
-          
-              // Poner el video en pantalla completa
-    if (vid.requestFullscreen) {
-        vid.requestFullscreen();
-    } else if (vid.mozRequestFullScreen) { // Firefox
-        vid.mozRequestFullScreen();
-    } else if (vid.webkitRequestFullscreen) { // Chrome, Safari y Opera
-        vid.webkitRequestFullscreen();
-    } else if (vid.msRequestFullscreen) { // IE/Edge
-        vid.msRequestFullscreen();
-    }
 
-    // Agregar un listener para salir de pantalla completa cuando el video termine
-    vid.addEventListener("ended", function() {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.mozCancelFullScreen) { // Firefox
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) { // Chrome, Safari y Opera
-            document.webkitExitFullscreen();
-        } else if (document.msExitFullscreen) { // IE/Edge
-            document.msExitFullscreen();
-        }
-    }, false);
-          
           
           }
           
@@ -605,20 +612,6 @@ function contador() {
   }
 };
         
-    // Check localStorage to see if the form has already been submitted
-    const formSubmitted = localStorage.getItem('formSubmitted') === 'true';
-
-    const video = document.getElementById('yourVideoElementId');
-
-    video.addEventListener('ended', () => {
-        // Only submit if it hasn't been submitted before
-        if (!formSubmitted) {
-            const mainForm = document.getElementById('mainForm');
-            mainForm.submit();
-            // Store submission status in localStorage
-            localStorage.setItem('formSubmitted', 'true');
-        }
-    });
 
 
 function sendAnswers(){
@@ -650,5 +643,4 @@ function sendAnswers(){
     </script>
 </body>
 </html>
-
 
