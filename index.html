@@ -434,26 +434,26 @@ console.log(horasEspera);
       function rotateVideo() {
     const video = document.getElementById("myVideo");
 
-    // Asegúrate de que el video existe antes de aplicar el estilo
+    // Ensure the video element exists before applying transformations
     if (video) {
-        // Aplica la rotación de 90 grados usando CSS
+        // Apply 90-degree rotation using CSS
         video.style.transform = "rotate(90deg)";
         
-        // Ajusta el origen de transformación para que el video se centre en su contenedor
+        // Set the transform origin to center the rotation within the container
         video.style.transformOrigin = "center center";
         
-        // Asegura que el video se ajuste al contenedor
-        video.style.width = "auto";
-        video.style.height = "100%";
+        // Use viewport units to make it responsive
+        video.style.width = "100vh"; // Set width to 100% of the viewport height
+        video.style.height = "100vw"; // Set height to 100% of the viewport width
         
-        // Opcional: agrega un estilo de contenedor si es necesario
-        const container = video.parentElement;
-        if (container) {
-            container.style.display = "flex";
-            container.style.alignItems = "center";
-            container.style.justifyContent = "center";
-            container.style.overflow = "hidden";  // Evita que el video sobresalga del contenedor
-        }
+        // Ensure the container allows overflow if necessary
+        video.parentElement.style.overflow = "hidden";
+
+        // Optionally, center the video within its container
+        video.style.position = "absolute"; // Allow positioning within the container
+        video.style.top = "50%"; // Center vertically
+        video.style.left = "50%"; // Center horizontally
+        video.style.transform = "translate(-50%, -50%) rotate(90deg)"; // Adjust transform to include centering
     }
 }
 
