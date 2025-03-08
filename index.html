@@ -226,11 +226,15 @@
     </div>
 
     <script>
-let grupoAleatorio = Math.floor(Math.random() * 4) + 1;
-let horasEspera = (grupoAleatorio === 1) ? 0.0005 : (grupoAleatorio === 2) ? 0.5 : (grupoAleatorio === 3) ? 2 : 24;
+//let grupoAleatorio = Math.floor(Math.random() * 4) + 1;
+let grupoAleatorio =5;
+//let horasEspera = (grupoAleatorio === 1) ? 0.0005 : (grupoAleatorio === 2) ? 0.5 : (grupoAleatorio === 3) ? 2 : 24;
+let horasEspera =5;
 // Select the form element
 const form = document.getElementById("mainForm");
+form.action = "https://docs.google.com/forms/d/e/1FAIpQLSftkZ82eKA1W8ck6DmpkD8SCvZkeFyzLV25DFGEliFw1GezQQ/formResponse"
 
+/*    
 // Assign the action URL based on the formOption value
 switch (grupoAleatorio) {
   case 1:
@@ -248,7 +252,7 @@ switch (grupoAleatorio) {
   default:
     console.error("Invalid form option");
 }
-
+*/
 
 
 console.log(horasEspera);
@@ -408,6 +412,7 @@ if (localStorage.getItem("Link") !== null) {
 
 
 
+
        if (localStorage.getItem("visita")) {
         if (localStorage.getItem("visita")=="realizada") {
 
@@ -554,7 +559,7 @@ else{
 
 
 
-      switch (grupoAleatorio) {
+     /* switch (grupoAleatorio) {
             case 1:
                 continuationLink = continuacion1;
                 break;
@@ -570,7 +575,10 @@ else{
             default:
                 continuationLink = "#";
         }
+*/
 
+continuationLink ="https://docs.google.com/forms/d/e/1FAIpQLScrBl4XUcxTDn7Q_L7pDSss_eXuR180VSkIgAOUpQf6bktF6Q/viewform?usp=header"
+        
         localStorage.setItem("Link",continuationLink);
         
 
