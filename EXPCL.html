@@ -111,6 +111,8 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             margin-bottom: 20px;
+            opacity: 1;
+            transition: opacity 0.5s;
         }
         
         .response-buttons {
@@ -200,6 +202,43 @@
             0% { opacity: 0.3; }
             50% { opacity: 1; }
             100% { opacity: 0.3; }
+        }
+        
+        /* Nuevos estilos para las animaciones */
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .transition-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        
+        #betweenPhasesInstructions {
+            display: none;
         }
     </style>
 </head>
@@ -337,7 +376,6 @@
             <input type="hidden" name="entry.955814617" id="img4Response">
             <input type="hidden" name="entry.368502653" id="img4Time">
 
-
             <button type="button" onclick="showInstructions()">Seguir</button>
         </form>
 
@@ -374,12 +412,25 @@
         </div>
     </div>
 
+    <!-- Pantalla de instrucciones entre fases -->
+    <div id="betweenPhasesInstructions" class="form-container">
+        <h2>Instrucciones para la siguiente fase</h2>
+        <p>Ahora comenzará la fase de reconocimiento. Se te mostrarán imágenes y deberás indicar si:</p>
+        <ul>
+            <li><strong>RECUERDAS</strong> haberla visto en la fase anterior (Sí)</li>
+            <li><strong>NO RECUERDAS</strong> haberla visto (No)</li>
+            <li>No estás seguro (No sé)</li>
+        </ul>
+        <p>Responde lo más rápido y preciso que puedas.</p>
+        <button onclick="startTestPhase()">Comenzar fase de reconocimiento</button>
+    </div>
+
     <!-- Study Phase (images shown for 2 seconds each) -->
     <div id="studyPhase">
         <div class="form-container">
             <div class="image-container">
                 <div id="fixationCross" class="fixation-cross" style="display: none;">+</div>
-                <center>  <img id="studyImage" class="task-image" src="" alt="Imagen de estudio" style="display: none;"></center> 
+                <center><img id="studyImage" class="task-image" src="" alt="Imagen de estudio" style="display: none;"></center>
                 <div id="studyProgress" class="progress-text"></div>
             </div>
         </div>
@@ -389,7 +440,7 @@
     <div id="testPhase">
         <div class="form-container">
             <div class="image-container">
-            <center>  <img id="testImage" class="task-image" src="" alt="Imagen de prueba" style="display: none;"></center> 
+                <center><img id="testImage" class="task-image" src="" alt="Imagen de prueba" style="display: none;"></center>
                 <div class="response-buttons" style="display: none;">
                     <button id="yesBtn" class="response-btn" onclick="recordResponse('SI')">Sí</button>
                     <button id="noBtn" class="response-btn" onclick="recordResponse('NO')">No</button>
@@ -400,6 +451,11 @@
         </div>
     </div>
 
+    <!-- Pantalla de transición -->
+    <div id="imageTransition" style="display: none;" style="display: none; height: 400px; background-color: #f9f9f9; border: 1px dashed #ccc; margin: 20px 0; display: flex; justify-content: center; align-items: center;">
+       
+    </div>
+
     <div id="countdown"></div>
 
     <div id="continuationSection">
@@ -407,10 +463,9 @@
     </div>
 
     <script>
-
         // Variables para el tiempo de reacción
-let imageDisplayTime = 0;
-let reactionTimes = [];
+        let imageDisplayTime = 0;
+        let reactionTimes = [];
 
         // Experiment configuration
         let grupoAleatorio = 5;
@@ -418,7 +473,7 @@ let reactionTimes = [];
         
         // Image task variables
         const imageUrls = [
-            'image1.jpg',
+        'image1.jpg',
             'image1.jpg',
             'image1.jpg',
             'image1.jpg'
@@ -430,7 +485,7 @@ let reactionTimes = [];
         let studyPhaseCompleted = false;
         let testPhaseCompleted = false;
 
-        // Form functions (same as before)
+        // Form functions
         function showInstructions() {
             if (validateForm()) {
                 document.getElementById('instrucciones').style.display = 'block';
@@ -456,7 +511,7 @@ let reactionTimes = [];
             return allFilled;
         }
         
-        // Study Phase functions (showing images for 2 seconds each)
+        // Study Phase functions
         function startStudyPhase() {
             document.getElementById("instrucciones").style.display = "none";
             document.getElementById("studyPhase").style.display = "block";
@@ -467,14 +522,16 @@ let reactionTimes = [];
             if (currentStudyIndex >= imageUrls.length) {
                 studyPhaseCompleted = true;
                 document.getElementById("studyPhase").style.display = "none";
-                startTestPhase();
+                
+                // Mostrar pantalla de instrucciones entre fases
+                document.getElementById("betweenPhasesInstructions").style.display = "block";
                 return;
             }
             
             document.getElementById("studyProgress").textContent = 
                 `Imagen ${currentStudyIndex + 1} de ${imageUrls.length} (Fase de estudio)`;
             
-            // Show fixation cross for 1 second before each image
+            // Mostrar cruz de fijación por 1 segundo antes de cada imagen
             document.getElementById("fixationCross").style.display = "block";
             document.getElementById("studyImage").style.display = "none";
             
@@ -488,7 +545,7 @@ let reactionTimes = [];
                     document.getElementById("studyImage").style.display = "block";
                     document.getElementById("studyImage").scrollIntoView({ behavior: 'smooth', block: 'center' });
                     
-                    // Show image for 2 seconds then move to next
+                    // Mostrar imagen por 2 segundos luego pasar a la siguiente
                     setTimeout(() => {
                         currentStudyIndex++;
                         showNextStudyImage();
@@ -497,14 +554,12 @@ let reactionTimes = [];
             }, 1000);
         }
 
-        // Test Phase functions (showing images with response buttons)
+        // Test Phase functions
         function startTestPhase() {
+            document.getElementById("betweenPhasesInstructions").style.display = "none";
             document.getElementById("testPhase").style.display = "block";
             showNextTestImage();
         }
-
-
-
         function showNextTestImage() {
     if (currentTestIndex >= imageUrls.length) {
         testPhaseCompleted = true;
@@ -513,64 +568,88 @@ let reactionTimes = [];
         return;
     }
     
+    // Ocultar imagen y botones, mostrar área de transición
+    document.getElementById("testImage").style.display = "none";
+    document.querySelector("#testPhase .response-buttons").style.display = "none";
+    document.getElementById("imageTransition").style.display = "flex";
+    
     document.getElementById("testProgress").textContent = 
         `Imagen ${currentTestIndex + 1} de ${imageUrls.length} (Fase de prueba)`;
     
-    const img = new Image();
-    img.src = imageUrls[currentTestIndex];
-    img.onload = function() {
-        document.getElementById("testImage").src = imageUrls[currentTestIndex];
-        document.getElementById("testImage").style.display = "block";
-        document.getElementById("testImage").scrollIntoView({ behavior: 'smooth', block: 'center' });
-        document.querySelector("#testPhase .response-buttons").style.display = "flex";
+    // Esperar 1 segundo antes de mostrar la siguiente imagen
+    setTimeout(() => {
+        document.getElementById("imageTransition").style.display = "none";
         
-        // Registrar el momento exacto en que la imagen se muestra completamente
-        imageDisplayTime = Date.now();
-    };
+        const img = new Image();
+        img.src = imageUrls[currentTestIndex];
+        img.onload = function() {
+            const testImage = document.getElementById("testImage");
+            testImage.src = imageUrls[currentTestIndex];
+            
+            // Aplicar animación de fade-in solo a la imagen
+            testImage.style.display = "block";
+            testImage.classList.add("fade-in");
+            
+            setTimeout(() => {
+                testImage.classList.remove("fade-in");
+            }, 500);
+            
+            document.querySelector("#testPhase .response-buttons").style.display = "flex";
+            imageDisplayTime = Date.now();
+        };
+    }, 1000);
 }
 
 function recordResponse(response) {
-    const responseTime = Date.now();
-    const reactionTime = responseTime - imageDisplayTime; // Tiempo de reacción en ms
+    const testImage = document.getElementById("testImage");
     
-    imageResponses.push({
-        imageIndex: currentTestIndex,
-        imageUrl: imageUrls[currentTestIndex],
-        response: response,
-        reactionTime: reactionTime, // Guardamos el tiempo de reacción
-        responseTime: responseTime // También guardamos el momento absoluto por si acaso
-    });
+    // Aplicar animación de fade-out solo a la imagen
+    testImage.classList.add("fade-out");
     
-    document.getElementById("testImage").style.display = "none";
-    document.querySelector("#testPhase .response-buttons").style.display = "none";
-    
-    currentTestIndex++;
-    showNextTestImage();
+    setTimeout(() => {
+        const responseTime = Date.now();
+        const reactionTime = responseTime - imageDisplayTime;
+        
+        imageResponses.push({
+            imageIndex: currentTestIndex,
+            imageUrl: imageUrls[currentTestIndex],
+            response: response,
+            reactionTime: reactionTime,
+            responseTime: responseTime
+        });
+        
+        testImage.style.display = "none";
+        testImage.classList.remove("fade-out");
+        document.querySelector("#testPhase .response-buttons").style.display = "none";
+        
+        currentTestIndex++;
+        showNextTestImage();
+    }, 500);
 }
+        function imageTaskComplete() {
+            // Asignar respuestas y tiempos de reacción a los campos ocultos del formulario
+            if (imageResponses.length >= 4) {
+                document.getElementById('img1Response').value = imageResponses[0].response;
+                document.getElementById('img1Time').value = imageResponses[0].reactionTime;
+                
+                document.getElementById('img2Response').value = imageResponses[1].response;
+                document.getElementById('img2Time').value = imageResponses[1].reactionTime;
+                
+                document.getElementById('img3Response').value = imageResponses[2].response;
+                document.getElementById('img3Time').value = imageResponses[2].reactionTime;
+                
+                document.getElementById('img4Response').value = imageResponses[3].response;
+                document.getElementById('img4Time').value = imageResponses[3].reactionTime;
+            }
+            
+            if (!localStorage.getItem("visita")) {
+                localStorage.setItem("visita", "2");
+                sendAnswers(); // Envía el formulario con todas las respuestas
+                startCountdown("no");
+            }
+        }
 
-function imageTaskComplete() {
-    // Asignar respuestas y tiempos de reacción a los campos ocultos del formulario
-    if (imageResponses.length >= 4) {
-        document.getElementById('img1Response').value = imageResponses[0].response;
-        document.getElementById('img1Time').value = imageResponses[0].reactionTime;
-        
-        document.getElementById('img2Response').value = imageResponses[1].response;
-        document.getElementById('img2Time').value = imageResponses[1].reactionTime;
-        
-        document.getElementById('img3Response').value = imageResponses[2].response;
-        document.getElementById('img3Time').value = imageResponses[2].reactionTime;
-        
-        document.getElementById('img4Response').value = imageResponses[3].response;
-        document.getElementById('img4Time').value = imageResponses[3].reactionTime;
-    }
-    
-    if (!localStorage.getItem("visita")) {
-        localStorage.setItem("visita", "2");
-        sendAnswers(); // Envía el formulario con todas las respuestas
-        startCountdown("no");
-    }
-}
-        // Countdown and continuation functions (same as before)
+        // Countdown and continuation functions
         function startCountdown(storedEndTime) {
             if (storedEndTime === "no") {
                 const waitTime = horasEspera * 60 * 60 * 1000;
@@ -645,7 +724,7 @@ function imageTaskComplete() {
             }
         }
 
-        // Conditional field displays (same as before)
+        // Conditional field displays
         document.getElementById('medicacion_cronica').addEventListener('change', function() {
             document.getElementById('detalle_medicacion_block').style.display = this.value === 'Si' ? 'block' : 'none';
         });
