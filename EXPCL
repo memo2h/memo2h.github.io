@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Participación</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #b7473a;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        .sub {
+            font-size: 12px;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        .question-block {
+            background-color: #f9f9f9;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        input[type="text"], input[type="email"], input[type="time"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="time"]:focus, select:focus {
+            border-color: #673ab7;
+            outline: none;
+        }
+        button {
+            background-color: #673ab7;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #311b92;
+        }
+        a {
+            color: #673ab7;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Image task styling */
+        #studyPhase, #testPhase {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #b73e3a;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            display: none;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .task-image {
+            max-width: 100%;
+            max-height: 60vh;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .response-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .response-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+        
+        #yesBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        #dontKnowBtn {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .response-btn:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+        
+        .progress-text {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        #countdown {
+            display: none; 
+            font-size: 20px; 
+            white-space: pre-wrap;
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #673ab7;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        
+        #continuationSection {
+            display: none;
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #673ab7;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        
+        .fixation-cross {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: fadeInOut 1s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+  <iframe name="formTarget" style="display:none;"></iframe>
+    <div class="form-container" id="contenedorForm">
+        <div class="title">Formulario de Participación</div>
+        <div class="sub">
+            <h2 style="font-size: 24px; margin-bottom: 10px;">¡Hola!</h2>
+            <p style="margin-bottom: 12px;">Este cuestionario forma parte de una investigación sobre memoria del Laboratorio de Sueño y Memoria (ITBA). Podes participar usando computadora, tablet o teléfono.</p>
+            <ul style="margin: 12px 0; padding-left: 20px;">
+                <li><strong>Requisitos:</strong> Tener entre 18 y 45 años, no consumir psicofármacos, y no tener desordenes de sueño diagnosticados.</li>
+                <li><strong>Duración:</strong> El experimento se divide en tres partes. Esta primera parte lleva aproximadamente 10 minutos. La segunda parte se realiza inmediatamente, dentro de media hora, dos horas, 5 horas o 24 horas (dependiendo del grupo que te toque). La segunda parte te va a llevar unos 5 minutos. La parte tres se realiza 48 horas despues de la primera y también lleva aprox 10 minutos. Te vamos a ir mandando enlaces a tu mail, para que puedas ir completando cada parte en el tiempo correspondiente.</li>
+                <li><strong>Más información:</strong> Para información más detallada sobre el experimento, podes entrar <a href="https://docs.google.com/document/d/19rrrXTJehi-1rZkxOGua4qccrDwTZhxRxt0SKN-o3cw/edit?usp=sharing" target="_blank">aquí</a>.</li>
+            </ul>
+            <p style="margin-bottom: 12px;">Este Protocolo fue aprobado por el Comité de Ética Humana (CEH), de la Facultad de Medicina UBA.</p>
+            <p style="margin-bottom: 12px;">Para consultas comunicate con el Licenciado Facundo Urreta, al mail: furreta@itba.edu.ar,
+              o la Doctora Cecilia Forcato, al mail: cforcato@itba.edu.ar</p>
+              <p style="margin-bottom: 12px;"> La información recolectada durante este estudio será guardada confidencialmente dentro de lo que estipula la ley 25326 de protección de datos personales. Los resultados pueden ser publicados para propósitos científicos, pero la identidad de las personas participantes no será revelada.</p>
+        </div>
+
+        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSeW8B4N7EBt2y1l7QOHs1C6A1HK9BHAOGM-cE2hCJgYFCIRUQ/formResponse" method="POST" target="formTarget">
+            <div class="question-block">
+                <label class="question" for="email">Dirección de correo electrónico</label>
+                <input type="email" id="email" name="entry.1190073540" placeholder="Ingresa tu correo electrónico" required>
+            </div>
+
+            <div class="question-block">
+                <label class="question">¿Desde qué dispositivo estás realizando esta tarea?</label>
+                <select name="entry.2120654582" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Computadora">Computadora</option>
+                    <option value="Telefono">Teléfono</option>
+                    <option value="Tablet">Tablet</option>
+                </select>
+            </div>
+
+            <div class="question-block">
+                <label class="question">¿Das tu consentimiento para participar?</label>
+                <select name="entry.402678851" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+
+            <div class="question-block">
+                <label class="question" for="nombre">Nombre y apellido</label>
+                <input type="text" id="nombre" name="entry.543210643" placeholder="Ingresa tu nombre completo" required>
+            </div>
+
+            <div class="question-block">
+                <label class="question" for="edad">Edad</label>
+                <input type="number" id="edad" name="entry.165872651" placeholder="Ingresa tu edad" required min="18" max="45">
+            </div>
+
+            <div class="question-block">
+                <label class="question">Género</label>
+                <select name="entry.843997443" required>
+                    <option value="" disabled selected>Selecciona tu género</option>
+                    <option value="Femenino">Femenino</option>
+                    <option value="Masculino">Masculino</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="question-block">
+                <label class="question">¿Cuál es tu nivel educativo actual?</label>
+                <select name="entry.2121646283" required>
+                    <option value="" disabled selected>Selecciona tu nivel educativo</option>
+                    <option value="Posgrado completo">Posgrado completo</option>
+                    <option value="Secundario completo">Secundario completo</option>
+                    <option value="Secundario incompleto">Secundario incompleto</option>
+                    <option value="Universitario completo">Universitario completo</option>
+                    <option value="Posgrado incompleto">Posgrado incompleto</option>
+                    <option value="Universitario incompleto">Universitario incompleto</option>
+                    <option value="Terciario incompleto">Terciario incompleto</option>
+                    <option value="Terciario completo">Terciario completo</option>
+                </select>
+            </div>
+
+            <div class="question-block">
+                <label class="question">¿A qué hora te despertaste hoy?</label>
+                <input type="time" name="entry.810565752" required>
+            </div>
+
+            <div class="question-block">
+                <label class="question">¿Consumes alguna medicación de forma crónica?</label>
+                <select name="entry.221114551" id="medicacion_cronica" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Si">Sí</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="question-block" id="detalle_medicacion_block" style="display: none;">
+                <label class="question">En caso de que consumas medicación de forma crónica, ¿Cuál/es?</label>
+                <input type="text" name="entry.315741378" placeholder="Especifica la medicación">
+            </div>
+
+            <div class="question-block">
+                <label class="question">¿Sufres algún trastorno o desorden del sueño?</label>
+                <select name="entry.1140039148" id="trastorno_sueno" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Si">Sí</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="question-block" id="detalle_trastorno_block" style="display: none;">
+                <label class="question">Si respondiste "Sí" en la pregunta anterior, ¿Cuál es el trastorno o desorden?</label>
+                <input type="text" name="entry.830809876" placeholder="Describe el trastorno">
+            </div>
+
+            <div class="question-block">
+                <label class="question">¿Participaste en otro experimento de memoria anteriormente?</label>
+                <select name="entry.1546566797" id="experimento_anterior" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Si">Sí</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
+
+            <div class="question-block" id="detalle_experimento_block" style="display: none;">
+                <label class="question">Si respondiste "Sí" a la pregunta anterior, contanos de qué se trataba el experimento</label>
+                <input type="text" name="entry.1966342366" placeholder="Describe el experimento">
+            </div>
+
+            <input type="hidden" name="entry.1053849261" id="img1Response">
+            <input type="hidden" name="entry.634818883" id="img1Time">
+            <input type="hidden" name="entry.700564156" id="img2Response">
+            <input type="hidden" name="entry.578696829" id="img2Time">
+            <input type="hidden" name="entry.1846099994" id="img3Response">
+            <input type="hidden" name="entry.1266411467" id="img3Time">
+            <input type="hidden" name="entry.955814617" id="img4Response">
+            <input type="hidden" name="entry.368502653" id="img4Time">
+
+
+            <button type="button" onclick="showInstructions()">Seguir</button>
+        </form>
+
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
+    </div>
+
+    <div id="denuevo" style="display: none;" class="form-container">
+      <p class="question-block">
+      Solo se puede participar una vez en esta tarea. Si desea participar de otro de nuestros experimentos o tiene consultas,
+      puede dirigirse a la pagina del Laboratorio de sueño y memoria, haciendo click en el siguiente
+      enlace:
+      <br>
+      <br>
+      <a href="https://zaap.bio/labsuenoymemoria">Pagina del laboratorio</a>
+      </p>
+    </div>
+
+    <div id="instrucciones" style="display:none;">
+        <div class="form-container">
+            <p>¡Gracias por responder!</p>
+            <p>El experimento consta de dos partes:</p>
+            <ol style="text-align: left;">
+                <li><strong>Fase de estudio:</strong> Se le mostrarán 4 imágenes, cada una durante 2 segundos.</li>
+                <li><strong>Fase de prueba:</strong> Las mismas imágenes se mostrarán nuevamente y deberá indicar si las reconoce o no.</li>
+            </ol>
+            <p>Por favor:</p>
+            <ul style="text-align: left;">
+                <li>Concéntrese en las imágenes durante la fase de estudio</li>
+                <li>Responda con sinceridad en la fase de prueba</li>
+                <li>No hay respuestas correctas o incorrectas</li>
+            </ul>
+            <p>Cuando esté listo para comenzar, presione el botón de abajo:</p>
+            <button onclick="startStudyPhase()" type="button" id="startTaskBtn">Comenzar el experimento</button>
+        </div>
+    </div>
+
+    <!-- Study Phase (images shown for 2 seconds each) -->
+    <div id="studyPhase">
+        <div class="form-container">
+            <div class="image-container">
+                <div id="fixationCross" class="fixation-cross" style="display: none;">+</div>
+                <center>  <img id="studyImage" class="task-image" src="" alt="Imagen de estudio" style="display: none;"></center> 
+                <div id="studyProgress" class="progress-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Phase (images shown with response buttons) -->
+    <div id="testPhase">
+        <div class="form-container">
+            <div class="image-container">
+            <center>  <img id="testImage" class="task-image" src="" alt="Imagen de prueba" style="display: none;"></center> 
+                <div class="response-buttons" style="display: none;">
+                    <button id="yesBtn" class="response-btn" onclick="recordResponse('SI')">Sí</button>
+                    <button id="noBtn" class="response-btn" onclick="recordResponse('NO')">No</button>
+                    <button id="dontKnowBtn" class="response-btn" onclick="recordResponse('TAL VEZ')">No sé</button>
+                </div>
+                <div id="testProgress" class="progress-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="countdown"></div>
+
+    <div id="continuationSection">
+        <p id="continuationLink" style="display: none;"></p>
+    </div>
+
+    <script>
+
+        // Variables para el tiempo de reacción
+let imageDisplayTime = 0;
+let reactionTimes = [];
+
+        // Experiment configuration
+        let grupoAleatorio = 5;
+        let horasEspera = 5;
+        
+        // Image task variables
+        const imageUrls = [
+            'image1.jpg',
+            'image1.jpg',
+            'image1.jpg',
+            'image1.jpg'
+        ];
+        
+        let currentStudyIndex = 0;
+        let currentTestIndex = 0;
+        let imageResponses = [];
+        let studyPhaseCompleted = false;
+        let testPhaseCompleted = false;
+
+        // Form functions (same as before)
+        function showInstructions() {
+            if (validateForm()) {
+                document.getElementById('instrucciones').style.display = 'block';
+                document.getElementById('contenedorForm').style.display = 'none';
+            } else {
+                alert('Por favor, completa todos los campos obligatorios antes de continuar.');
+            }
+        }
+
+        function validateForm() {
+            const requiredFields = document.querySelectorAll('#mainForm [required]');
+            let allFilled = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    allFilled = false;
+                    field.style.borderColor = 'red';
+                } else {
+                    field.style.borderColor = '#dadce0';
+                }
+            });
+
+            return allFilled;
+        }
+        
+        // Study Phase functions (showing images for 2 seconds each)
+        function startStudyPhase() {
+            document.getElementById("instrucciones").style.display = "none";
+            document.getElementById("studyPhase").style.display = "block";
+            showNextStudyImage();
+        }
+
+        function showNextStudyImage() {
+            if (currentStudyIndex >= imageUrls.length) {
+                studyPhaseCompleted = true;
+                document.getElementById("studyPhase").style.display = "none";
+                startTestPhase();
+                return;
+            }
+            
+            document.getElementById("studyProgress").textContent = 
+                `Imagen ${currentStudyIndex + 1} de ${imageUrls.length} (Fase de estudio)`;
+            
+            // Show fixation cross for 1 second before each image
+            document.getElementById("fixationCross").style.display = "block";
+            document.getElementById("studyImage").style.display = "none";
+            
+            setTimeout(() => {
+                document.getElementById("fixationCross").style.display = "none";
+                
+                const img = new Image();
+                img.src = imageUrls[currentStudyIndex];
+                img.onload = function() {
+                    document.getElementById("studyImage").src = imageUrls[currentStudyIndex];
+                    document.getElementById("studyImage").style.display = "block";
+                    document.getElementById("studyImage").scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Show image for 2 seconds then move to next
+                    setTimeout(() => {
+                        currentStudyIndex++;
+                        showNextStudyImage();
+                    }, 2000);
+                };
+            }, 1000);
+        }
+
+        // Test Phase functions (showing images with response buttons)
+        function startTestPhase() {
+            document.getElementById("testPhase").style.display = "block";
+            showNextTestImage();
+        }
+
+
+
+        function showNextTestImage() {
+    if (currentTestIndex >= imageUrls.length) {
+        testPhaseCompleted = true;
+        document.getElementById("testPhase").style.display = "none";
+        imageTaskComplete();
+        return;
+    }
+    
+    document.getElementById("testProgress").textContent = 
+        `Imagen ${currentTestIndex + 1} de ${imageUrls.length} (Fase de prueba)`;
+    
+    const img = new Image();
+    img.src = imageUrls[currentTestIndex];
+    img.onload = function() {
+        document.getElementById("testImage").src = imageUrls[currentTestIndex];
+        document.getElementById("testImage").style.display = "block";
+        document.getElementById("testImage").scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.querySelector("#testPhase .response-buttons").style.display = "flex";
+        
+        // Registrar el momento exacto en que la imagen se muestra completamente
+        imageDisplayTime = Date.now();
+    };
+}
+
+function recordResponse(response) {
+    const responseTime = Date.now();
+    const reactionTime = responseTime - imageDisplayTime; // Tiempo de reacción en ms
+    
+    imageResponses.push({
+        imageIndex: currentTestIndex,
+        imageUrl: imageUrls[currentTestIndex],
+        response: response,
+        reactionTime: reactionTime, // Guardamos el tiempo de reacción
+        responseTime: responseTime // También guardamos el momento absoluto por si acaso
+    });
+    
+    document.getElementById("testImage").style.display = "none";
+    document.querySelector("#testPhase .response-buttons").style.display = "none";
+    
+    currentTestIndex++;
+    showNextTestImage();
+}
+
+function imageTaskComplete() {
+    // Asignar respuestas y tiempos de reacción a los campos ocultos del formulario
+    if (imageResponses.length >= 4) {
+        document.getElementById('img1Response').value = imageResponses[0].response;
+        document.getElementById('img1Time').value = imageResponses[0].reactionTime;
+        
+        document.getElementById('img2Response').value = imageResponses[1].response;
+        document.getElementById('img2Time').value = imageResponses[1].reactionTime;
+        
+        document.getElementById('img3Response').value = imageResponses[2].response;
+        document.getElementById('img3Time').value = imageResponses[2].reactionTime;
+        
+        document.getElementById('img4Response').value = imageResponses[3].response;
+        document.getElementById('img4Time').value = imageResponses[3].reactionTime;
+    }
+    
+    if (!localStorage.getItem("visita")) {
+        localStorage.setItem("visita", "2");
+        sendAnswers(); // Envía el formulario con todas las respuestas
+        startCountdown("no");
+    }
+}
+        // Countdown and continuation functions (same as before)
+        function startCountdown(storedEndTime) {
+            if (storedEndTime === "no") {
+                const waitTime = horasEspera * 60 * 60 * 1000;
+                const endTime = Date.now() + waitTime;
+                updateCountdown(endTime);
+                localStorage.setItem("countdownEndTime", endTime);
+            } else {
+                const endTime = parseInt(storedEndTime);
+                if (endTime > Date.now()) {
+                    updateCountdown(endTime);
+                } else {
+                    showContinuationLink();
+                }
+            }
+        }
+
+        function updateCountdown(endTime) {
+            document.getElementById("countdown").style.display = "block";
+            
+            const countdownInterval = setInterval(() => {
+                const remainingTime = endTime - Date.now();
+                
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    showContinuationLink();
+                    localStorage.removeItem("countdownEndTime");
+                } else {
+                    const hours = Math.floor(remainingTime / (60 * 60 * 1000));
+                    const minutes = Math.floor((remainingTime % (60 * 60 * 1000)) / (60 * 1000));
+                    const seconds = Math.floor((remainingTime % (60 * 1000)) / 1000);
+                    
+                    document.getElementById("countdown").innerHTML = `
+                        <p>El enlace para la siguiente parte se te enviará por mail luego de transcurridas ${horasEspera} horas.</p>
+                        <p>Por favor, intentá realizar la tarea inmediatamente después de obtener el enlace.</p>
+                        <p><strong>Tiempo restante: ${hours}h ${minutes}m ${seconds}s</strong></p>
+                    `;
+                }
+            }, 1000);
+        }
+
+        function showContinuationLink() {
+            const continuationLink = "https://docs.google.com/forms/d/e/1FAIpQLScrBl4XUcxTDn7Q_L7pDSss_eXuR180VSkIgAOUpQf6bktF6Q/viewform?usp=header";
+            localStorage.setItem("Link", continuationLink);
+            
+            document.getElementById("countdown").style.display = "none";
+            document.getElementById("continuationSection").style.display = "block";
+            document.getElementById("continuationLink").style.display = "block";
+            document.getElementById("continuationLink").innerHTML = `
+                <p>Para continuar con el experimento, haz clic en el siguiente enlace. Simultáneamente, este enlace será enviado a tu correo electrónico:</p>
+                <p><a href="${continuationLink}" target="_blank" style="font-size: 18px; font-weight: bold;">Continuar con la siguiente parte</a></p>
+            `;
+        }
+
+        function sendAnswers() {
+            const mainForm = document.getElementById('mainForm');
+            mainForm.submit();
+        }
+
+        // Check if participant has already completed the task
+        if (localStorage.getItem("visita") === "realizada") {
+            document.getElementById("denuevo").style.display = "block";
+            document.getElementById("contenedorForm").style.display = "none";
+        } else if (localStorage.getItem("visita") === "2") {
+            document.getElementById("contenedorForm").style.display = "none";
+            document.getElementById("instrucciones").style.display = "none";
+            
+            const storedEndTime = localStorage.getItem("countdownEndTime");
+            if (storedEndTime) {
+                startCountdown(storedEndTime);
+            } else {
+                showContinuationLink();
+            }
+        }
+
+        // Conditional field displays (same as before)
+        document.getElementById('medicacion_cronica').addEventListener('change', function() {
+            document.getElementById('detalle_medicacion_block').style.display = this.value === 'Si' ? 'block' : 'none';
+        });
+
+        document.getElementById('trastorno_sueno').addEventListener('change', function() {
+            document.getElementById('detalle_trastorno_block').style.display = this.value === 'Si' ? 'block' : 'none';
+        });
+
+        document.getElementById('experimento_anterior').addEventListener('change', function() {
+            document.getElementById('detalle_experimento_block').style.display = this.value === 'Si' ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>
