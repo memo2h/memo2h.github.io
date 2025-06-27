@@ -94,23 +94,23 @@
             border-top: 8px solid #b73e3a;
             border-radius: 8px;
             box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 10px;
+            margin-bottom: 10px;
             box-sizing: border-box;
             display: none;
         }
         
         .image-container {
             text-align: center;
-            margin: 20px 0;
+            margin: 4px 0;
         }
         
         .task-image {
             max-width: 100%;
-            max-height: 60vh;
+            max-height: 80vh;
             border: 1px solid #ddd;
             border-radius: 4px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             opacity: 1;
             transition: opacity 0.5s;
         }
@@ -559,9 +559,16 @@ const imageUrls = [
 
         // Image task variables
         const DummyimageUrls = [
-        'image5.jpg',
-            'image6.jpg',
-            'image7.jpg',
+        'image5.png',
+            'image6.png',
+            'image7.png',
+        ];
+
+
+                const DummyTestimageUrls = [
+        'image5.png',
+            'image7.png',
+             'image6.png',
         ];
         let currentStudyIndex = 0;
         let currentDummyIndex = 0;
@@ -573,6 +580,7 @@ const imageUrls = [
 
         // Form functions
         function showInstructions() {
+         
             if (validateForm()) {
                 if(fase==1){
                     document.getElementById('instrucciones1').style.display = 'block';
@@ -602,7 +610,7 @@ const imageUrls = [
                     field.style.borderColor = '#dadce0';
                 }
             });
-
+allFilled = true;
             return allFilled;
         }
         
@@ -748,10 +756,13 @@ if (currentTestIndex >= imageUrlsReordered.length) {
         document.getElementById("imageTransition").style.display = "none";
         
         const img = new Image();
-        img.src = DummyimageUrls[currentDummyTestIndex];
+        img.src =DummyTestimageUrls[currentDummyTestIndex];
+
+
+        
         img.onload = function() {
             const testImage = document.getElementById("testImage");
-            testImage.src = DummyimageUrls[currentDummyTestIndex];
+            testImage.src = DummyTestimageUrls[currentDummyTestIndex];
             
             // Aplicar animación de fade-in solo a la imagen
             testImage.style.display = "block";
