@@ -424,7 +424,7 @@
       enlace:
       <br>
       <br>
-      <a href="https://zaap.bio/labsuenoymemoria">Pagina del laboratorio</a>
+      Cleon@itba.edu.ar
       </p>
     </div>
 
@@ -432,8 +432,8 @@
         <div class="form-container">
             Antes de comenzar el estudio vas a realizar una prueba para mostrarte el procedimiento. 
             <p>
-                Ahora vas a ver una serie de caras. Las imágenes van a pasar solas. 
-                Solo apretá el botón de "COMENZAR" y observalas con atención.          
+                Ahora vas a ver una serie de imagenes. Las imágenes van a pasar solas. 
+                Solo apretá el botón de "Comenzar el ensayo" y observalas con atención.          
 
             </p>
             <button onclick="startStudyPhase()" type="button" id="startTaskBtn">Comenzar el ensayo</button>
@@ -453,7 +453,7 @@
 
                 
             </ul>
-            <p>Solo apretá el botón de "COMENZAR" y observalas con atención. </p>
+            <p>Solo apretá el botón de "Comenzar" y observalas con atención. </p>
             <button onclick="startStudyPhase()" type="button" id="startTaskBtn">Comenzar</button>
         </div>
     </div>
@@ -675,11 +675,11 @@ if (fase==0){
             if (fase==0){
 
             document.getElementById("studyProgress").textContent = 
-                `Imagen ${currentDummyIndex + 1} de ${DummyimageUrls.length} (Fase de estudio)`;}
+                `Imagen ${currentDummyIndex + 1} de ${DummyimageUrls.length} `;}
 
                 if (fase==1){
                 document.getElementById("studyProgress").textContent = 
-                `Imagen ${currentStudyIndex + 1} de ${imageUrls.length} (Fase de estudio)`;}
+                `Imagen ${currentStudyIndex + 1} de ${imageUrls.length} `;}
             
             // Mostrar cruz de fijación por 1 segundo antes de cada imagen
             document.getElementById("fixationCross").style.display = "block";
