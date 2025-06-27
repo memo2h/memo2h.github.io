@@ -533,7 +533,7 @@ const imageUrls = [
 
             if (grupoUsuario==4){
 
-                       localStorage.setItem("visita", "3");
+                       localStorage.setItem("segunda", "3");
                 sendAnswers(); // Envía el formulario con todas las respuestas
                 document.getElementById('PlaceHolder').style.display = 'block';
 
@@ -553,7 +553,7 @@ const imageUrls = [
 
                     if (grupoUsuario==3){
 
-                       localStorage.setItem("visita", "3");
+                       localStorage.setItem("segunda", "3");
                 sendAnswers(); // Envía el formulario con todas las respuestas
                 document.getElementById('PlaceHolder').style.display = 'block';
 
@@ -864,8 +864,8 @@ if (imageResponses.length >= 12) {
 }
 
             
-            if (!localStorage.getItem("visita")) {
-                localStorage.setItem("visita", "3");
+            if (!localStorage.getItem("segunda")) {
+                localStorage.setItem("segunda", "3");
                 sendAnswers(); // Envía el formulario con todas las respuestas
                 document.getElementById('Agradecimiento').style.display = 'block';
             }
@@ -882,7 +882,7 @@ if (imageResponses.length >= 12) {
         }
 
 
-         if (localStorage.getItem("visita") === "3") {
+         if (localStorage.getItem("segunda") === "3") {
             document.getElementById("contenedorForm").style.display = "none";
             document.getElementById("instrucciones").style.display = "none";
             document.getElementById("instrucciones1").style.display = "none";
