@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Participación</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+        }
+        .form-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #b7473a;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        .sub {
+            font-size: 12px;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        .question-block {
+            background-color: #f9f9f9;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+        input[type="text"], input[type="email"], input[type="time"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="time"]:focus, select:focus {
+            border-color: #673ab7;
+            outline: none;
+        }
+        button {
+            background-color: #673ab7;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #311b92;
+        }
+        a {
+            color: #673ab7;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Image task styling */
+        #studyPhase, #testPhase {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #b73e3a;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            display: none;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 4px 0;
+        }
+        
+        .task-image {
+            max-width: 100%;
+            max-height: 80vh;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            opacity: 1;
+            transition: opacity 0.5s;
+        }
+        
+        .response-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .response-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+        
+        #yesBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+        }
+        
+        #dontKnowBtn {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .response-btn:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+        
+        .progress-text {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        #countdown {
+            display: none; 
+            font-size: 20px; 
+            white-space: pre-wrap;
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #b73c3a;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        
+        #continuationSection {
+            display: none;
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #673ab7;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        
+        .fixation-cross {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 20px 0;
+            animation: fadeInOut 1s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+        
+        /* Nuevos estilos para las animaciones */
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .transition-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        
+        #betweenPhasesInstructions {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+  <iframe name="formTarget" style="display:none;"></iframe>
+    <div class="form-container" id="contenedorForm">
+        <div class="title">Formulario de Participación</div>
+        <div class="sub">
+            <h2 style="font-size: 24px; margin-bottom: 10px;">¡Hola!</h2>
+            <p style="margin-bottom: 12px;">Este estudio forma parte de una investigación sobre memoria del Laboratorio de Sueño y Memoria (ITBA). Podes participar usando computadora, tablet o teléfono.</p>
+            <ul style="margin: 12px 0; padding-left: 20px;">
+                <li><strong>Requisitos:</strong> Tener entre 18 y 45 años, no consumir psicofármacos, y no tener desordenes de sueño diagnosticados.</li>
+                <li><strong>Duración:</strong> El experimento está dividido en tres partes, que se realizan en tres días consecutivos. Cada una toma aproximadamente 10 minutos. Mañana y pasado mañana recibirás por mail el enlace correspondiente para completar la segunda y tercera parte.</li>
+                <li><strong>Más información:</strong> Para información más detallada sobre el experimento, podes entrar <a href="https://docs.google.com/document/d/19rrrXTJehi-1rZkxOGua4qccrDwTZhxRxt0SKN-o3cw/edit?usp=sharing" target="_blank">aquí</a>.</li>
+            </ul>
+            <p style="margin-bottom: 12px;">Este Protocolo fue aprobado por el Comité de Ética Humana (CEH), de la Facultad de Medicina UBA.</p>
+            <p style="margin-bottom: 12px;">Para consultas específicas comunicate con la Lic. Candela Leon, al mail: cleon@itba.edu.ar, o la Dra Cecilia Forcato, al mail: cforcato@itba.edu.ar.</p>
+              <p style="margin-bottom: 12px;"> La información recolectada durante este estudio será guardada confidencialmente dentro de lo que estipula la ley 25326 de protección de datos personales. Los resultados pueden ser publicados para propósitos científicos, pero la identidad de las personas participantes no será revelada.</p>
+        </div>
+
+        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdZuvnyJYXxx0wIk8FZJJYYgixXDExkWQb-NbpnmnBOR2NiFA/formResponse" method="POST" target="formTarget">
+            <div class="question-block">
+                <label class="question" for="email">Dirección de correo electrónico</label>
+                <input type="email" id="email" name="entry.1190073540" placeholder="Ingresa tu correo electrónico" required>
+            </div>
+
+            <div class="question-block">
+                <label class="question">¿Desde qué dispositivo estás realizando esta tarea?</label>
+                <select name="entry.2120654582" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Computadora">Computadora</option>
+                    <option value="Telefono">Teléfono</option>
+                    <option value="Tablet">Tablet</option>
+                </select>
+            </div>
+
+
+            <div class="question-block">
+                <label class="question" for="nombre">Nombre y apellido</label>
+                <input type="text" id="nombre" name="entry.543210643" placeholder="Ingresa tu nombre completo" required>
+            </div>
+
+
+                <input type="hidden" id="grupo" name="entry.165872651" >
+   
+
+            <div class="question-block">
+                <label class="question">¿A qué hora te despertaste hoy?</label>
+                <input type="time" name="entry.810565752" required>
+            </div>
+
+
+
+
+
+            <div class="question-block">
+                <label class="question">GRADO DE SOMNOLENCIA:</label>
+                <select name="entry.1053849261"  required>
+                    <option value="" disabled selected>Marcá la opción que te identifique mejor en este momento.</option>
+                    <option value=1>Me siento activo, vital, alerta, o bien despierto</option>
+                    <option value=2>Funcionando a niveles altos, pero no completamente alerta</option>
+                    <option value=3>Despierto, pero relajado; sensible, pero no completamente alerta</option>
+                    <option value=4>Un poco confundido, decepcionado</option>
+                    <option value=5>Confundido; pierdo interés en permanecer despierto; ralentizado</option>
+                    <option value=6>Somnoliento, mareado, luchado contra el sueño; prefiero recostarme</option>
+                    <option value=7>Ya no lucho contra el sueño, comenzaré a dormirme pronto; tengo pensamientos como sueños</option>
+                    <option value=8>Dormido</option>
+                </select>
+            </div>
+
+
+
+
+
+
+
+        <input type="hidden" name="entry.700564156" id="img2Response">
+        <input type="hidden" name="entry.578696829" id="img2Time">
+        <input type="hidden" name="entry.1846099994" id="img3Response">
+        <input type="hidden" name="entry.1266411467" id="img3Time">
+        <input type="hidden" name="entry.955814617" id="img4Response">
+        <input type="hidden" name="entry.368502653" id="img4Time">
+        <input type="hidden" name="entry.281848136" id="img5Response">
+        <input type="hidden" name="entry.1415358376" id="img5Time">
+        <input type="hidden" name="entry.901203518" id="img6Response">
+        <input type="hidden" name="entry.551600816" id="img6Time">
+        <input type="hidden" name="entry.874666398" id="img7Response">
+        <input type="hidden" name="entry.1774748287" id="img7Time">
+        <input type="hidden" name="entry.663993879" id="img8Response">
+        <input type="hidden" name="entry.31742072" id="img8Time">
+        <input type="hidden" name="entry.1624298721" id="img9Response">
+        <input type="hidden" name="entry.2017633666" id="img9Time">
+        <input type="hidden" name="entry.250557209" id="img10Response">
+        <input type="hidden" name="entry.1631802898" id="img10Time">
+        <input type="hidden" name="entry.2034845045" id="img11Response">
+        <input type="hidden" name="entry.105270583" id="img11Time">
+
+
+            <button type="button" onclick="showInstructions()">Seguir</button>
+        </form>
+
+        <iframe name="hidden_iframe" style="display:none;"></iframe>
+    </div>
+
+    <div id="denuevo" style="display: none;" class="form-container">
+      <p class="question-block">
+      Solo se puede participar una vez en esta tarea. Si desea participar de otro de nuestros experimentos o tiene consultas,
+      puede escribirnos al siguiente Email:
+      <br>
+      <br>
+      Cleon@itba.edu.ar
+      </p>
+    </div>
+
+    <div id="instrucciones" style="display:none;">
+        <div class="form-container"> 
+            <p>
+            Ahora vas a ver una serie de caras. Las imágenes van a pasar solas. 
+            Solo apretá el botón de "COMENZAR" y observalas con atención. 
+
+            </p>
+            <button onclick="startStudyPhase()" type="button" id="startTaskBtn">COMENZAR</button>
+        </div>
+    </div>
+
+
+
+
+    <div id="instrucciones1" style="display:none;">
+        <div class="form-container">
+
+
+            <ul style="text-align: left;">
+                Ahora vas a ver otra serie de caras. Las imágenes van a pasar solas. 
+
+                
+            </ul>
+            <p>Solo apretá el botón de "Comenzar" y observalas con atención. </p>
+            <button onclick="startStudyPhase()" type="button" id="startTaskBtn">Comenzar</button>
+        </div>
+    </div>
+
+
+    <!-- Pantalla de instrucciones entre fases -->
+    <div id="betweenPhasesInstructions" class="form-container">
+        <h2>Instrucciones para la siguiente fase</h2>
+        <p>Ahora vas a volver a ver una serie de caras y podes elegir entre las siguientes opciones:  </p>
+        <ul>
+            <li>Si recordás haber visto la foto elegí la opción "VISTO"</li>
+            <li>Si no la recordás elegí la opción "NO VISTO"</li>
+            <li>Si te resulta familiar elegí la opción "FAMILIAR"</li>
+        </ul>
+        <p>Responde lo más rápido y preciso que puedas.</p>
+        <button onclick="startTestPhase()">Comenzar fase de reconocimiento</button>
+    </div>
+
+
+
+        <!-- Pantalla de instrucciones entre fases -->
+        <div id="Agradecimiento" class="form-container" style="display:none;">
+            <h2>Gracias por responder</h2>
+            <p>Mañana a está hora vas a recibir un mail con el enlace para realizar la segunda parte. </p>
+        </div>
+
+
+                <div id="PlaceHolder" class="form-container" style="display:none;">
+            <h2>Gracias por participar</h2>
+            <p>Fuiste asignado de manera aleatoria a un grupo que no tiene que hacer nada mas hoy. </p>
+            <p>Mañana a esta hora recibirás otro mail y se te asignará una tarea.</p>
+        </div>
+        
+
+    <!-- Study Phase (images shown for 2 seconds each) -->
+    <div id="studyPhase">
+        <div class="form-container">
+            <div class="image-container">
+                <div id="fixationCross" class="fixation-cross" style="display: none;">+</div>
+                <center><img id="studyImage" class="task-image" src="" alt="Imagen de estudio" style="display: none;"></center>
+                <div id="studyProgress" class="progress-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Phase (images shown with response buttons) -->
+    <div id="testPhase">
+        <div class="form-container">
+            <div class="image-container">
+                <center><img id="testImage" class="task-image" src="" alt="Imagen de prueba" style="display: none;"></center>
+                <div class="response-buttons" style="display: none;">
+                    <button id="yesBtn" class="response-btn" onclick="recordResponse('SI')">VISTO</button>
+                    <button id="noBtn" class="response-btn" onclick="recordResponse('NO')">NO VISTO</button>
+                    <button id="dontKnowBtn" class="response-btn" onclick="recordResponse('TAL VEZ')">FAMILIAR</button>
+                </div>
+                <div id="testProgress" class="progress-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pantalla de transición -->
+    <div id="imageTransition" style="display: none;" style="display: none; height: 400px; background-color: #f9f9f9; border: 1px dashed #ccc; margin: 20px 0; display: flex; justify-content: center; align-items: center;">
+       
+    </div>
+
+    <div id="countdown"></div>
+
+    <div id="continuationSection">
+        <p id="continuationLink" style="display: none;"></p>
+    </div>
+
+    <script>
+let grupoUsuario =0;
+  
+    // Asignar grupo aleatorio (1-4)
+    grupoUsuario = Math.floor(Math.random() * 4) + 1;
+    document.getElementById('grupo').value = grupoUsuario;
+    
+    console.log("Usuario asignado al grupo:", grupoUsuario); // Opcional: para debugging
+
+        // Variables para el tiempo de reacción
+        let imageDisplayTime = 0;
+        let reactionTimes = [];
+        let fase=0;
+
+        // Experiment configuration
+        let grupoAleatorio = 5;
+        let horasEspera = 5;
+        
+        // Image task variables
+const imageUrls = [
+  '11.png',
+  '12.png',
+  '13.png',
+  '14.png',
+  '15.png',
+  '16.png',
+  '17.png',
+  '18.png',
+  '19.png',
+  '20.png'
+];
+
+        const imageUrlsReordered = [
+  '13.png',
+  '11.png',
+  '17.png',
+  '19.png',
+  '12.png',
+  '15.png',
+  '20.png',
+  '16.png',
+  '14.png',
+  '18.png'
+        ];
+        
+
+        // Image task variables
+        const DummyimageUrls = [
+        'image11.png',
+            'image12.png',
+            'image13.png',
+            'image14.png',
+            'image15.png',
+            'image16.png',
+            'image17.png',
+            'image18.png',
+            'image19.png',
+            'image20.png',
+        ];
+
+
+
+        let currentStudyIndex = 0;
+        let currentDummyIndex = 0;
+        let currentTestIndex = 0;
+        let currentDummyTestIndex = 0;
+        let imageResponses = [];
+        let studyPhaseCompleted = false;
+        let testPhaseCompleted = false;
+
+       if (grupoUsuario==2){
+        fase=1;
+       }
+
+
+
+        // Form functions
+        function showInstructions() {
+         
+            if (validateForm()) {
+                if(fase==1){
+
+
+            if (grupoUsuario==4){
+
+                       localStorage.setItem("visita", "2");
+                sendAnswers(); // Envía el formulario con todas las respuestas
+                document.getElementById('PlaceHolder').style.display = 'block';
+
+                    document.getElementById('contenedorForm').style.display = 'none';
+
+                    return;
+                    }
+
+                    else{
+
+                    document.getElementById('instrucciones1').style.display = 'block';
+                    document.getElementById('contenedorForm').style.display = 'none';
+                    }
+
+                }
+                else{
+
+                    if (grupoUsuario==3){
+
+                       localStorage.setItem("visita", "2");
+                sendAnswers(); // Envía el formulario con todas las respuestas
+                document.getElementById('PlaceHolder').style.display = 'block';
+
+                    document.getElementById('contenedorForm').style.display = 'none';
+
+                    return;
+                    }
+
+                    else {
+
+                    document.getElementById('instrucciones').style.display = 'block';
+                    document.getElementById('contenedorForm').style.display = 'none';
+                    }
+
+                }
+
+            } else {
+                alert('Por favor, completa todos los campos obligatorios antes de continuar.');
+            }
+        }
+
+function validateForm() {
+    const requiredFields = document.querySelectorAll('#mainForm [required]');
+    let allFilled = true;
+
+    requiredFields.forEach(field => {
+        if (!field.value) {
+            allFilled = false;
+            field.style.borderColor = 'red';
+        } else {
+            field.style.borderColor = '#dadce0';
+        }
+    });
+
+
+ allFilled = true;
+    return allFilled;
+}
+        
+        // Study Phase functions
+        function startStudyPhase() {
+            document.getElementById("instrucciones").style.display = "none";
+            document.getElementById("instrucciones1").style.display = "none";
+            document.getElementById("studyPhase").style.display = "block";
+            showNextStudyImage();
+        }
+
+        function showNextStudyImage() {
+
+if (fase==0){
+
+    if (currentDummyIndex >= DummyimageUrls.length) {
+                studyPhaseCompleted = true;
+                document.getElementById("studyPhase").style.display = "none";
+
+                startTestPhase();
+                
+
+                return;
+            }
+
+
+}
+
+
+
+            if (currentStudyIndex >= imageUrls.length) {
+                studyPhaseCompleted = true;
+                document.getElementById("studyPhase").style.display = "none";
+                
+                // Mostrar pantalla de instrucciones entre fases
+                document.getElementById("betweenPhasesInstructions").style.display = "block";
+                return;
+            }
+            
+
+            if (fase==0){
+
+            document.getElementById("studyProgress").textContent = 
+                `Imagen ${currentDummyIndex + 1} de ${DummyimageUrls.length} `;}
+
+                if (fase==1){
+                document.getElementById("studyProgress").textContent = 
+                `Imagen ${currentStudyIndex + 1} de ${imageUrls.length} `;}
+            
+            // Mostrar cruz de fijación por 1 segundo antes de cada imagen
+            document.getElementById("fixationCross").style.display = "block";
+            document.getElementById("studyImage").style.display = "none";
+            
+            setTimeout(() => {
+                document.getElementById("fixationCross").style.display = "none";
+                
+                const img = new Image();
+
+
+                if (fase==0){
+                img.src = DummyimageUrls[currentDummyIndex];
+                img.onload = function() {
+                    document.getElementById("studyImage").src = DummyimageUrls[currentDummyIndex];
+                    document.getElementById("studyImage").style.display = "block";
+                    document.getElementById("studyImage").scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Mostrar imagen por 2 segundos luego pasar a la siguiente
+                    setTimeout(() => {
+                        currentDummyIndex++;
+                        showNextStudyImage();
+                    }, 3000);
+                };
+            }
+
+
+
+            if (fase==1){
+
+
+
+
+                img.src = imageUrls[currentStudyIndex];
+                img.onload = function() {
+                    document.getElementById("studyImage").src = imageUrls[currentStudyIndex];
+                    document.getElementById("studyImage").style.display = "block";
+                    document.getElementById("studyImage").scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Mostrar imagen por 2 segundos luego pasar a la siguiente
+                    setTimeout(() => {
+                        currentStudyIndex++;
+                        showNextStudyImage();
+                    }, 3000);
+                };
+
+            }
+
+
+
+            }, 500);
+        }
+
+        // Test Phase functions
+        function startTestPhase() {
+            document.getElementById("betweenPhasesInstructions").style.display = "none";
+            document.getElementById("testPhase").style.display = "block";
+            showNextTestImage();
+        }
+        function showNextTestImage() {
+
+if(fase==0){
+   
+        testPhaseCompleted = true;
+        document.getElementById("testPhase").style.display = "none";
+        fase=1;
+        showInstructions();
+        return;
+
+} 
+
+
+
+if (currentTestIndex >= imageUrlsReordered.length) {
+        testPhaseCompleted = true;
+        document.getElementById("testPhase").style.display = "none";
+        imageTaskComplete()
+        
+        return;
+    }
+
+    // Ocultar imagen y botones, mostrar área de transición
+    document.getElementById("testImage").style.display = "none";
+    document.querySelector("#testPhase .response-buttons").style.display = "none";
+    document.getElementById("imageTransition").style.display = "flex";
+
+
+
+    if (fase==0){
+    
+    document.getElementById("testProgress").textContent = 
+        `Imagen ${currentDummyTestIndex + 1} de ${DummyimageUrls.length} `;
+    
+    // Esperar 1 segundo antes de mostrar la siguiente imagen
+    setTimeout(() => {
+        document.getElementById("imageTransition").style.display = "none";
+        
+        const img = new Image();
+        img.src =DummyTestimageUrls[currentDummyTestIndex];
+
+
+        
+        img.onload = function() {
+            const testImage = document.getElementById("testImage");
+            testImage.src = DummyTestimageUrls[currentDummyTestIndex];
+            
+            // Aplicar animación de fade-in solo a la imagen
+            testImage.style.display = "block";
+            testImage.classList.add("fade-in");
+            
+            setTimeout(() => {
+                testImage.classList.remove("fade-in");
+            }, 500);
+            
+            document.querySelector("#testPhase .response-buttons").style.display = "flex";
+            imageDisplayTime = Date.now();
+        };
+    }, 1000);}
+
+
+
+
+    if (fase==1){
+    
+    document.getElementById("testProgress").textContent = 
+        `Imagen ${currentTestIndex + 1} de ${imageUrlsReordered.length} `;
+    
+    // Esperar 1 segundo antes de mostrar la siguiente imagen
+    setTimeout(() => {
+        document.getElementById("imageTransition").style.display = "none";
+        
+        const img = new Image();
+        img.src = imageUrlsReordered[currentTestIndex];
+        img.onload = function() {
+            const testImage = document.getElementById("testImage");
+            testImage.src = img.src;
+            
+            // Aplicar animación de fade-in solo a la imagen
+            testImage.style.display = "block";
+            testImage.classList.add("fade-in");
+            
+            setTimeout(() => {
+                testImage.classList.remove("fade-in");
+            }, 500);
+            
+            document.querySelector("#testPhase .response-buttons").style.display = "flex";
+            imageDisplayTime = Date.now();
+        };
+    }, 1000);}
+
+
+}
+
+function recordResponse(response) {
+    
+
+    const testImage = document.getElementById("testImage");
+    
+    // Aplicar animación de fade-out solo a la imagen
+    testImage.classList.add("fade-out");
+    
+    setTimeout(() => {
+        const responseTime = Date.now();
+        const reactionTime = responseTime - imageDisplayTime;
+        
+        imageResponses.push({
+            imageIndex: currentTestIndex,
+            imageUrl: imageUrls[currentTestIndex],
+            response: response,
+            reactionTime: reactionTime,
+            responseTime: responseTime
+        });
+        
+        testImage.style.display = "none";
+        testImage.classList.remove("fade-out");
+        document.querySelector("#testPhase .response-buttons").style.display = "none";
+
+        if (fase==1){
+            currentTestIndex++;
+        }
+        
+        
+        currentDummyTestIndex++;
+        showNextTestImage();
+    }, 500);
+}
+        function imageTaskComplete() {
+
+            if(fase==0){
+        return;
+    }
+
+// Asignar respuestas y tiempos de reacción a los campos ocultos del formulario
+if (imageResponses.length >= 12) {
+    document.getElementById('img2Response').value = imageResponses[3].response;
+    document.getElementById('img2Time').value = imageResponses[3].reactionTime;
+
+    document.getElementById('img3Response').value = imageResponses[4].response;
+    document.getElementById('img3Time').value = imageResponses[4].reactionTime;
+
+    document.getElementById('img4Response').value = imageResponses[5].response;
+    document.getElementById('img4Time').value = imageResponses[5].reactionTime;
+
+    document.getElementById('img5Response').value = imageResponses[6].response;
+    document.getElementById('img5Time').value = imageResponses[6].reactionTime;
+
+    document.getElementById('img6Response').value = imageResponses[7].response;
+    document.getElementById('img6Time').value = imageResponses[7].reactionTime;
+
+    document.getElementById('img7Response').value = imageResponses[8].response;
+    document.getElementById('img7Time').value = imageResponses[8].reactionTime;
+
+    document.getElementById('img8Response').value = imageResponses[9].response;
+    document.getElementById('img8Time').value = imageResponses[9].reactionTime;
+
+    document.getElementById('img9Response').value = imageResponses[10].response;
+    document.getElementById('img9Time').value = imageResponses[10].reactionTime;
+
+    document.getElementById('img10Response').value = imageResponses[11].response;
+    document.getElementById('img10Time').value = imageResponses[11].reactionTime;
+
+    document.getElementById('img11Response').value = imageResponses[12].response;
+    document.getElementById('img11Time').value = imageResponses[12].reactionTime;
+}
+
+            
+            if (!localStorage.getItem("visita")) {
+                localStorage.setItem("visita", "2");
+                sendAnswers(); // Envía el formulario con todas las respuestas
+                document.getElementById('Agradecimiento').style.display = 'block';
+            }
+        }
+
+
+
+
+      
+
+        function sendAnswers() {
+            const mainForm = document.getElementById('mainForm');
+            mainForm.submit();
+        }
+
+        // Check if participant has already completed the task
+        if (localStorage.getItem("visita") === "realizada") {
+            document.getElementById("denuevo").style.display = "block";
+            document.getElementById("contenedorForm").style.display = "none";
+        } else if (localStorage.getItem("visita") === "2") {
+            document.getElementById("contenedorForm").style.display = "none";
+            document.getElementById("instrucciones").style.display = "none";
+            document.getElementById("instrucciones1").style.display = "none";
+            
+            document.getElementById('denuevo').style.display = 'block';
+            
+        }
+
+
+    </script>
+</body>
+</html>
+
+
