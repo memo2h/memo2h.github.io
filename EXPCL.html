@@ -598,21 +598,43 @@ const imageUrls = [
             }
         }
 
-        function validateForm() {
-            const requiredFields = document.querySelectorAll('#mainForm [required]');
-            let allFilled = true;
+function validateForm() {
+    const requiredFields = document.querySelectorAll('#mainForm [required]');
+    let allFilled = true;
 
-            requiredFields.forEach(field => {
-                if (!field.value) {
-                    allFilled = false;
-                    field.style.borderColor = 'red';
-                } else {
-                    field.style.borderColor = '#dadce0';
-                }
-            });
-
-            return allFilled;
+    requiredFields.forEach(field => {
+        if (!field.value) {
+            allFilled = false;
+            field.style.borderColor = 'red';
+        } else {
+            field.style.borderColor = '#dadce0';
         }
+    });
+
+    // Validar campos condicionales visibles
+    const conditionalFields = [
+        {trigger: 'medicacion_cronica', field: 'detalle_medicacion_block'},
+        {trigger: 'trastorno_sueno', field: 'detalle_trastorno_block'},
+        {trigger: 'experimento_anterior', field: 'detalle_experimento_block'}
+    ];
+
+    conditionalFields.forEach(item => {
+        const trigger = document.getElementById(item.trigger);
+        const fieldBlock = document.getElementById(item.field);
+        
+        if (trigger.value === 'Si' && fieldBlock.style.display === 'block') {
+            const input = fieldBlock.querySelector('input');
+            if (!input.value) {
+                allFilled = false;
+                input.style.borderColor = 'red';
+            } else {
+                input.style.borderColor = '#dadce0';
+            }
+        }
+    });
+
+    return allFilled;
+}
         
         // Study Phase functions
         function startStudyPhase() {
