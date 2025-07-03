@@ -115,8 +115,8 @@
 
 <div class="full-screen" id="nameScreen">
   
-  <h2 class="text-container">Te damos la bienvenida a la segunda parte de nuestro estudio. A continuacion vas a realizar una serie de tareas, durante un tiempo estimado de 15 minutos. Por favor, prestá mucha atención al leer y responder. No es posible retroceder ni modificar una respuesta despues de avanzar a la siguiente pregunta.
-¡Muchas gracias!</h2>
+  <p class="text-container">Te damos la bienvenida a la segunda parte de nuestro estudio. A continuacion vas a realizar una serie de tareas, durante un tiempo estimado de 15 minutos. Por favor, prestá mucha atención al leer y responder. No es posible retroceder ni modificar una respuesta despues de avanzar a la siguiente pregunta.
+¡Muchas gracias!</p>
 <br>
 <br>
   <h2>Por favor, ingresa tu nombre y apellido</h2>
@@ -134,19 +134,19 @@
 <div class="full-screen hidden" id="instructionsStart" class="text-container" >
   <h2>Instrucciones </h2>
   <br>
-  <p class="text-container">Ahora vas a realizar una rueda de reconocimiento con seis sospechosos, entre los que se puede encontrar una de las personas que robó la pizzería en el video que viste. Tomate tu tiempo para verlos.<br>
-    Si identificas a uno de los ladrones entre los sospechosos seleccioná su foto. Si no reconoces a ninguno utiliza el boton "no reconozco a ninguno" que esta abajo de las fotos.</p>
+  <p class="text-container">Ahora vas a realizar una serie de pruebas de reconocimiento con seis caras cada una. En cada prueba se puede encontrar o no una de las caras que viste en las sesiones anteriores<br>
+    Si la reconocés elegila. Si no reconoces a ninguna clickea el botón "no reconozco a ninguna" que esta abajo de las fotos.</p>
   <br>
   <button onclick="showLineup()">Comenzar</button>
 </div>
 
 <div class="full-screen hidden" id="lineupContainer">
-  <h2>¿Reconoces a alguno de los ladrones?</h2>
+  <h2>¿Reconoces alguna de estas caras?</h2>
   <br>
   <div class="photo-grid" id="photoGrid">
     <!-- Photos will be dynamically added here -->
   </div>
-  <button id="opcionCero"> No reconozco a ninguno</button>
+  <button id="opcionCero"> No reconozco a ninguna</button>
 </div>
 
 <div class="modal" id="confirmationModal">
