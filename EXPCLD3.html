@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ruedas de Reconocimiento</title>
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* General */
+    body, html {
+      height: 100%;
+      font-family: Arial, sans-serif;
+      font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    }
+
+    /* Full-screen containers */
+    .full-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .hidden { display: none; }
+
+    /* Grid for photos */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 600px;
+      width: 90%;
+    }
+
+    .photo {
+      width: 100%;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .photo:hover {
+      transform: scale(1.05);
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+      max-width: 90%;
+      width: 300px;
+    }
+
+    /* Buttons */
+    button {
+      
+      padding: 10px 20px;
+      margin-top: 10px;
+      font-size: 16px;
+      cursor: pointer;
+
+      background-color: #673ab7;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    }
+
+
+    .text-container {
+            max-width: 600px;
+            width: 100%;
+            background-color: #fff;
+            border: 1px solid #dadce0;
+            border-top: 8px solid #673ab7;
+            border-radius: 8px;
+            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+    .confirm-button { background-color: #4CAF50; color: white; }
+    .cancel-button { background-color: #f44336; color: white; }
+  </style>
+</head>
+<body>
+
+<div class="full-screen" id="nameScreen">
+  
+  <h2 class="text-container">Te damos la bienvenida a la segunda parte de nuestro estudio. A continuacion vas a realizar una serie de tareas, durante un tiempo estimado de 15 minutos. Por favor, prestá mucha atención al leer y responder. No es posible retroceder ni modificar una respuesta despues de avanzar a la siguiente pregunta.
+¡Muchas gracias!</h2>
+<br>
+<br>
+  <h2>Por favor, ingresa tu nombre y apellido</h2>
+  <br>
+  <input type="text" id="nameInput" placeholder="Nombre y apellido" required>
+  <br>
+  <br>
+  <br>
+  <p>¿Estás usando computadora o celular?</p>
+  <br>
+  <button onclick="setDevice('Computadora')">Computadora</button>
+  <button onclick="setDevice('Celular')">Celular</button>
+</div>
+
+<div class="full-screen hidden" id="instructionsStart" class="text-container" >
+  <h2>Instrucciones </h2>
+  <br>
+  <p class="text-container">Ahora vas a realizar una rueda de reconocimiento con seis sospechosos, entre los que se puede encontrar una de las personas que robó la pizzería en el video que viste. Tomate tu tiempo para verlos.<br>
+    Si identificas a uno de los ladrones entre los sospechosos seleccioná su foto. Si no reconoces a ninguno utiliza el boton "no reconozco a ninguno" que esta abajo de las fotos.</p>
+  <br>
+  <button onclick="showLineup()">Comenzar</button>
+</div>
+
+<div class="full-screen hidden" id="lineupContainer">
+  <h2>¿Reconoces a alguno de los ladrones?</h2>
+  <br>
+  <div class="photo-grid" id="photoGrid">
+    <!-- Photos will be dynamically added here -->
+  </div>
+  <button id="opcionCero"> No reconozco a ninguno</button>
+</div>
+
+<div class="modal" id="confirmationModal">
+  <div class="modal-content">
+    <p>¿Confirmar elección?</p>
+    <img src="" alt="Selected" id="selectedPhoto" style="width:100px;">
+    <br>
+    <button class="confirm-button" id="confirmButton">Confirmar</button>
+    <button class="cancel-button" id="cancelButton">Cancelar</button>
+  </div>
+</div>
+
+<div id="confidence" class="full-screen hidden" >
+<p> Del 0 al 100 ¿Qué confianza tenes en tu elección?</p>
+<br>
+<center>
+<input type="number" id="confidenceInput" min="0" max="100" placeholder="Confianza (0-100)" required>
+<br>
+<button class="confirm-button" id="nextButton">Seguir</button>
+</center>
+</div>
+
+<div class="full-screen hidden" id="instructionsQuestions">
+  <h2>Cuestionario</h2>
+  <br>
+  <br>
+  <p class="text-container">En la siguiente tarea vas a responder una serie de preguntas referidas al video, utilizando uno de los tres botones debajo de cada pregunta.</p>
+  <br>
+  <button onclick="startQuestions()">Comenzar</button>
+</div>
+
+<div class="full-screen hidden" id="questionContainer">
+  <h2>Preguntas</h2>
+  <br>
+  <br>
+  <div id="questionContent">
+    <!-- Questions will be displayed here -->
+  
+  </div>
+  <br>
+  <br>
+</div>
+
+<div class="full-screen hidden" id="instructionsAdditionalQuestions">
+  <h2>Cuestionario final</h2>
+  <br>
+  <br>
+  <p>Por ultimo, queremos saber algunas cosas sobre tus habitos de sueño.</p>
+  <br>
+  <br>
+  <button onclick="startAdditionalQuestions()">Comenzar</button>
+</div>
+
+<div class="full-screen hidden" id="additionalQuestionContainer">
+  <h2>Preguntas Finales</h2>
+    <br>
+  <br>
+  <div id="additionalQuestionContent">
+    <!-- Additional Questions will be displayed here -->
+  </div>
+</div>
+
+
+<form id="googleForm" action="https://docs.google.com/forms/d/e/1FAIpQLSfItb_8yOhwb8zqMy95OdR9RN4nGuptJL8f1A-VtG6gkFgrlQ/formResponse"  target="formTarget" method="POST">
+  <!-- Campos para el formulario de Google -->
+  <input type="hidden" name="entry.1706121057" id="entry.1706121057">
+  <input type="hidden" name="entry.1795197407" id="entry_1795197407">
+  <input type="hidden" name="entry.1108713682" id="entry_1108713682">
+
+  <input type="hidden" name="entry.1976955927" id="entry_1976955927">
+  <input type="hidden" name="entry.1006823805" id="entry_1006823805">
+  <input type="hidden" name="entry.114523550" id="entry_114523550">
+  <input type="hidden" name="entry.1993344215" id="entry_1993344215">
+
+  <input type="hidden" name="entry.1220245853" id="entry_1220245853">
+  <input type="hidden" name="entry.1511974812" id="entry_1511974812">
+  <input type="hidden" name="entry.591454687" id="entry_591454687">
+  <input type="hidden" name="entry.1654474234" id="entry_1654474234">
+  <input type="hidden" name="entry.1724594370" id="entry_1724594370">
+  <input type="hidden" name="entry.765485932" id="entry_765485932">
+  <input type="hidden" name="entry.2054724147" id="entry_2054724147">
+  <input type="hidden" name="entry.540105700" id="entry_540105700">
+  <input type="hidden" name="entry.1879992819" id="entry_1879992819">
+  <input type="hidden" name="entry.545488488" id="entry_545488488">
+  <input type="hidden" name="entry.1138152553" id="entry_1138152553">
+  <input type="hidden" name="entry.2101045136" id="entry_2101045136">
+  <input type="hidden" name="entry.973497637" id="entry_973497637">
+  <input type="hidden" name="entry.1051167862" id="entry_1051167862">
+  <input type="hidden" name="entry.1619698537" id="entry_1619698537">
+  <input type="hidden" name="entry.2100816218" id="entry_2100816218">
+
+   <!-- Preguntas -->
+  <input type="hidden" name="entry.120025552" id="entry_120025552">
+  <input type="hidden" name="entry.1035456947" id="entry_1035456947"> 
+
+    <input type="hidden" name="entry.1217020151" id="entry.1217020151">
+  <input type="hidden" name="entry.952803505" id="entry.952803505">
+  <input type="hidden" name="entry.1837406324" id="entry.1837406324"> 
+
+   <!-- Tiempos de reacción -->
+
+<input type="hidden" name="entry.484865147" id="entry.484865147">
+<input type="hidden" name="entry.1733942759" id="entry.1733942759">
+<input type="hidden" name="entry.1399718921" id="entry.1399718921">
+<input type="hidden" name="entry.1591013530" id="entry.1591013530">
+<input type="hidden" name="entry.955137903" id="entry.955137903">
+<input type="hidden" name="entry.791038620" id="entry.791038620">
+<input type="hidden" name="entry.395361839" id="entry.395361839">
+<input type="hidden" name="entry.1269112391" id="entry.1269112391">
+<input type="hidden" name="entry.223898318" id="entry.223898318">
+<input type="hidden" name="entry.1267564744" id="entry.1267564744">
+
+
+
+</form>
+
+
+
+<form id="cronotipoForm" action="https://docs.google.com/forms/d/e/1FAIpQLSf7EoYS1PV59UDpnI_E_3TO6MhGejEzX9f9Jc6hEhU6Zy1-IA/formResponse"  method="POST">
+  <!-- Campos para el formulario de Google -->
+  
+  <input type="hidden" name="entry.389458798" id="entry.389458798">
+  <input type="hidden" name="entry.223455243" id="entry_223455243">
+  <input type="hidden" name="entry.2135024330" id="entry_2135024330">
+  <input type="hidden" name="entry.1478644393" id="entry_1478644393">
+  <input type="hidden" name="entry.370821162" id="entry_370821162">
+  <input type="hidden" name="entry.466025918" id="entry_466025918">
+  <input type="hidden" name="entry.1343533441" id="entry_1343533441">
+  <input type="hidden" name="entry.1237158535" id="entry_1237158535">
+  <input type="hidden" name="entry.508902244" id="entry_508902244">
+  <input type="hidden" name="entry.1676515562" id="entry_1676515562">
+  <input type="hidden" name="entry.16998789" id="entry_16998789">
+  <input type="hidden" name="entry.218193544" id="entry_218193544">
+  <input type="hidden" name="entry.72257361" id="entry_72257361">
+  <input type="hidden" name="entry.459874185" id="entry_459874185">
+
+  
+</form>
+
+
+
+
+<iframe name="formTarget" style="display:none;"></iframe>
+<script>
+// Variables para almacenar respuestas
+let userName = "";
+let userDevice = "";
+let userLineupSelections = [];
+let userConfidenceLevels = [];
+let firstSetAnswers = [];
+let additionalQuestionAnswers = [];
+
+// Simulated photos for each lineup
+
+const lineups = [
+  ["T1.png", "T2.png", "T3.png", "T4.png", "T5.png", "T6.png"],
+  ["T11.png", "T12.png", "T13.png", "T14.png", "T15.png", "T16.png"],
+  ["T21.png", "T22.png", "T23.png", "T24.png", "T25.png", "T26.png"],
+  ["T31.png", "T32.png", "T33.png", "T34.png", "T35.png", "T36.png"],
+  ["T41.png", "T42.png", "T43.png", "T44.png", "T45.png", "T46.png"],
+  ["T51.png", "T52.png", "T53.png", "T54.png", "T55.png", "T56.png"],
+  ["T61.png", "T62.png", "T63.png", "T64.png", "T65.png", "T66.png"],
+  ["T71.png", "T72.png", "T73.png", "T74.png", "T75.png", "T76.png"],
+  ["T81.png", "T82.png", "T83.png", "T84.png", "T85.png", "T86.png"],
+  ["T91.png", "T92.png", "T93.png", "T94.png", "T95.png", "T96.png"]
+];
+// Questions for the first questionnaire
+const questions = [
+ { text: "¿Ha consumido café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?", type: "binaria" }, 
+  { text:"¿Durmió usted siesta hoy?", type: "binaria" }, 
+ { text: "¿Tuviste algun problema de funcionamiento de la aplicación en alguna de las 3 partes del experimento?", type: "binaria" },
+ { text: "¿Que problema tuviste?", type: "Campo" },  
+ { text: "¿Cómo evaluaría su capacidad para reconocer rostros en la vida cotidiana?", type: "puntos" },
+
+
+];
+
+// Additional questions for the final questionnaire with types
+const additionalQuestions = [
+  { text: "En dias laborales me acuesto a las ..:.. horas", type: "horario" },
+  { text: "¡Tenga en cuenta que algunas personas permanecen despiertas algún tiempo cuando están en la cama! En realidad, EN DÍAS LABORALES estoy listo/a para dormirme a las ...:... horas.", type: "horario" },
+  { text: "EN DIAS LABORALES Necesito ... minutos para conciliar el sueño.", type: "numerica" },
+  { text: "En días laborales me despierto a las ..:.. horas.", type: "horario" },
+  { text: "¿Con despertador o sin despertador? (Recordá que se refiere a días laborables).", type: "cerrada" },
+  { text: "EN DIAS LABORALES Me levanto después de .. minutos.", type: "numerica" },
+  { text: "En días NO laborales me acuesto a las ..:.. horas.", type: "horario" },
+  { text: "¡Tenga en cuenta que algunas personas permanecen despiertas algún tiempo cuando están en la cama! En realidad, EN DÍAS NO LABORALES estoy listo/a para dormirme a las ...:... horas.", type: "horario" },
+  { text: "EN DIAS NO LABORALES Necesito ... minutos para conciliar el sueño.", type: "numerica" },
+  { text: "En días NO laborales me despierto a las ..:.. horas.", type: "horario" },
+  { text: "¿Con despertador o sin despertador? (Recordá que se refiere a días NO laborables).", type: "cerrada" },
+  { text: "EN DIAS NO LABORALES Me levanto después de .. minutos.", type: "numerica" }
+];
+
+let currentLineup = 0;
+let currentQuestion = 0;
+let currentAdditionalQuestion = 0;
+let group="";
+let reactionTimes = [];
+let startTime = 0;
+
+// UI Elements
+const lineupContainer = document.getElementById("lineupContainer");
+const nameScreen = document.getElementById("nameScreen");
+const instructionsStart = document.getElementById("instructionsStart");
+const questionContainer = document.getElementById("questionContainer");
+const photoGrid = document.getElementById("photoGrid");
+const confirmationModal = document.getElementById("confirmationModal");
+const selectedPhoto = document.getElementById("selectedPhoto");
+const confirmButton = document.getElementById("confirmButton");
+const cancelButton = document.getElementById("cancelButton");
+const nextButton = document.getElementById("nextButton");
+const instructionsQuestions = document.getElementById("instructionsQuestions");
+const instructionsAdditionalQuestions = document.getElementById("instructionsAdditionalQuestions");
+const questionContent = document.getElementById("questionContent");
+const additionalQuestionContainer = document.getElementById("additionalQuestionContainer");
+const additionalQuestionContent = document.getElementById("additionalQuestionContent");
+const confidenceInput = document.getElementById("confidenceInput");
+const confidence = document.getElementById("confidence");
+const opcionCero = document.getElementById("opcionCero");
+
+
+
+
+ // Function to get URL parameter by name
+ function getParameterByName(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    // Function to handle the group parameter
+    function handleGroupParameter() {
+      group = getParameterByName('group');
+      if (group) {
+        // Display the group for debugging or save it in your form data
+        console.log("User's group:", group);
+      }
+    }
+
+    // Run this function when the page loads
+    window.onload = handleGroupParameter;
+
+
+
+
+// Store device info
+function setDevice(device) {
+  userName = document.getElementById("nameInput").value;
+  if (userName === "") {
+    alert("Por favor, ingresa tu nombre y apellido.");
+    return;
+  }
+  userDevice = device;
+  nameScreen.classList.add("hidden");
+  instructionsStart.classList.remove("hidden");
+}
+
+
+// Start recognition lineup
+function showLineup() {
+  instructionsStart.classList.add("hidden");
+  lineupContainer.classList.remove("hidden");
+  loadLineup();
+}
+
+// Load photos for the current lineup
+function loadLineup() {
+  photoGrid.innerHTML = "";
+  const photos = lineups[currentLineup];
+  let loadedImages = 0;
+
+  photos.forEach(photo => {
+    const img = document.createElement("img");
+    img.src = photo;
+    img.classList.add("photo");
+    img.onload = () => {
+      loadedImages++;
+      if (loadedImages === photos.length) {
+        startTime = Date.now(); // Solo después de que todas se cargaron
+      }
+    };
+    img.onclick = () => openConfirmationModal(photo);
+    photoGrid.appendChild(img);
+  });
+
+  // NO SE TOCA LA LÓGICA DE OPCIÓN 0
+  opcionCero.onclick = () => openConfirmationModal("0.jpg");
+}
+
+// Open confirmation modal
+function openConfirmationModal(photo) {
+  selectedPhoto.src = photo;
+  confirmationModal.style.display = "flex";
+}
+
+// Close confirmation modal
+function closeConfirmationModal() {
+  confirmationModal.style.display = "none";
+}
+
+// Confirm selection
+confirmButton.onclick = () => {
+  const reactionTime = Date.now() - startTime;
+  reactionTimes.push(reactionTime);
+
+  closeConfirmationModal();
+  lineupContainer.classList.add("hidden");
+  confidence.classList.remove("hidden");
+  userLineupSelections.push(selectedPhoto.src.match(/(\d+)(?=\.png$)/)[0]);
+  console.log("Tiempos de reacción:", reactionTimes);
+};
+
+// next lineup
+nextButton.onclick = () => {
+  const confidenceValue = confidenceInput.value;
+  if (confidenceValue < 0 || confidenceValue > 100 || confidenceValue === "") {
+    alert("Por favor, ingresa un nivel de confianza entre 0 y 100.");
+    return;
+  }
+
+  userConfidenceLevels.push(confidenceValue);
+  console.log(userConfidenceLevels);
+  lineupContainer.classList.remove("hidden");
+  confidence.classList.add("hidden");
+  closeConfirmationModal();
+  currentLineup++;
+
+  if (currentLineup < lineups.length) {
+    loadLineup(); // Load next lineup
+  } else {
+    lineupContainer.classList.add("hidden");
+    instructionsQuestions.classList.remove("hidden");
+  }
+
+  confidenceInput.value = "";
+};
+
+// Cancel selection
+cancelButton.onclick = closeConfirmationModal;
+
+
+// Start first question set after instruction screen
+function startQuestions() {
+  instructionsQuestions.classList.add("hidden");
+  questionContainer.classList.remove("hidden");
+  showQuestion();
+}
+
+// Show current question in the first set
+
+function showQuestion() {
+  // Verificamos que no nos pasamos del final
+  if (currentQuestion >= questions.length) {
+    questionContainer.classList.add("hidden");
+    asignarRespuestas();
+    instructionsAdditionalQuestions.classList.remove("hidden");
+    return;
+  }
+
+  // Saltar la pregunta de campo si la anterior fue "No"
+  if (
+    currentQuestion > 0 &&
+    questions[currentQuestion].type === "Campo" &&
+    firstSetAnswers[currentQuestion - 1] === "No"
+  ) {
+    firstSetAnswers.push("N/A"); // Registramos que se saltó
+    currentQuestion++;
+    showQuestion();
+    return;
+  }
+
+  const question = questions[currentQuestion];
+  let html = `<p>${question.text}</p><br><br>`;
+
+  if (question.type === "binaria") {
+    html += `
+      <button onclick="answerQuestion('Sí')">Sí</button>
+      <button onclick="answerQuestion('No')">No</button>
+    `;
+  } else if (question.type === "Campo") {
+    html += `
+      <input type="text"size="30" id="campoInput" placeholder="Escriba su respuesta aquí">
+      <br><br>
+      <button onclick="answerCampo()">Siguiente</button>
+    `;
+  } else if (question.type === "puntos") {
+    html += `Puntúe del 1 (muy mala) al 5 (excelente):<br><br>`;
+    for (let i = 1; i <= 5; i++) {
+      html += `<button onclick="answerQuestion(${i})">${i}</button> `;
+    }
+  }
+
+  questionContent.innerHTML = html;
+}
+
+
+
+
+function answerCampo() {
+  const input = document.getElementById("campoInput").value.trim();
+  if (input === "") {
+    alert("Por favor, escriba una respuesta antes de continuar.");
+    return;
+  }
+  firstSetAnswers.push(input);
+  currentQuestion++;
+  console.log(firstSetAnswers);
+  showQuestion();
+}
+
+
+
+// Responder una pregunta en el primer conjunto
+function answerQuestion(answer) {
+  firstSetAnswers.push(answer); // Guardamos solo el valor de la respuesta
+  currentQuestion++;
+  console.log(firstSetAnswers);
+  showQuestion();
+}
+
+// Start additional question set
+function startAdditionalQuestions() {
+  
+  instructionsAdditionalQuestions.classList.add("hidden");
+  additionalQuestionContainer.classList.remove("hidden");
+  showAdditionalQuestion();
+}
+
+// Show current question in the additional set
+function showAdditionalQuestion() {
+  if (currentAdditionalQuestion < additionalQuestions.length) {
+    const question = additionalQuestions[currentAdditionalQuestion];
+    let inputField = '';
+
+    // Generate the appropriate input field based on the question type
+    if (question.type === 'horario') {
+      inputField = `<label>Selecciona la hora:</label><input type="time" id="timeInput" required>`;
+    } else if (question.type === 'numerica') {
+      inputField = `<label>Ingresa minutos:</label><input type="number" id="numberInput" required>`;
+    } else if (question.type === 'cerrada') {
+      inputField = `
+        <button onclick="answerAdditionalQuestion('Con despertador')">Con despertador</button>
+        <button onclick="answerAdditionalQuestion('Sin despertador')">Sin despertador</button>`;
+    }
+
+    additionalQuestionContent.innerHTML = `<p>${question.text}</p><br>${inputField}
+      <button onclick="nextAdditionalQuestion()">Siguiente</button>`;
+  } else {
+    additionalQuestionContainer.innerHTML = "<h2>¡Gracias por participar!</h2> ";
+    asignarRespuestasCronotipo();
+
+  }
+}
+
+// Move to the next question in the additional set
+function nextAdditionalQuestion() {
+  const question = additionalQuestions[currentAdditionalQuestion];
+  let answer = null;
+
+  if (question.type === 'horario') {
+    answer = document.getElementById("timeInput").value;
+  } else if (question.type === 'numerica') {
+    answer = document.getElementById("numberInput").value;
+  }
+
+  if (answer) {
+    additionalQuestionAnswers.push(answer);
+    currentAdditionalQuestion++;
+    showAdditionalQuestion();
+  } else {
+    alert("Por favor, responde la pregunta antes de continuar.");
+  }
+}
+
+// Answer a closed question in the additional set
+function answerAdditionalQuestion(answer) {
+  additionalQuestionAnswers.push(answer);
+  currentAdditionalQuestion++;
+  showAdditionalQuestion();
+}
+
+
+
+
+
+        // Función para asignar las respuestas dinámicamente
+        function asignarRespuestas() {
+
+
+            // Asignar las respuestas a los campos ocultos
+           
+            
+document.getElementById('entry.1706121057').value = group;          
+ document.getElementById('entry_1795197407').value = userName;
+document.getElementById('entry_1108713682').value = userDevice;
+
+document.getElementById('entry_1976955927').value = userLineupSelections [0];
+document.getElementById('entry_1006823805').value = userConfidenceLevels[0];
+document.getElementById('entry_114523550').value = userLineupSelections [1];
+document.getElementById('entry_1993344215').value = userConfidenceLevels[1];
+
+document.getElementById('entry_1220245853').value = userLineupSelections [2];
+document.getElementById('entry_1511974812').value = userConfidenceLevels[2];
+document.getElementById('entry_591454687').value = userLineupSelections [3];
+document.getElementById('entry_1654474234').value = userConfidenceLevels[3];
+document.getElementById('entry_1724594370').value = userLineupSelections [4];
+document.getElementById('entry_765485932').value = userConfidenceLevels[4];
+document.getElementById('entry_2054724147').value = userLineupSelections [5];
+document.getElementById('entry_540105700').value = userConfidenceLevels [5];
+document.getElementById('entry_1879992819').value = userLineupSelections [6];
+document.getElementById('entry_545488488').value = userConfidenceLevels [6];
+document.getElementById('entry_1138152553').value = userLineupSelections [7];
+document.getElementById('entry_2101045136').value = userConfidenceLevels [7];
+document.getElementById('entry_973497637').value = userLineupSelections [8];
+document.getElementById('entry_1051167862').value = userConfidenceLevels [8];
+document.getElementById('entry_1619698537').value = userLineupSelections [9];
+document.getElementById('entry_2100816218').value = userConfidenceLevels[9];
+document.getElementById('entry_120025552').value = firstSetAnswers  [0];
+document.getElementById('entry_1035456947').value = firstSetAnswers  [1];
+document.getElementById('entry.1217020151').value = firstSetAnswers  [2];
+document.getElementById('entry.952803505').value = firstSetAnswers  [3];
+document.getElementById('entry.1837406324').value = firstSetAnswers  [4];
+
+document.getElementById('entry.484865147').value = reactionTimes[0];
+document.getElementById('entry.1733942759').value = reactionTimes[1];
+document.getElementById('entry.1399718921').value = reactionTimes[2];
+document.getElementById('entry.1591013530').value = reactionTimes[3];
+document.getElementById('entry.955137903').value = reactionTimes[4];
+document.getElementById('entry.791038620').value = reactionTimes[5];
+document.getElementById('entry.395361839').value = reactionTimes[6];
+document.getElementById('entry.1269112391').value = reactionTimes[7];
+document.getElementById('entry.223898318').value = reactionTimes[8];
+document.getElementById('entry.1267564744').value = reactionTimes[9];
+
+
+
+
+
+            // Enviar el formulario automáticamente
+            document.getElementById('googleForm').submit();
+        }
+
+function asignarRespuestasCronotipo(){
+  console.log( additionalQuestionAnswers);
+
+
+document.getElementById('entry.389458798').value = group;
+document.getElementById('entry_223455243').value = userName;
+document.getElementById('entry_2135024330').value = additionalQuestionAnswers[0];
+document.getElementById('entry_1478644393').value = additionalQuestionAnswers[1];
+document.getElementById('entry_370821162').value = additionalQuestionAnswers[2];
+document.getElementById('entry_466025918').value = additionalQuestionAnswers[3];
+document.getElementById('entry_1343533441').value = additionalQuestionAnswers[4];
+document.getElementById('entry_1237158535').value = additionalQuestionAnswers[5];
+document.getElementById('entry_508902244').value = additionalQuestionAnswers[6];
+document.getElementById('entry_1676515562').value = additionalQuestionAnswers[7];
+document.getElementById('entry_16998789').value = additionalQuestionAnswers[8];
+document.getElementById('entry_218193544').value = additionalQuestionAnswers[9];
+document.getElementById('entry_72257361').value = additionalQuestionAnswers[10];
+document.getElementById('entry_459874185').value = additionalQuestionAnswers[11];
+
+           // Enviar el formulario automáticamente
+           document.getElementById('cronotipoForm').submit();
+}
+
+   
+</script>
+</body>
+</html>
