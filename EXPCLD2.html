@@ -259,7 +259,7 @@
               <p style="margin-bottom: 12px;"> La información recolectada durante este estudio será guardada confidencialmente dentro de lo que estipula la ley 25326 de protección de datos personales. Los resultados pueden ser publicados para propósitos científicos, pero la identidad de las personas participantes no será revelada.</p>
         </div>
 
-        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSdZuvnyJYXxx0wIk8FZJJYYgixXDExkWQb-NbpnmnBOR2NiFA/formResponse" method="POST" target="formTarget">
+        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSeyRKUR0grnNHVO9irt3PFA5RIkI2p0ZaKnQsYwT1IjuGqJnQ/formResponse" method="POST" target="formTarget">
             <div class="question-block">
                 <label class="question" for="email">Dirección de correo electrónico</label>
                 <input type="email" id="email" name="entry.1190073540" placeholder="Ingresa tu correo electrónico" required>
@@ -285,12 +285,32 @@
                 <input type="hidden" id="grupo" name="entry.165872651" >
    
 
+
+
+
             <div class="question-block">
                 <label class="question">¿A qué hora te despertaste hoy?</label>
                 <input type="time" name="entry.810565752" required>
             </div>
 
+                        <div class="question-block">
+                <label class="question">¿Ha consumido café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?</label>
+                <select name="entry.853320553" id="stim" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Si">Sí</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
 
+
+                        <div class="question-block">
+                <label class="question">¿Durmió usted siesta hoy?</label>
+                <select name="entry.213282261" id="nap" required>
+                    <option value="" disabled selected>Selecciona una opción</option>
+                    <option value="Si">Sí</option>
+                    <option value="No">No</option>
+                </select>
+            </div>
 
 
 
@@ -315,26 +335,26 @@
 
 
 
-        <input type="hidden" name="entry.700564156" id="img2Response">
-        <input type="hidden" name="entry.578696829" id="img2Time">
-        <input type="hidden" name="entry.1846099994" id="img3Response">
-        <input type="hidden" name="entry.1266411467" id="img3Time">
-        <input type="hidden" name="entry.955814617" id="img4Response">
-        <input type="hidden" name="entry.368502653" id="img4Time">
-        <input type="hidden" name="entry.281848136" id="img5Response">
-        <input type="hidden" name="entry.1415358376" id="img5Time">
-        <input type="hidden" name="entry.901203518" id="img6Response">
-        <input type="hidden" name="entry.551600816" id="img6Time">
-        <input type="hidden" name="entry.874666398" id="img7Response">
-        <input type="hidden" name="entry.1774748287" id="img7Time">
-        <input type="hidden" name="entry.663993879" id="img8Response">
-        <input type="hidden" name="entry.31742072" id="img8Time">
-        <input type="hidden" name="entry.1624298721" id="img9Response">
-        <input type="hidden" name="entry.2017633666" id="img9Time">
-        <input type="hidden" name="entry.250557209" id="img10Response">
-        <input type="hidden" name="entry.1631802898" id="img10Time">
-        <input type="hidden" name="entry.2034845045" id="img11Response">
-        <input type="hidden" name="entry.105270583" id="img11Time">
+        <input type="hidden" name="entry.700564156" id="img1Response">
+        <input type="hidden" name="entry.578696829" id="img1Time">
+        <input type="hidden" name="entry.1846099994" id="img2Response">
+        <input type="hidden" name="entry.1266411467" id="img2Time">
+        <input type="hidden" name="entry.955814617" id="img3Response">
+        <input type="hidden" name="entry.368502653" id="img3Time">
+        <input type="hidden" name="entry.281848136" id="img4Response">
+        <input type="hidden" name="entry.1415358376" id="img4Time">
+        <input type="hidden" name="entry.901203518" id="img5Response">
+        <input type="hidden" name="entry.551600816" id="img5Time">
+        <input type="hidden" name="entry.874666398" id="img6Response">
+        <input type="hidden" name="entry.1774748287" id="img6Time">
+        <input type="hidden" name="entry.663993879" id="img7Response">
+        <input type="hidden" name="entry.31742072" id="img7Time">
+        <input type="hidden" name="entry.1624298721" id="img8Response">
+        <input type="hidden" name="entry.2017633666" id="img8Time">
+        <input type="hidden" name="entry.250557209" id="img9Response">
+        <input type="hidden" name="entry.1631802898" id="img9Time">
+        <input type="hidden" name="entry.2034845045" id="img10Response">
+        <input type="hidden" name="entry.105270583" id="img10Time">
 
 
             <button type="button" onclick="showInstructions()">Seguir</button>
@@ -468,44 +488,44 @@ let grupoUsuario =0;
         
         // Image task variables
 const imageUrls = [
-  '11.png',
-  '12.png',
-  '13.png',
-  '14.png',
-  '15.png',
-  '16.png',
-  '17.png',
-  '18.png',
-  '19.png',
-  '20.png'
+  'I1.png',
+  'I2.png',
+  'I3.png',
+  'I4.png',
+  'I5.png',
+  'I6.png',
+  'I7.png',
+  'I8.png',
+  'I9.png',
+  'I10.png'
 ];
 
         const imageUrlsReordered = [
-  '13.png',
-  '11.png',
-  '17.png',
-  '19.png',
-  '12.png',
-  '15.png',
-  '20.png',
-  '16.png',
-  '14.png',
-  '18.png'
+  'I3.png',
+  'I1.png',
+  'I7.png',
+  'I9.png',
+  'I2.png',
+  'I5.png',
+  'I10.png',
+  'I6.png',
+  'I4.png',
+  'I8.png'
         ];
         
 
         // Image task variables
         const DummyimageUrls = [
-        'image11.png',
-            'image12.png',
-            'image13.png',
-            'image14.png',
-            'image15.png',
-            'image16.png',
-            'image17.png',
-            'image18.png',
-            'image19.png',
-            'image20.png',
+        'R1.png',
+            'R2.png',
+            'R3.png',
+            'R4.png',
+            'R5.png',
+            'R6.png',
+            'R7.png',
+            'R8.png',
+            'R9.png',
+            'R10.png',
         ];
 
 
@@ -831,36 +851,40 @@ function recordResponse(response) {
     }
 
 // Asignar respuestas y tiempos de reacción a los campos ocultos del formulario
-if (imageResponses.length >= 12) {
-    document.getElementById('img2Response').value = imageResponses[3].response;
-    document.getElementById('img2Time').value = imageResponses[3].reactionTime;
+if (imageResponses.length >= 10) {
+    console.log(imageResponses);
+    document.getElementById('img1Response').value = imageResponses[0].response;
+    document.getElementById('img1Time').value = imageResponses[0].reactionTime;
 
-    document.getElementById('img3Response').value = imageResponses[4].response;
-    document.getElementById('img3Time').value = imageResponses[4].reactionTime;
+    document.getElementById('img2Response').value = imageResponses[1].response;
+    document.getElementById('img2Time').value = imageResponses[1].reactionTime;
 
-    document.getElementById('img4Response').value = imageResponses[5].response;
-    document.getElementById('img4Time').value = imageResponses[5].reactionTime;
+    document.getElementById('img3Response').value = imageResponses[2].response;
+    document.getElementById('img3Time').value = imageResponses[2].reactionTime;
 
-    document.getElementById('img5Response').value = imageResponses[6].response;
-    document.getElementById('img5Time').value = imageResponses[6].reactionTime;
+    document.getElementById('img4Response').value = imageResponses[3].response;
+    document.getElementById('img4Time').value = imageResponses[3].reactionTime;
 
-    document.getElementById('img6Response').value = imageResponses[7].response;
-    document.getElementById('img6Time').value = imageResponses[7].reactionTime;
+    document.getElementById('img5Response').value = imageResponses[4].response;
+    document.getElementById('img5Time').value = imageResponses[4].reactionTime;
 
-    document.getElementById('img7Response').value = imageResponses[8].response;
-    document.getElementById('img7Time').value = imageResponses[8].reactionTime;
+    document.getElementById('img6Response').value = imageResponses[5].response;
+    document.getElementById('img6Time').value = imageResponses[5].reactionTime;
 
-    document.getElementById('img8Response').value = imageResponses[9].response;
-    document.getElementById('img8Time').value = imageResponses[9].reactionTime;
+    document.getElementById('img7Response').value = imageResponses[6].response;
+    document.getElementById('img7Time').value = imageResponses[6].reactionTime;
 
-    document.getElementById('img9Response').value = imageResponses[10].response;
-    document.getElementById('img9Time').value = imageResponses[10].reactionTime;
+    document.getElementById('img8Response').value = imageResponses[7].response;
+    document.getElementById('img8Time').value = imageResponses[7].reactionTime;
 
-    document.getElementById('img10Response').value = imageResponses[11].response;
-    document.getElementById('img10Time').value = imageResponses[11].reactionTime;
+    document.getElementById('img9Response').value = imageResponses[8].response;
+    document.getElementById('img9Time').value = imageResponses[8].reactionTime;
 
-    document.getElementById('img11Response').value = imageResponses[12].response;
-    document.getElementById('img11Time').value = imageResponses[12].reactionTime;
+    document.getElementById('img10Response').value = imageResponses[9].response;
+    document.getElementById('img10Time').value = imageResponses[9].reactionTime;
+
+   console.log(imageResponses);
+    
 }
 
             
