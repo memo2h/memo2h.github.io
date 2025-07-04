@@ -39,8 +39,8 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      max-width: 600px;
-      width: 90%;
+      max-width: 800px;
+      width: 100%;
     }
 
     .photo {
@@ -119,17 +119,50 @@
 ¡Muchas gracias!</p>
 <br>
 <br>
-  <h2>Por favor, ingresa tu nombre y apellido</h2>
+  <h3>Por favor, ingresa tu nombre y apellido</h3>
   <br>
   <input type="text" id="nameInput" placeholder="Nombre y apellido" required>
   <br>
   <br>
+
+
+  
   <br>
   <p>¿Estás usando computadora o celular?</p>
   <br>
   <button onclick="setDevice('Computadora')">Computadora</button>
   <button onclick="setDevice('Celular')">Celular</button>
+
+
 </div>
+
+
+
+<div class="full-screen hidden" id="stimScreen">
+    <br>
+  <p>¿Ha consumido café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?</p>
+  <br>
+  <button onclick="setStim('SI')">SI</button>
+  <button onclick="setStim('NO')">NO</button>
+</div>
+
+
+
+
+
+<div class="full-screen hidden" id="napScreen">
+    <br>
+  <p>¿Durmió usted siesta hoy?</p>
+  <br>
+  <button onclick="setNap('SI')">SI</button>
+  <button onclick="setNap('NO')">NO</button>
+
+</div>
+
+
+
+
+
 
 <div class="full-screen hidden" id="instructionsStart" class="text-container" >
   <h2>Instrucciones </h2>
@@ -215,6 +248,10 @@
   <input type="hidden" name="entry.1706121057" id="entry.1706121057">
   <input type="hidden" name="entry.1795197407" id="entry_1795197407">
   <input type="hidden" name="entry.1108713682" id="entry_1108713682">
+  <input type="hidden" name="entry_120025552" id="entry_120025552">
+  <input type="hidden" name="entry_1035456947" id="entry_1035456947">
+
+
 
   <input type="hidden" name="entry.1976955927" id="entry_1976955927">
   <input type="hidden" name="entry.1006823805" id="entry_1006823805">
@@ -239,8 +276,6 @@
   <input type="hidden" name="entry.2100816218" id="entry_2100816218">
 
    <!-- Preguntas -->
-  <input type="hidden" name="entry.120025552" id="entry_120025552">
-  <input type="hidden" name="entry.1035456947" id="entry_1035456947"> 
 
     <input type="hidden" name="entry.1217020151" id="entry.1217020151">
   <input type="hidden" name="entry.952803505" id="entry.952803505">
@@ -294,6 +329,8 @@
 // Variables para almacenar respuestas
 let userName = "";
 let userDevice = "";
+let userStim = "";
+let userNap = "";
 let userLineupSelections = [];
 let userConfidenceLevels = [];
 let firstSetAnswers = [];
@@ -315,8 +352,6 @@ const lineups = [
 ];
 // Questions for the first questionnaire
 const questions = [
- { text: "¿Ha consumido café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?", type: "binaria" }, 
-  { text:"¿Durmió usted siesta hoy?", type: "binaria" }, 
  { text: "¿Tuviste algun problema de funcionamiento de la aplicación en alguna de las 3 partes del experimento?", type: "binaria" },
  { text: "¿Que problema tuviste?", type: "Campo" },  
  { text: "¿Cómo evaluaría su capacidad para reconocer rostros en la vida cotidiana?", type: "puntos" },
@@ -350,6 +385,8 @@ let startTime = 0;
 // UI Elements
 const lineupContainer = document.getElementById("lineupContainer");
 const nameScreen = document.getElementById("nameScreen");
+const stimScreen = document.getElementById("stimScreen");
+const napScreen = document.getElementById("napScreen");
 const instructionsStart = document.getElementById("instructionsStart");
 const questionContainer = document.getElementById("questionContainer");
 const photoGrid = document.getElementById("photoGrid");
@@ -400,8 +437,25 @@ function setDevice(device) {
   }
   userDevice = device;
   nameScreen.classList.add("hidden");
+  stimScreen.classList.remove("hidden");
+}
+
+
+// Store stim info
+function setStim(stim) {
+  userStim = stim;
+stimScreen.classList.add("hidden");
+  napScreen.classList.remove("hidden");
+}
+
+
+// Store nap info
+function setNap(nap) {
+  userNap= nap;
+napScreen.classList.add("hidden");
   instructionsStart.classList.remove("hidden");
 }
+
 
 
 // Start recognition lineup
@@ -477,7 +531,9 @@ nextButton.onclick = () => {
     loadLineup(); // Load next lineup
   } else {
     lineupContainer.classList.add("hidden");
-    instructionsQuestions.classList.remove("hidden");
+    //instructionsQuestions.classList.remove("hidden");
+      questionContainer.classList.remove("hidden");
+  showQuestion();
   }
 
   confidenceInput.value = "";
@@ -637,11 +693,14 @@ function answerAdditionalQuestion(answer) {
 
             // Asignar las respuestas a los campos ocultos
            
-            
+ //iniciales           
 document.getElementById('entry.1706121057').value = group;          
  document.getElementById('entry_1795197407').value = userName;
 document.getElementById('entry_1108713682').value = userDevice;
+document.getElementById('entry_120025552').value = userStim;
+document.getElementById('entry_1035456947').value = userNap;
 
+//reconocimientos
 document.getElementById('entry_1976955927').value = userLineupSelections [0];
 document.getElementById('entry_1006823805').value = userConfidenceLevels[0];
 document.getElementById('entry_114523550').value = userLineupSelections [1];
@@ -663,12 +722,14 @@ document.getElementById('entry_973497637').value = userLineupSelections [8];
 document.getElementById('entry_1051167862').value = userConfidenceLevels [8];
 document.getElementById('entry_1619698537').value = userLineupSelections [9];
 document.getElementById('entry_2100816218').value = userConfidenceLevels[9];
-document.getElementById('entry_120025552').value = firstSetAnswers  [0];
-document.getElementById('entry_1035456947').value = firstSetAnswers  [1];
-document.getElementById('entry.1217020151').value = firstSetAnswers  [2];
-document.getElementById('entry.952803505').value = firstSetAnswers  [3];
-document.getElementById('entry.1837406324').value = firstSetAnswers  [4];
 
+//cuestionario final
+
+document.getElementById('entry.1217020151').value = firstSetAnswers  [0];
+document.getElementById('entry.952803505').value = firstSetAnswers  [1];
+document.getElementById('entry.1837406324').value = firstSetAnswers  [2];
+
+//Cronotipo
 document.getElementById('entry.484865147').value = reactionTimes[0];
 document.getElementById('entry.1733942759').value = reactionTimes[1];
 document.getElementById('entry.1399718921').value = reactionTimes[2];
