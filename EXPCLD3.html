@@ -39,7 +39,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      max-width: 800px;
+      max-width: 700px;
       width: 100%;
     }
 
@@ -108,7 +108,7 @@
         }
 
     .confirm-button { background-color: #4CAF50; color: white; }
-    .cancel-button { background-color: #f44336; color: white; }
+    .cancel-button { background-color: #673ab7; color: white; }
   </style>
 </head>
 <body>
@@ -140,7 +140,7 @@
 
 <div class="full-screen hidden" id="stimScreen">
     <br>
-  <p>¿Ha consumido café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?</p>
+  <p>¿Consumiste café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?</p>
   <br>
   <button onclick="setStim('SI')">SI</button>
   <button onclick="setStim('NO')">NO</button>
@@ -152,7 +152,7 @@
 
 <div class="full-screen hidden" id="napScreen">
     <br>
-  <p>¿Durmió usted siesta hoy?</p>
+  <p>¿Dormiste siesta hoy?</p>
   <br>
   <button onclick="setNap('SI')">SI</button>
   <button onclick="setNap('NO')">NO</button>
@@ -339,22 +339,22 @@ let additionalQuestionAnswers = [];
 // Simulated photos for each lineup
 
 const lineups = [
-  ["T1.png", "T2.png", "T3.png", "T4.png", "T5.png", "T6.png"],
-  ["T11.png", "T12.png", "T13.png", "T14.png", "T15.png", "T16.png"],
-  ["T21.png", "T22.png", "T23.png", "T24.png", "T25.png", "T26.png"],
-  ["T31.png", "T32.png", "T33.png", "T34.png", "T35.png", "T36.png"],
-  ["T41.png", "T42.png", "T43.png", "T44.png", "T45.png", "T46.png"],
-  ["T51.png", "T52.png", "T53.png", "T54.png", "T55.png", "T56.png"],
-  ["T61.png", "T62.png", "T63.png", "T64.png", "T65.png", "T66.png"],
-  ["T71.png", "T72.png", "T73.png", "T74.png", "T75.png", "T76.png"],
-  ["T81.png", "T82.png", "T83.png", "T84.png", "T85.png", "T86.png"],
-  ["T91.png", "T92.png", "T93.png", "T94.png", "T95.png", "T96.png"]
+  ["T1.jpg", "T2.jpg", "T3.jpg", "T4.jpg", "T5.jpg", "T6.jpg"],
+  ["T11.jpg", "T12.jpg", "T13.jpg", "T14.jpg", "T15.jpg", "T16.jpg"],
+  ["T21.jpg", "T22.jpg", "T23.jpg", "T24.jpg", "T25.jpg", "T26.jpg"],
+  ["T31.jpg", "T32.jpg", "T33.jpg", "T34.jpg", "T35.jpg", "T36.jpg"],
+  ["T41.jpg", "T42.jpg", "T43.jpg", "T44.jpg", "T45.jpg", "T46.jpg"],
+  ["T51.jpg", "T52.jpg", "T53.jpg", "T54.jpg", "T55.jpg", "T56.jpg"],
+  ["T61.jpg", "T62.jpg", "T63.jpg", "T64.jpg", "T65.jpg", "T66.jpg"],
+  ["T71.jpg", "T72.jpg", "T73.jpg", "T74.jpg", "T75.jpg", "T76.jpg"],
+  ["T81.jpg", "T82.jpg", "T83.jpg", "T84.jpg", "T85.jpg", "T86.jpg"],
+  ["T91.jpg", "T92.jpg", "T93.jpg", "T94.jpg", "T95.jpg", "T96.jpg"]
 ];
 // Questions for the first questionnaire
 const questions = [
  { text: "¿Tuviste algun problema de funcionamiento de la aplicación en alguna de las 3 partes del experimento?", type: "binaria" },
  { text: "¿Que problema tuviste?", type: "Campo" },  
- { text: "¿Cómo evaluaría su capacidad para reconocer rostros en la vida cotidiana?", type: "puntos" },
+ { text: "¿Cómo evaluarías tu capacidad para reconocer rostros en la vida cotidiana?", type: "puntos" },
 
 
 ];
@@ -486,7 +486,7 @@ function loadLineup() {
   });
 
   // NO SE TOCA LA LÓGICA DE OPCIÓN 0
-  opcionCero.onclick = () => openConfirmationModal("0.png");
+  opcionCero.onclick = () => openConfirmationModal("0.jpg");
 }
 
 // Open confirmation modal
@@ -508,7 +508,7 @@ confirmButton.onclick = () => {
   closeConfirmationModal();
   lineupContainer.classList.add("hidden");
   confidence.classList.remove("hidden");
-  userLineupSelections.push(selectedPhoto.src.match(/(\d+)(?=\.png$)/)[0]);
+  userLineupSelections.push(selectedPhoto.src.match(/(\d+)(?=\.jpg$)/)[0]);
   console.log("Tiempos de reacción:", reactionTimes);
 };
 
