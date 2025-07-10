@@ -18,11 +18,27 @@
         .form-container {
             max-width: 600px;
             width: 100%;
+           
             background-color: #fff;
-            border: 1px solid #dadce0;
-            border-top: 8px solid #b7473a;
+          
+            border-top: 8px solid #000000;
             border-radius: 8px;
-            box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+      
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+
+        .photo-container {
+            max-width: 600px;
+            width: 100%;
+            height: 80vh;
+            background-color: #fff;
+          
+            border-top: 8px solid #673ab7;
+            border-radius: 8px;
+      
             padding: 20px;
             margin-bottom: 20px;
             box-sizing: border-box;
@@ -90,8 +106,8 @@
             max-width: 600px;
             width: 100%;
             background-color: #fff;
-            border: 1px solid #dadce0;
-            border-top: 8px solid #b73e3a;
+            
+            border-top: 8px solid #673ab7;
             border-radius: 8px;
             box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
             padding: 10px;
@@ -108,7 +124,7 @@
         .task-image {
             max-width: 100%;
             max-height: 80vh;
-            border: 1px solid #ddd;
+          
             border-radius: 4px;
             margin-bottom: 10px;
             opacity: 1;
@@ -139,7 +155,7 @@
         }
         
         #noBtn {
-            background-color: #f44336;
+            background-color: #673ab7;
             color: white;
         }
         
@@ -167,7 +183,7 @@
             width: 100%;
             background-color: #fff;
             border: 1px solid #dadce0;
-            border-top: 8px solid #b73c3a;
+            border-top: 8px solid #673ab7;
             border-radius: 8px;
             box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -326,7 +342,7 @@
 
 
                         <div class="question-block">
-                <label class="question">¿Ha consumido café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?</label>
+                <label class="question">¿Consumiste café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?</label>
                 <select name="entry.1287033660" id="stim" required>
                     <option value="" disabled selected>Selecciona una opción</option>
                     <option value="Si">Sí</option>
@@ -336,7 +352,7 @@
 
 
                         <div class="question-block">
-                <label class="question">¿Durmió usted siesta hoy?</label>
+                <label class="question">¿Dormiste siesta hoy?</label>
                 <select name="entry.615663639" id="nap" required>
                     <option value="" disabled selected>Selecciona una opción</option>
                     <option value="Si">Sí</option>
@@ -346,7 +362,7 @@
 
 
             <div class="question-block">
-                <label class="question">¿Consumes alguna medicación de forma crónica?</label>
+                <label class="question">¿Consumís alguna medicación de forma crónica?</label>
                 <select name="entry.221114551" id="medicacion_cronica" required>
                     <option value="" disabled selected>Selecciona una opción</option>
                     <option value="Si">Sí</option>
@@ -360,7 +376,7 @@
             </div>
 
             <div class="question-block">
-                <label class="question">¿Sufres algún trastorno o desorden del sueño?</label>
+                <label class="question">¿Sufrís algún trastorno o desorden del sueño?</label>
                 <select name="entry.1140039148" id="trastorno_sueno" required>
                     <option value="" disabled selected>Selecciona una opción</option>
                     <option value="Si">Sí</option>
@@ -440,7 +456,7 @@
 
     <div id="denuevo" style="display: none;" class="form-container">
       <p class="question-block">
-      Solo se puede participar una vez en esta tarea. Si desea participar de otro de nuestros experimentos o tiene consultas,
+      Solo se puede participar una vez en esta tarea. Si tiene consultas,
       puede escribirnos al siguiente Email:
       <br>
       <br>
@@ -504,18 +520,18 @@
 
     <!-- Study Phase (images shown for 2 seconds each) -->
     <div id="studyPhase">
-        <div class="form-container">
-            <div class="image-container">
-                <div id="fixationCross" class="fixation-cross" style="display: none;">+</div>
+        <div class="photo-container">
+            <div class="image-container" >
+                <div id="fixationCross" class="fixation-cross" style="display: none;"></div>
                 <center><img id="studyImage" class="task-image" src="" alt="Imagen de estudio" style="display: none;"></center>
-                <div id="studyProgress" class="progress-text"></div>
+                <div id="studyProgress" class="progress-text" style="display: none;"></div>
             </div>
         </div>
     </div>
 
     <!-- Test Phase (images shown with response buttons) -->
     <div id="testPhase">
-        <div class="form-container">
+        <div class="photo-container">
             <div class="image-container">
                 <center><img id="testImage" class="task-image" src="" alt="Imagen de prueba" style="display: none;"></center>
                 <div class="response-buttons" style="display: none;">
@@ -523,7 +539,7 @@
                     <button id="noBtn" class="response-btn" onclick="recordResponse('NO')">NO VISTO</button>
                     <button id="dontKnowBtn" class="response-btn" onclick="recordResponse('TAL VEZ')">FAMILIAR</button>
                 </div>
-                <div id="testProgress" class="progress-text"></div>
+                <div id="testProgress" class="progress-text" style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -540,6 +556,9 @@
     </div>
 
     <script>
+
+
+
         // Variables para el tiempo de reacción
         let imageDisplayTime = 0;
         let reactionTimes = [];
@@ -551,31 +570,31 @@
         
         // Image task variables
 const imageUrls = [
-  'E1.png',
-  'E2.png',
-  'E3.png',
-  'E4.png',
-  'E5.png',
-  'E6.png',
-  'E7.png',
-  'E8.png',
-  'E9.png',
-  'E10.png'
+  'E1.jpg',
+  'E2.jpg',
+  'E3.jpg',
+  'E4.jpg',
+  'E5.jpg',
+  'E6.jpg',
+  'E7.jpg',
+  'E8.jpg',
+  'E9.jpg',
+  'E10.jpg'
 ];
 
-        const imageUrlsReordered = [
-  'E3.png',
-  'E1.png',
-  'E7.png',
-  'E9.png',
-  'E2.png',
-  'E5.png',
-  'E10.png',
-  'E6.png',
-  'E4.png',
-  'E8.png'
-        ];
-        
+const imageUrlsReordered = [
+  'E3.jpg',
+  'E1.jpg',
+  'E7.jpg',
+  'E9.jpg',
+  'E2.jpg',
+  'E5.jpg',
+  'E10.jpg',
+  'E6.jpg',
+  'E4.jpg',
+  'E8.jpg'
+];
+
 
         // Image task variables
         const DummyimageUrls = [
@@ -652,12 +671,13 @@ function validateForm() {
             }
         }
     });
-
+allFilled = true;
     return allFilled;
 }
         
         // Study Phase functions
         function startStudyPhase() {
+            
             document.getElementById("instrucciones").style.display = "none";
             document.getElementById("instrucciones1").style.display = "none";
             document.getElementById("studyPhase").style.display = "block";
@@ -760,6 +780,9 @@ if (fase==0){
             showNextTestImage();
         }
         function showNextTestImage() {
+            const buttons = document.querySelectorAll("#testPhase .response-buttons button");
+buttons.forEach(btn => btn.disabled = false);
+
 
 if(fase==0){
     if (currentDummyTestIndex>= DummyimageUrls.length) {
@@ -854,7 +877,9 @@ if (currentTestIndex >= imageUrlsReordered.length) {
 }
 
 function recordResponse(response) {
-    
+        // Evitar múltiples clics: deshabilita todos los botones
+    const buttons = document.querySelectorAll("#testPhase .response-buttons button");
+    buttons.forEach(btn => btn.disabled = true);
 
     const testImage = document.getElementById("testImage");
     
@@ -925,12 +950,16 @@ if (imageResponses.length >= 12) {
     document.getElementById('img11Time').value = imageResponses[12].reactionTime;
 }
 
+
+
             
-            if (!localStorage.getItem("visita")) {
-                localStorage.setItem("visita", "2");
-                sendAnswers(); // Envía el formulario con todas las respuestas
-                document.getElementById('Agradecimiento').style.display = 'block';
+            if (!localStorage.getItem("HizoLaParte1?")) {
+                localStorage.setItem("HizoLaParte1?", "YaHizoparte1CL");
+
             }
+
+                            sendAnswers(); // Envía el formulario con todas las respuestas
+                document.getElementById('Agradecimiento').style.display = 'block';
         }
 
 
@@ -944,10 +973,7 @@ if (imageResponses.length >= 12) {
         }
 
         // Check if participant has already completed the task
-        if (localStorage.getItem("visita") === "realizada") {
-            document.getElementById("denuevo").style.display = "block";
-            document.getElementById("contenedorForm").style.display = "none";
-        } else if (localStorage.getItem("visita") === "2") {
+         if (localStorage.getItem("HizoLaParte1?") === "YaHizoparte1CL") {
             document.getElementById("contenedorForm").style.display = "none";
             document.getElementById("instrucciones").style.display = "none";
             document.getElementById("instrucciones1").style.display = "none";
