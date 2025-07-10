@@ -20,9 +20,24 @@
             width: 100%;
             background-color: #fff;
             border: 1px solid #dadce0;
-            border-top: 8px solid #b7473a;
+            border-top: 8px solid #673ab7;
             border-radius: 8px;
             box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+
+                .photo-container {
+            max-width: 600px;
+            width: 100%;
+            height: 80vh;
+            background-color: #fff;
+          
+            border-top: 8px solid #673ab7;
+            border-radius: 8px;
+      
             padding: 20px;
             margin-bottom: 20px;
             box-sizing: border-box;
@@ -91,7 +106,7 @@
             width: 100%;
             background-color: #fff;
             border: 1px solid #dadce0;
-            border-top: 8px solid #b73e3a;
+            border-top: 8px solid #673ab7;
             border-radius: 8px;
             box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
             padding: 10px;
@@ -139,7 +154,7 @@
         }
         
         #noBtn {
-            background-color: #f44336;
+            background-color:#673ab7;
             color: white;
         }
         
@@ -167,7 +182,7 @@
             width: 100%;
             background-color: #fff;
             border: 1px solid #dadce0;
-            border-top: 8px solid #b73c3a;
+            border-top: 8px solid#673ab7;
             border-radius: 8px;
             box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
@@ -284,12 +299,12 @@
 
 
             <div class="question-block">
-                <label class="question">¿A qué hora se despertó hoy?</label>
+                <label class="question">¿A qué hora te despertaste hoy?</label>
                 <input type="time" name="entry.810565752" required>
             </div>
 
                         <div class="question-block">
-                <label class="question">¿Ha consumido café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?</label>
+                <label class="question">¿Consumiste café, mate u otra bebida estimulante (por ejemplo, bebidas energizantes como Speed) en las últimas seis horas?</label>
                 <select name="entry.853320553" id="stim" required>
                     <option value="" disabled selected>Selecciona una opción</option>
                     <option value="Si">Sí</option>
@@ -299,7 +314,7 @@
 
 
                         <div class="question-block">
-                <label class="question">¿Durmió usted siesta hoy?</label>
+                <label class="question">¿Dormiste siesta hoy?</label>
                 <select name="entry.213282261" id="nap" required>
                     <option value="" disabled selected>Selecciona una opción</option>
                     <option value="Si">Sí</option>
@@ -360,7 +375,7 @@
 
     <div id="denuevo" style="display: none;" class="form-container">
       <p class="question-block">
-      Solo se puede participar una vez en esta tarea. Si desea participar de otro de nuestros experimentos o tiene consultas,
+      Solo se puede participar una vez en esta tarea. Si tiene consultas,
       puede escribirnos al siguiente Email:
       <br>
       <br>
@@ -428,18 +443,18 @@
 
     <!-- Study Phase (images shown for 2 seconds each) -->
     <div id="studyPhase">
-        <div class="form-container">
+        <div class="photo-container">
             <div class="image-container">
-                <div id="fixationCross" class="fixation-cross" style="display: none;">+</div>
+                <div id="fixationCross" class="fixation-cross" style="display: none;"></div>
                 <center><img id="studyImage" class="task-image" src="" alt="Imagen de estudio" style="display: none;"></center>
-                <div id="studyProgress" class="progress-text"></div>
+                <div id="studyProgress" class="progress-text" style="display: none;"></div>
             </div>
         </div>
     </div>
 
     <!-- Test Phase (images shown with response buttons) -->
     <div id="testPhase">
-        <div class="form-container">
+        <div class="photo-container">
             <div class="image-container">
                 <center><img id="testImage" class="task-image" src="" alt="Imagen de prueba" style="display: none;"></center>
                 <div class="response-buttons" style="display: none;">
@@ -447,7 +462,7 @@
                     <button id="noBtn" class="response-btn" onclick="recordResponse('NO')">NO VISTO</button>
                     <button id="dontKnowBtn" class="response-btn" onclick="recordResponse('TAL VEZ')">FAMILIAR</button>
                 </div>
-                <div id="testProgress" class="progress-text"></div>
+                <div id="testProgress" class="progress-text"style="display: none;"></div>
             </div>
         </div>
     </div>
@@ -481,47 +496,47 @@ let grupoUsuario =0;
         let grupoAleatorio = 5;
         let horasEspera = 5;
         
-        // Image task variables
+ // Image task variables
 const imageUrls = [
-  'I1.png',
-  'I2.png',
-  'I3.png',
-  'I4.png',
-  'I5.png',
-  'I6.png',
-  'I7.png',
-  'I8.png',
-  'I9.png',
-  'I10.png'
+  'I1.jpg',
+  'I2.jpg',
+  'I3.jpg',
+  'I4.jpg',
+  'I5.jpg',
+  'I6.jpg',
+  'I7.jpg',
+  'I8.jpg',
+  'I9.jpg',
+  'I10.jpg'
 ];
 
-        const imageUrlsReordered = [
-  'I3.png',
-  'I1.png',
-  'I7.png',
-  'I9.png',
-  'I2.png',
-  'I5.png',
-  'I10.png',
-  'I6.png',
-  'I4.png',
-  'I8.png'
-        ];
-        
+const imageUrlsReordered = [
+  'I3.jpg',
+  'I1.jpg',
+  'I7.jpg',
+  'I9.jpg',
+  'I2.jpg',
+  'I5.jpg',
+  'I10.jpg',
+  'I6.jpg',
+  'I4.jpg',
+  'I8.jpg'
+];
 
-        // Image task variables
-        const DummyimageUrls = [
-        'R1.png',
-            'R2.png',
-            'R3.png',
-            'R4.png',
-            'R5.png',
-            'R6.png',
-            'R7.png',
-            'R8.png',
-            'R9.png',
-            'R10.png',
-        ];
+// Image task variables
+const DummyimageUrls = [
+  'R1.jpg',
+  'R2.jpg',
+  'R3.jpg',
+  'R4.jpg',
+  'R5.jpg',
+  'R6.jpg',
+  'R7.jpg',
+  'R8.jpg',
+  'R9.jpg',
+  'R10.jpg'
+];
+
 
 
 
@@ -548,7 +563,7 @@ const imageUrls = [
 
             if (grupoUsuario==4){
 
-                       localStorage.setItem("segunda", "3");
+                       localStorage.setItem("HizoLaParte2?", "YaHizoparte2CL");
                 sendAnswers(); // Envía el formulario con todas las respuestas
                 document.getElementById('PlaceHolder').style.display = 'block';
 
@@ -568,7 +583,7 @@ const imageUrls = [
 
                     if (grupoUsuario==3){
 
-                       localStorage.setItem("segunda", "3");
+                       localStorage.setItem("HizoLaParte2?", "YaHizoparte2CL");
                 sendAnswers(); // Envía el formulario con todas las respuestas
                 document.getElementById('PlaceHolder').style.display = 'block';
 
@@ -714,6 +729,9 @@ if (fase==0){
         }
         function showNextTestImage() {
 
+ const buttons = document.querySelectorAll("#testPhase .response-buttons button");
+buttons.forEach(btn => btn.disabled = false);
+
 if(fase==0){
    
         testPhaseCompleted = true;
@@ -807,7 +825,10 @@ if (currentTestIndex >= imageUrlsReordered.length) {
 }
 
 function recordResponse(response) {
-    
+          // Evitar múltiples clics: deshabilita todos los botones
+    const buttons = document.querySelectorAll("#testPhase .response-buttons button");
+    buttons.forEach(btn => btn.disabled = true);
+  
 
     const testImage = document.getElementById("testImage");
     
@@ -883,11 +904,14 @@ if (imageResponses.length >= 10) {
 }
 
             
-            if (!localStorage.getItem("segunda")) {
-                localStorage.setItem("segunda", "3");
-                sendAnswers(); // Envía el formulario con todas las respuestas
-                document.getElementById('Agradecimiento').style.display = 'block';
+            if (!localStorage.getItem("HizoLaParte2?")) {
+                localStorage.setItem("HizoLaParte2?", "YaHizoparte2CL");
+
             }
+     
+                     sendAnswers(); // Envía el formulario con todas las respuestas
+                document.getElementById('Agradecimiento').style.display = 'block';
+     
         }
 
 
@@ -901,7 +925,7 @@ if (imageResponses.length >= 10) {
         }
 
 
-         if (localStorage.getItem("segunda") === "3") {
+         if (localStorage.getItem("HizoLaParte2?") === "YaHizoparte2CL") {
             document.getElementById("contenedorForm").style.display = "none";
             document.getElementById("instrucciones").style.display = "none";
             document.getElementById("instrucciones1").style.display = "none";
