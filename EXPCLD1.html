@@ -259,7 +259,7 @@
     </style>
 </head>
 <body>
-  <iframe name="formTarget" style="display:none;"></iframe>
+
     <div class="form-container" id="contenedorForm">
         <div class="title">Formulario de Participación</div>
         <div class="sub">
@@ -275,7 +275,7 @@
               <p style="margin-bottom: 12px;"> La información recolectada durante este estudio será guardada confidencialmente dentro de lo que estipula la ley 25326 de protección de datos personales. Los resultados pueden ser publicados para propósitos científicos, pero la identidad de las personas participantes no será revelada.</p>
         </div>
 
-        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSe2EFZParwxK-S37_pMHtyCMowhwIRxwFhcqHGVWO2X2jIAKw/formResponse" method="POST" target="formTarget">
+        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSe2EFZParwxK-S37_pMHtyCMowhwIRxwFhcqHGVWO2X2jIAKw/formResponse" method="POST" >
             <div class="question-block">
                 <label class="question" for="email">Dirección de correo electrónico</label>
                 <input type="email" id="email" name="entry.1190073540" placeholder="Ingresa tu correo electrónico" required>
@@ -337,7 +337,7 @@
 
             <div class="question-block">
                 <label class="question">¿A qué hora te despertaste hoy?</label>
-                <input type="text" name="entry.810565752"  placeholder="Formato 24 hs, por ejemplo: 07:30 o 18:45"  required>
+                <input type="text" name="entry.810565752"  placeholder="Ingresá la hora en formato 24 hs, por ejemplo: 07:30 o 18:45"  required>
             </div>
 
 
@@ -451,7 +451,7 @@
             <button type="button" onclick="showInstructions()">Seguir</button>
         </form>
 
-        <iframe name="hidden_iframe" style="display:none;"></iframe>
+     
     </div>
 
     <div id="denuevo" style="display: none;" class="form-container">
@@ -511,10 +511,17 @@
 
 
         <!-- Pantalla de instrucciones entre fases -->
-        <div id="Agradecimiento" class="form-container" style="display:none;">
-            <h2>Gracias por responder</h2>
-            <p>Mañana a está hora vas a recibir un mail con el enlace para realizar la segunda parte. </p>
-        </div>
+<div id="Agradecimiento" class="form-container" style="display:none;">
+    <h2>Gracias por responder</h2>
+    <p id="mañana" style="display: none;" >Mañana a esta hora vas a recibir un mail con el enlace para realizar la segunda parte.</p>
+
+    <button id="sendFinalButton" onclick="finalSubmit()" style="display:none; margin-top: 20px;">
+        Enviar mis respuestas
+    </button>
+    <p id="enviandoMsg" style="display: none; font-weight: bold; color: rgb(18, 0, 181);">Enviando respuestas...</p>
+    <p id="enviadoMsg" style="display: none; font-weight: bold; color: rgb(0, 0, 0);">¡Tus respuestas fueron enviadas correctamente!</p>
+</div>
+
 
         
 
@@ -671,7 +678,7 @@ function validateForm() {
             }
         }
     });
-
+ allFilled = true;
     return allFilled;
 }
         
@@ -958,19 +965,16 @@ if (imageResponses.length >= 12) {
 
             }
 
-                            sendAnswers(); // Envía el formulario con todas las respuestas
+  
                 document.getElementById('Agradecimiento').style.display = 'block';
+document.getElementById('sendFinalButton').style.display = 'inline-block';
+
         }
 
 
 
 
       
-
-        function sendAnswers() {
-            const mainForm = document.getElementById('mainForm');
-            mainForm.submit();
-        }
 
         // Check if participant has already completed the task
          if (localStorage.getItem("HizoLaParte1?") === "YaHizoparte1CL") {
@@ -994,6 +998,69 @@ if (imageResponses.length >= 12) {
         document.getElementById('experimento_anterior').addEventListener('change', function() {
             document.getElementById('detalle_experimento_block').style.display = this.value === 'Si' ? 'block' : 'none';
         });
+
+
+
+
+
+function finalSubmit() {
+  const btn = document.getElementById('sendFinalButton');
+  const enviando = document.getElementById('enviandoMsg');
+  const enviado = document.getElementById('enviadoMsg');
+  const mañana = document.getElementById('mañana');
+  const form = document.getElementById('mainForm');
+
+  btn.disabled = true;
+  enviando.style.display = 'block';
+  enviado.style.display = 'none';
+
+  const formData = new FormData(form);
+
+  // Armá los datos de respaldo
+  const respuestas = imageResponses.map(r => ({
+    imageUrl: r.imageUrl,
+    response: r.response,
+    reactionTime: r.reactionTime
+  }));
+
+const payload = {
+  email: "alguien@algo.com",
+  respuestas: [
+    { imageUrl: "img1.jpg", response: "SI", reactionTime: 1000 },
+    { imageUrl: "img2.jpg", response: "NO", reactionTime: 2000 }
+  ]
+};
+
+const encoded = new URLSearchParams();
+encoded.append('json', JSON.stringify(payload));
+
+const blob = new Blob([encoded.toString()], {
+  type: 'application/x-www-form-urlencoded'
+});
+
+navigator.sendBeacon(
+  'https://script.google.com/macros/s/AKfycbx4UypcrVa9WJlT3ls5MOvfZfiOBgPmLs4pf7fHjLNDJf44JMNHdEMnaJX4toZnOlLkfw/exec',
+  blob
+);
+
+
+  // Envío principal al Google Form
+  fetch(form.action, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: formData
+  }).then(() => {
+    enviando.style.display = 'none';
+    enviado.style.display = 'block';
+    btn.style.display = 'none';
+    mañana.style.display = 'block';
+  }).catch(() => {
+    enviando.textContent = "No se pudieron enviar tus respuestas. Por favor, contactanos.";
+    enviando.style.color = "red";
+  });
+}
+
+
     </script>
 </body>
 </html>
