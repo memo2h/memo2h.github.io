@@ -1014,50 +1014,72 @@ function finalSubmit() {
   enviando.style.display = 'block';
   enviado.style.display = 'none';
 
+  // Recopilar todos los datos del formulario
   const formData = new FormData(form);
-
-  // Armá los datos de respaldo
-  const respuestas = imageResponses.map(r => ({
-    imageUrl: r.imageUrl,
-    response: r.response,
-    reactionTime: r.reactionTime
-  }));
-
-const payload = {
-  email: "alguien@algo.com",
-  respuestas: [
-    { imageUrl: "img1.jpg", response: "SI", reactionTime: 1000 },
-    { imageUrl: "img2.jpg", response: "NO", reactionTime: 2000 }
-  ]
-};
-
-const encoded = new URLSearchParams();
-encoded.append('json', JSON.stringify(payload));
-
-const blob = new Blob([encoded.toString()], {
-  type: 'application/x-www-form-urlencoded'
-});
-
-navigator.sendBeacon(
-  'https://script.google.com/macros/s/AKfycbx4UypcrVa9WJlT3ls5MOvfZfiOBgPmLs4pf7fHjLNDJf44JMNHdEMnaJX4toZnOlLkfw/exec',
-  blob
-);
-
-
-  // Envío principal al Google Form
-  fetch(form.action, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: formData
-  }).then(() => {
-    enviando.style.display = 'none';
-    enviado.style.display = 'block';
-    btn.style.display = 'none';
-    mañana.style.display = 'block';
-  }).catch(() => {
-    enviando.textContent = "No se pudieron enviar tus respuestas. Por favor, contactanos.";
-    enviando.style.color = "red";
+  const formValues = {};
+  formData.forEach((value, key) => {
+    formValues[key] = value;
   });
+
+  // Preparar los datos para el beacon
+  const payload = {
+    email: formValues['entry.1190073540'] || 'No proporcionado',
+    nombre: formValues['entry.543210643'] || 'No proporcionado',
+    dispositivo: formValues['entry.2120654582'] || 'No proporcionado',
+    respuestas: imageResponses.map(r => ({
+      imageUrl: r.imageUrl,
+      response: r.response,
+      reactionTime: r.reactionTime
+    })),
+    // Incluir otros campos relevantes del formulario
+    timestamp: new Date().toISOString()
+  };
+
+  // Convertir a JSON y crear Blob
+  const blob = new Blob([JSON.stringify(payload)], {
+    type: 'application/json'
+  });
+
+  // URL del endpoint de Google Apps Script
+  const beaconUrl = 'https://script.google.com/macros/s/AKfycbx4UypcrVa9WJlT3ls5MOvfZfiOBgPmLs4pf7fHjLNDJf44JMNHdEMnaJX4toZnOlLkfw/exec';
+
+  // Enviar beacon
+  const beaconSent = navigator.sendBeacon(beaconUrl, blob);
+
+  if (beaconSent) {
+    console.log('Beacon enviado correctamente');
+    
+    // Continuar con el envío al Google Form como respaldo
+    fetch(form.action, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    }).then(() => {
+      enviando.style.display = 'none';
+      enviado.style.display = 'block';
+      btn.style.display = 'none';
+      mañana.style.display = 'block';
+    }).catch((error) => {
+      console.error('Error al enviar al Google Form:', error);
+      enviando.textContent = "No se pudieron enviar tus respuestas. Por favor, contactanos.";
+      enviando.style.color = "red";
+    });
+  } else {
+    console.error('Falló el envío del beacon');
+    // Intentar con fetch si el beacon falla
+    fetch(beaconUrl, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      keepalive: true // Similar comportamiento a beacon
+    }).then(() => {
+      // Continuar con el procesamiento normal
+    }).catch(error => {
+      console.error('Error al enviar datos:', error);
+    });
+  }
 }
 
 
