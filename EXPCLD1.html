@@ -1004,53 +1004,73 @@ document.getElementById('sendFinalButton').style.display = 'inline-block';
 
 
 function finalSubmit() {
-  const btn = document.getElementById('sendFinalButton');
-  const enviando = document.getElementById('enviandoMsg');
-  const enviado = document.getElementById('enviadoMsg');
-  const mañana = document.getElementById('mañana');
-  const form = document.getElementById('mainForm');
+  console.group("Iniciando envío de datos");
+  
+  try {
+    // 1. Recopilar datos
+    const form = document.getElementById('mainForm');
+    const formData = new FormData(form);
+    
+    console.log("📋 Datos del formulario:", Object.fromEntries(formData.entries()));
 
-  btn.disabled = true;
-  enviando.style.display = 'block';
-  enviado.style.display = 'none';
+    // 2. Preparar payload
+    const payload = {
+      email: formData.get('entry.1190073540'),
+      nombre: formData.get('entry.543210643'),
+      respuestas: window.imageResponses || []
+    };
+    
+    console.log("📦 Payload a enviar:", payload);
 
-  // 1. Primero intentar con Beacon
-  const scriptUrl = 'https://script.google.com/macros/s/AKfycbyEsZbmHX1PjsgWo7MWwDX7MRWzk4pkTBRYB_lD13yGmmb2thfB5qMQ73bzumTkEI41ZQ/exec';
-  const formData = new FormData(form);
-  const payload = {
-    email: formData.get('entry.1190073540'),
-    nombre: formData.get('entry.543210643'),
-    respuestas: imageResponses
-  };
+    // 3. URL del script (¡ACTUALIZAR!)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzlEfzkQAJi_zzA0CX3t38ndxodVJKfMprqidbf3UGKnU8SiD96VSdF2Kx3Pq_-UaWMag/exec";
+    console.log("🔗 URL destino:", SCRIPT_URL);
 
-  // Intento con Beacon
-  const beaconSuccess = navigator.sendBeacon(scriptUrl, JSON.stringify(payload));
-
-  if (!beaconSuccess) {
-    console.warn("Beacon falló, intentando con fetch");
-    // 2. Fallback a fetch con keepalive
-    fetch(scriptUrl, {
+    // 4. Envío principal con fetch
+    console.log("🚀 Enviando datos via fetch...");
+    fetch(SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify(payload),
-      headers: { 'Content-Type': 'application/json' },
-      keepalive: true,
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Debug-Info': 'Frontend-v1.0'
+      }
+    })
+    .then(response => {
+      console.log("📥 Respuesta recibida (cruda):", response);
+      return response.json();
+    })
+    .then(data => {
+      console.log("✅ Respuesta exitosa:", data);
+      document.getElementById('enviadoMsg').style.display = 'block';
+    })
+    .catch(error => {
+      console.error("❌ Error en fetch:", error);
+      
+      // 5. Fallback a Beacon
+      console.log("🔄 Intentando con Beacon...");
+      const blob = new Blob([JSON.stringify(payload)], { 
+        type: 'application/json' 
+      });
+      
+      const beaconSent = navigator.sendBeacon(SCRIPT_URL, blob);
+      console.log(beaconSent ? "✔️ Beacon enviado" : "✖️ Beacon falló");
+    });
+
+    // 6. Envío al Google Forms como respaldo
+    console.log("📤 Enviando respaldo a Google Forms...");
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
       mode: 'no-cors'
-    }).catch(e => console.error("Fetch también falló:", e));
+    });
+
+  } catch (error) {
+    console.error("💥 Error inesperado:", error);
+  } finally {
+    console.groupEnd();
   }
-
-  // 3. Envío tradicional al Google Form como respaldo
-  fetch(form.action, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: new FormData(form)
-  }).finally(() => {
-    enviando.style.display = 'none';
-    enviado.style.display = 'block';
-    btn.style.display = 'none';
-    mañana.style.display = 'block';
-  });
 }
-
 
 
 
