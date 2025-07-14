@@ -1002,64 +1002,37 @@ document.getElementById('sendFinalButton').style.display = 'inline-block';
 
 
 
-async function finalSubmit() {
-  console.group("Envío de datos");
-  
-  try {
-    // 1. Recopilar datos
-    const formData = new FormData(document.getElementById('mainForm'));
-    const payload = {
-      email: formData.get('entry.1190073540'),
-      nombre: formData.get('entry.543210643'),
-      respuestas: window.imageResponses || []
-    };
-    console.log("Payload:", payload);
+function finalSubmit() {
+  const btn = document.getElementById('sendFinalButton');
+  const enviando = document.getElementById('enviandoMsg');
+  const enviado = document.getElementById('enviadoMsg');
+  const mañana = document.getElementById('mañana');
+  const form = document.getElementById('mainForm');
 
-    // 2. URL del script (¡ACTUALIZAR!)
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyL8LZmcsMfgjRYkIB2RfhXMaCBTTMIxtTFAmYhfBO590J7_fs5e_EnzxaRg0g4y1gvVg/exec";
+  btn.disabled = true;
+  enviando.style.display = 'block';
+  enviado.style.display = 'none';
 
-    // 3. Opción 1: Envío directo sin CORS (funciona con Beacon)
-    const blob = new Blob([JSON.stringify(payload)], {type: 'application/json'});
-    const beaconSuccess = navigator.sendBeacon(SCRIPT_URL, blob);
-    console.log(beaconSuccess ? "✔ Beacon enviado" : "✖ Beacon falló");
+  const formData = new FormData(form);
 
-    // 4. Opción 2: Usar proxy CORS (solución alternativa)
-    if (!beaconSuccess) {
-      console.log("Intentando con proxy CORS...");
-      await sendViaCORSProxy(payload, SCRIPT_URL);
-    }
-
-    // 5. Envío a Google Forms como respaldo
-    fetch(form.action, {
-      method: 'POST',
-      body: formData,
-      mode: 'no-cors'
-    });
-
-  } catch (error) {
-    console.error("Error:", error);
-  } finally {
-    console.groupEnd();
-  }
+  // Enviar con fetch en background
+  fetch(form.action, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: formData
+  }).then(() => {
+    // Mostrar mensajes propios (tu pantalla de agradecimiento)
+    enviando.style.display = 'none';
+    enviado.style.display = 'block';
+    btn.style.display = 'none';
+    mañana.style.display = 'block';
+  }).catch(() => {
+    // Por si falla el fetch
+    enviando.textContent = "No se pudieron enviar tus respuestas. Por favor, contactanos.";
+    enviando.style.color = "red";
+  });
 }
 
-// Función alternativa usando proxy CORS
-async function sendViaCORSProxy(payload, targetUrl) {
-  const PROXY_URL = "https://cors-anywhere.herokuapp.com/"; // Servicio proxy
-  try {
-    const response = await fetch(PROXY_URL + targetUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      },
-      body: JSON.stringify(payload)
-    });
-    console.log("Respuesta del proxy:", await response.json());
-  } catch (error) {
-    console.error("Error con proxy:", error);
-  }
-}
 
 
 
