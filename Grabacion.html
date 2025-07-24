@@ -202,7 +202,7 @@ async function sendAudio() {
   reader.onloadend = async () => {
     const base64Audio = reader.result.split(',')[1];
     try {
-      await fetch('https://script.google.com/macros/s/AKfycbzpEcaK6XndlDRlaf11gBXimaCG7gEYQhr56FrSx8TbG2rxk01GV6cruSsloSSFkNa-/exec', {
+      await fetch('https://script.google.com/macros/s/AKfycbxos53MinKR3YU_6yp4nCd09gjwqP8S_H5w1IgsZlhpcRYR34pJ8pUAwWotzpFLH8TG/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
