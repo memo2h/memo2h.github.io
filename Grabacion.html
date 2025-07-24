@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio Recorder & Send</title>
+<style>
+  body {
+    margin: 0;
+    background: #111;
+    font-family: sans-serif;
+    color: #0ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+  }
+  .recorder {
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+  }
+  button {
+    background: #0ff;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    cursor: pointer;
+  }
+  canvas {
+    width: 100%;
+    height: auto;
+    background: #000;
+    border: 2px solid #0ff;
+    border-radius: 8px;
+    display: block;
+  }
+  #spinner-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.9);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    color: white;
+    font-size: 1.2em;
+  }
+  #spinner-overlay h1, #spinner-overlay h2 {
+    margin-bottom: 20px;
+  }
+  .spinner {
+    border: 8px solid rgba(255, 255, 255, 0.3);
+    border-top: 8px solid white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #messages h1, #messages h2, #messages h3 {
+    color: #eee;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="recorder" id="recorder">
+  <div id="buttons">
+    <button id="recordBtn">🎤 Empezar Grabación</button>
+    <canvas id="waveform" height="150"></canvas>
+  </div>
+</div>
+
+<div id="messages" style="text-align:center; display:none;">
+  <h1 id="T1">Audio registrado correctamente</h1>
+  <h2 id="T2">Ya podés cerrar esta ventana</h2>
+  <h3 id="T3">Si creés que el audio salió mal, podés mandar otro.</h3>
+  <button id="T4" onclick="location.reload()">Enviar otro audio</button>
+</div>
+
+<div id="spinner-overlay">
+  <h1>Estamos enviando tu grabación</h1>
+  <h2>No cierres esta ventana</h2>
+  <div class="spinner"></div>
+</div>
+
+<script>
+const canvas = document.getElementById("waveform");
+const ctx = canvas.getContext("2d");
+const recordBtn = document.getElementById("recordBtn");
+const spinnerOverlay = document.getElementById("spinner-overlay");
+const recorder = document.getElementById("recorder");
+const messages = document.getElementById("messages");
+let audioCtx, analyser, dataArray, source, stream;
+let isRecording = false;
+let mediaRecorder;
+let audioChunks = [];
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+
+
+
+
+let isBusy = false;
+
+recordBtn.addEventListener("click", async () => {
+  if (isBusy) return;
+
+  isBusy = true;
+  recordBtn.disabled = true;
+
+  if (isRecording) {
+    await stopRecording();
+  } else {
+    await startRecording();
+  }
+
+  // esperar 2 segundos antes de habilitar el botón
+  await new Promise(resolve => setTimeout(resolve, 2000));
+
+  recordBtn.disabled = false;
+  isBusy = false;
+});
+
+
+
+async function startRecording() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    source = audioCtx.createMediaStreamSource(stream);
+    source.connect(analyser);
+    analyser.fftSize = 256;
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+    mediaRecorder = new MediaRecorder(stream);
+    audioChunks = [];
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+    mediaRecorder.onstop = sendAudio;
+
+    mediaRecorder.start();
+    isRecording = true;
+    recordBtn.textContent = "⏹ Detener Grabación";
+    drawWaveform();
+  } catch (err) {
+    console.error("Error accediendo al micrófono:", err);
+    alert("No se pudo acceder al micrófono.");
+  }
+}
+
+async function stopRecording() {
+  mediaRecorder.stop();
+  stream.getTracks().forEach(track => track.stop());
+  await audioCtx.close();
+  isRecording = false;
+  recordBtn.textContent = "🎤 Empezar Grabación";
+}
+
+function drawWaveform() {
+  if (!isRecording) return;
+  requestAnimationFrame(drawWaveform);
+  analyser.getByteTimeDomainData(dataArray);
+  ctx.fillStyle = "#000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#0ff";
+  ctx.beginPath();
+  const sliceWidth = canvas.width / dataArray.length;
+  let x = 0;
+  for (let i = 0; i < dataArray.length; i++) {
+    const v = dataArray[i] / 128.0;
+    const y = (v * canvas.height) / 2;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+    x += sliceWidth;
+  }
+  ctx.stroke();
+}
+
+const params = new URLSearchParams(window.location.search);
+const userId = params.get('id') || "unknown"; // si no hay id, mandamos "unknown"
+
+
+async function sendAudio() {
+  spinnerOverlay.style.display = 'flex';
+  const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+  const reader = new FileReader();
+  reader.onloadend = async () => {
+    const base64Audio = reader.result.split(',')[1];
+    try {
+      await fetch('https://script.google.com/macros/s/AKfycbz5m1Zq8xKwNgWnZJXwxlks2Otuah4Y2Wjlp8MHExzH2DUggeKdO9df1RcUI0UGolop/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          filename: 'grabacion.webm',
+          mimeType: 'audio/webm',
+          data: base64Audio,
+          userId: userId  // ← aquí se manda el ID
+        })
+      });
+    } catch (err) {
+      console.error("Error enviando el audio:", err);
+      alert("Error enviando el audio.");
+    } finally {
+      spinnerOverlay.style.display = 'none';
+      recorder.style.display = 'none';
+      messages.style.display = 'block';
+    }
+  };
+  reader.readAsDataURL(audioBlob);
+}
+
+
+
+window.addEventListener("beforeunload", function (e) {
+  if (spinnerOverlay.style.display === "flex") {
+    e.preventDefault();
+    e.returnValue = '';
+    return '';
+  }
+});
+
+</script>
+</body>
+</html>
