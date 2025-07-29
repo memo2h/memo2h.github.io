@@ -260,48 +260,58 @@
     }
 
     /* ✅ Responsive Layout for Mobile */
-    @media screen and (max-width: 768px) {
-      .container {
-        width: 100%;
-        min-height: auto;
-        height: auto;
-        box-shadow: none;
-        border-radius: 0;
-      }
+  @media screen and (max-width: 768px) {
+	.container {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: auto;
+		min-height: auto;
+		box-shadow: none;
+		border-radius: 0;
+	}
 
-      .form-container,
-      .overlay-container,
-      .overlay {
-        position: relative;
-        width: 100%;
-        transform: none !important;
-        opacity: 1 !important;
-        z-index: auto !important;
-        height: auto;
-      }
+	.form-container {
+		position: relative;
+		width: 100%;
+		height: auto;
+		opacity: 1 !important;
+		transform: none !important;
+	}
 
-      .sign-in-container,
-      .sign-up-container {
-        width: 100%;
-      }
+	.overlay-container,
+	.overlay {
+		display: none;
+	}
 
-      .overlay {
-        display: none;
-      }
+	.sign-in-container,
+	.sign-up-container {
+		width: 100%;
+		z-index: auto;
+	}
 
-      .container.right-panel-active .sign-in-container,
-      .container.right-panel-active .sign-up-container {
-        transform: none;
-      }
+	.container.right-panel-active .sign-in-container {
+		display: none;
+	}
 
-      button {
-        width: 100%;
-      }
+	.container.right-panel-active .sign-up-container {
+		display: block;
+	}
 
-      form {
-        padding: 20px;
-      }
-    }
+	.container:not(.right-panel-active) .sign-up-container {
+		display: none;
+	}
+
+	form {
+		padding: 20px;
+	}
+
+	button {
+		width: 100%;
+		max-width: 300px;
+	}
+}
+
   </style>
 </head>
 <body>
