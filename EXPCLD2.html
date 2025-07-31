@@ -366,6 +366,8 @@
         <input type="hidden" name="entry.2034845045" id="img10Response">
         <input type="hidden" name="entry.105270583" id="img10Time">
 
+        <input type="hidden" name="entry.102082278" id="identificador">
+
 
             <button type="button" onclick="showInstructions()">Seguir</button>
         </form>
@@ -487,6 +489,10 @@ let grupoUsuario =0;
     
     console.log("Usuario asignado al grupo:", grupoUsuario); // Opcional: para debugging
 
+
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('id') || "unknown"; // si no hay id, mandamos "unknown"
+document.getElementById('identificador').value = userId;
         // Variables para el tiempo de reacción
         let imageDisplayTime = 0;
         let reactionTimes = [];
