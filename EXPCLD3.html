@@ -294,6 +294,7 @@
 <input type="hidden" name="entry.223898318" id="entry.223898318">
 <input type="hidden" name="entry.1267564744" id="entry.1267564744">
 
+<input type="hidden" name="entry.1292126984" id="identificador">
 
 
 </form>
@@ -318,7 +319,7 @@
   <input type="hidden" name="entry.72257361" id="entry_72257361">
   <input type="hidden" name="entry.459874185" id="entry_459874185">
 
-  
+
 </form>
 
 
@@ -405,7 +406,9 @@ const confidence = document.getElementById("confidence");
 const opcionCero = document.getElementById("opcionCero");
 
 
-
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('id') || "unknown"; // si no hay id, mandamos "unknown"
+document.getElementById('identificador').value = userId;
 
  // Function to get URL parameter by name
  function getParameterByName(name) {
