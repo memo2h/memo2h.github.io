@@ -484,7 +484,7 @@
 let grupoUsuario =0;
   
     // Asignar grupo aleatorio (1-4)
-    grupoUsuario = Math.floor(Math.random() * 4) + 5;
+    grupoUsuario = Math.floor(Math.random() * 4) + 1;
     document.getElementById('grupo').value = grupoUsuario;
     
     console.log("Usuario asignado al grupo:", grupoUsuario); // Opcional: para debugging
@@ -554,7 +554,7 @@ const DummyimageUrls = [
         let studyPhaseCompleted = false;
         let testPhaseCompleted = false;
 
-       if (grupoUsuario==6){
+       if (grupoUsuario==2){
         fase=1;
        }
 
@@ -567,7 +567,7 @@ const DummyimageUrls = [
                 if(fase==1){
 
 
-            if (grupoUsuario==8){
+            if (grupoUsuario==4){
 
                        localStorage.setItem("HizoLaParte2?", "YaHizoparte2CL");
                 sendAnswers(); // Envía el formulario con todas las respuestas
@@ -587,7 +587,7 @@ const DummyimageUrls = [
                 }
                 else{
 
-                    if (grupoUsuario==7){
+                    if (grupoUsuario==3){
 
                        localStorage.setItem("HizoLaParte2?", "YaHizoparte2CL");
                 sendAnswers(); // Envía el formulario con todas las respuestas
