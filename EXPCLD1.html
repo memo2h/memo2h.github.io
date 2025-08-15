@@ -453,6 +453,11 @@
         <input type="hidden" name="entry.105270583" id="img11Time">
 
 
+        <input type="hidden" name="entry.1338038190" id="origen">
+
+
+
+
             <button type="button" onclick="showInstructions()">Seguir</button>
         </form>
 
@@ -569,6 +574,14 @@
 
     <script>
 
+window.onload = function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const origenParam = urlParams.get('origen');
+
+    if (origenParam && document.getElementById('origen')) {
+        document.getElementById('origen').value = origenParam;
+    }
+};
 
 
         // Variables para el tiempo de reacción
