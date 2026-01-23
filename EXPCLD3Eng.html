@@ -584,76 +584,6 @@
   </div>
 </div>
 
-<form id="googleForm" action="https://docs.google.com/forms/d/e/1FAIpQLScNsqKpy90EOYiPx4KvAybdYl0BX3oaQOpVx1uidgUFoR6-EQ/formResponse" target="formTarget" method="POST">
-  <!-- Campos para el formulario de Google -->
-  <input type="hidden" name="entry.1706121057" id="entry.1706121057">
-  <input type="hidden" name="entry.1795197407" id="entry_1795197407">
-  <input type="hidden" name="entry.1108713682" id="entry_1108713682">
-  <input type="hidden" name="entry.120025552" id="entry_120025552">
-  <input type="hidden" name="entry.1035456947" id="entry_1035456947">
-
-  <input type="hidden" name="entry.1976955927" id="entry_1976955927">
-  <input type="hidden" name="entry.1006823805" id="entry_1006823805">
-  <input type="hidden" name="entry.114523550" id="entry_114523550">
-  <input type="hidden" name="entry.1993344215" id="entry_1993344215">
-
-  <input type="hidden" name="entry.1220245853" id="entry_1220245853">
-  <input type="hidden" name="entry.1511974812" id="entry_1511974812">
-  <input type="hidden" name="entry.591454687" id="entry_591454687">
-  <input type="hidden" name="entry.1654474234" id="entry_1654474234">
-  <input type="hidden" name="entry.1724594370" id="entry_1724594370">
-  <input type="hidden" name="entry.765485932" id="entry_765485932">
-  <input type="hidden" name="entry.2054724147" id="entry_2054724147">
-  <input type="hidden" name="entry.540105700" id="entry_540105700">
-  <input type="hidden" name="entry.1879992819" id="entry_1879992819">
-  <input type="hidden" name="entry.545488488" id="entry_545488488">
-  <input type="hidden" name="entry.1138152553" id="entry_1138152553">
-  <input type="hidden" name="entry.2101045136" id="entry_2101045136">
-  <input type="hidden" name="entry.973497637" id="entry_973497637">
-  <input type="hidden" name="entry.1051167862" id="entry_1051167862">
-  <input type="hidden" name="entry.1619698537" id="entry_1619698537">
-  <input type="hidden" name="entry.2100816218" id="entry_2100816218">
-
-  <!-- Preguntas -->
-  <input type="hidden" name="entry.1217020151" id="entry.1217020151">
-  <input type="hidden" name="entry.952803505" id="entry.952803505">
-  <input type="hidden" name="entry.1837406324" id="entry.1837406324"> 
-
-  <!-- Tiempos de reacción -->
-  <input type="hidden" name="entry.484865147" id="entry.484865147">
-  <input type="hidden" name="entry.1733942759" id="entry.1733942759">
-  <input type="hidden" name="entry.1399718921" id="entry.1399718921">
-  <input type="hidden" name="entry.1591013530" id="entry.1591013530">
-  <input type="hidden" name="entry.955137903" id="entry.955137903">
-  <input type="hidden" name="entry.791038620" id="entry.791038620">
-  <input type="hidden" name="entry.395361839" id="entry.395361839">
-  <input type="hidden" name="entry.1269112391" id="entry.1269112391">
-  <input type="hidden" name="entry.223898318" id="entry.223898318">
-  <input type="hidden" name="entry.1267564744" id="entry.1267564744">
-
-  <input type="hidden" name="entry.1292126984" id="identificador">
-</form>
-
-<form id="cronotipoForm" action="https://docs.google.com/forms/d/e/1FAIpQLSf7EoYS1PV59UDpnI_E_3TO6MhGejEzX9f9Jc6hEhU6Zy1-IA/formResponse" method="POST">
-  <!-- Campos para el formulario de Google -->
-  <input type="hidden" name="entry.389458798" id="entry.389458798">
-  <input type="hidden" name="entry.223455243" id="entry_223455243">
-  <input type="hidden" name="entry.2135024330" id="entry_2135024330">
-  <input type="hidden" name="entry.1478644393" id="entry_1478644393">
-  <input type="hidden" name="entry.370821162" id="entry_370821162">
-  <input type="hidden" name="entry.466025918" id="entry_466025918">
-  <input type="hidden" name="entry.1343533441" id="entry_1343533441">
-  <input type="hidden" name="entry.1237158535" id="entry_1237158535">
-  <input type="hidden" name="entry.508902244" id="entry_508902244">
-  <input type="hidden" name="entry.1676515562" id="entry_1676515562">
-  <input type="hidden" name="entry.16998789" id="entry_16998789">
-  <input type="hidden" name="entry.218193544" id="entry_218193544">
-  <input type="hidden" name="entry.72257361" id="entry_72257361">
-  <input type="hidden" name="entry.459874185" id="entry_459874185">
-</form>
-
-<iframe name="formTarget" style="display:none;"></iframe>
-
 <script>
 // Variables to store responses
 let userName = "";
@@ -733,7 +663,6 @@ const opcionCero = document.getElementById("opcionCero");
 
 const params = new URLSearchParams(window.location.search);
 const userId = params.get('id') || "unknown";
-document.getElementById('identificador').value = userId;
 
 // Function to get URL parameter by name
 function getParameterByName(name) {
@@ -1036,81 +965,125 @@ function answerAdditionalQuestion(answer) {
   showAdditionalQuestion();
 }
 
-// Function to assign responses dynamically
+// Function to send all data to Google Apps Script endpoint
+function sendToEndpoint(data) {
+  fetch("https://script.google.com/macros/s/AKfycbymxGNkiKmB0nOpLfGRwplvTbBj4XK_5WiEFZiEuf1b4Jw3jf281oZS1cZ8JjX0wheh/exec", {
+    method: "POST",
+    contentType: "application/json",
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    console.log("Data sent successfully:", response);
+  })
+  .catch(err => {
+    console.error("Error sending data:", err);
+  });
+}
+
+// Function to assign responses and send to endpoint
 function assignResponses() {
-  // Initial information
-  document.getElementById('entry.1706121057').value = group;          
-  document.getElementById('entry_1795197407').value = userName;
-  document.getElementById('entry_1108713682').value = userDevice;
-  document.getElementById('entry_120025552').value = userStim;
-  document.getElementById('entry_1035456947').value = userNap;
+  const data = {
+    // User information (individual values)
+    group: group,
+    userName: userName,
+    userDevice: userDevice,
+    userStim: userStim,
+    userNap: userNap,
+    userId: userId,
+    userAgent: navigator.userAgent,
+    
+    // Recognition data (individual values for each lineup)
+    lineup1_selection: userLineupSelections[0] || "",
+    lineup1_confidence: userConfidenceLevels[0] || "",
+    lineup1_reactionTime: reactionTimes[0] || "",
+    
+    lineup2_selection: userLineupSelections[1] || "",
+    lineup2_confidence: userConfidenceLevels[1] || "",
+    lineup2_reactionTime: reactionTimes[1] || "",
+    
+    lineup3_selection: userLineupSelections[2] || "",
+    lineup3_confidence: userConfidenceLevels[2] || "",
+    lineup3_reactionTime: reactionTimes[2] || "",
+    
+    lineup4_selection: userLineupSelections[3] || "",
+    lineup4_confidence: userConfidenceLevels[3] || "",
+    lineup4_reactionTime: reactionTimes[3] || "",
+    
+    lineup5_selection: userLineupSelections[4] || "",
+    lineup5_confidence: userConfidenceLevels[4] || "",
+    lineup5_reactionTime: reactionTimes[4] || "",
+    
+    lineup6_selection: userLineupSelections[5] || "",
+    lineup6_confidence: userConfidenceLevels[5] || "",
+    lineup6_reactionTime: reactionTimes[5] || "",
+    
+    lineup7_selection: userLineupSelections[6] || "",
+    lineup7_confidence: userConfidenceLevels[6] || "",
+    lineup7_reactionTime: reactionTimes[6] || "",
+    
+    lineup8_selection: userLineupSelections[7] || "",
+    lineup8_confidence: userConfidenceLevels[7] || "",
+    lineup8_reactionTime: reactionTimes[7] || "",
+    
+    lineup9_selection: userLineupSelections[8] || "",
+    lineup9_confidence: userConfidenceLevels[8] || "",
+    lineup9_reactionTime: reactionTimes[8] || "",
+    
+    lineup10_selection: userLineupSelections[9] || "",
+    lineup10_confidence: userConfidenceLevels[9] || "",
+    lineup10_reactionTime: reactionTimes[9] || "",
+    
+    // Questionnaire data (individual values)
+    question1_answer: firstSetAnswers[0] || "",
+    question2_answer: firstSetAnswers[1] || "",
+    question3_answer: firstSetAnswers[2] || "",
+    
+    // Timestamp
+    timestamp: new Date().toISOString(),
+    
+    // Data type identifier
+    dataType: "main_study_data"
+  };
 
-  // Recognitions
-  document.getElementById('entry_1976955927').value = userLineupSelections[0];
-  document.getElementById('entry_1006823805').value = userConfidenceLevels[0];
-  document.getElementById('entry_114523550').value = userLineupSelections[1];
-  document.getElementById('entry_1993344215').value = userConfidenceLevels[1];
-
-  document.getElementById('entry_1220245853').value = userLineupSelections[2];
-  document.getElementById('entry_1511974812').value = userConfidenceLevels[2];
-  document.getElementById('entry_591454687').value = userLineupSelections[3];
-  document.getElementById('entry_1654474234').value = userConfidenceLevels[3];
-  document.getElementById('entry_1724594370').value = userLineupSelections[4];
-  document.getElementById('entry_765485932').value = userConfidenceLevels[4];
-  document.getElementById('entry_2054724147').value = userLineupSelections[5];
-  document.getElementById('entry_540105700').value = userConfidenceLevels[5];
-  document.getElementById('entry_1879992819').value = userLineupSelections[6];
-  document.getElementById('entry_545488488').value = userConfidenceLevels[6];
-  document.getElementById('entry_1138152553').value = userLineupSelections[7];
-  document.getElementById('entry_2101045136').value = userConfidenceLevels[7];
-  document.getElementById('entry_973497637').value = userLineupSelections[8];
-  document.getElementById('entry_1051167862').value = userConfidenceLevels[8];
-  document.getElementById('entry_1619698537').value = userLineupSelections[9];
-  document.getElementById('entry_2100816218').value = userConfidenceLevels[9];
-
-  // Final questionnaire
-  document.getElementById('entry.1217020151').value = firstSetAnswers[0];
-  document.getElementById('entry.952803505').value = firstSetAnswers[1];
-  document.getElementById('entry.1837406324').value = firstSetAnswers[2];
-
-  // Chronotype
-  document.getElementById('entry.484865147').value = reactionTimes[0];
-  document.getElementById('entry.1733942759').value = reactionTimes[1];
-  document.getElementById('entry.1399718921').value = reactionTimes[2];
-  document.getElementById('entry.1591013530').value = reactionTimes[3];
-  document.getElementById('entry.955137903').value = reactionTimes[4];
-  document.getElementById('entry.791038620').value = reactionTimes[5];
-  document.getElementById('entry.395361839').value = reactionTimes[6];
-  document.getElementById('entry.1269112391').value = reactionTimes[7];
-  document.getElementById('entry.223898318').value = reactionTimes[8];
-  document.getElementById('entry.1267564744').value = reactionTimes[9];
-
-  // Submit the form automatically
-  document.getElementById('googleForm').submit();
+  // Send data to endpoint
+  sendToEndpoint(data);
+  console.log("Main data sent:", data);
 }
 
 function assignChronotypeResponses() {
-  console.log(additionalQuestionAnswers);
+  const chronotypeData = {
+    group: group,
+    userName: userName,
+    userId: userId,
+    userAgent: navigator.userAgent,
+    
+    // Chronotype questions (individual values)
+    chrono_workday_bedtime: additionalQuestionAnswers[0] || "",
+    chrono_workday_sleeptime: additionalQuestionAnswers[1] || "",
+    chrono_workday_fall_asleep_minutes: additionalQuestionAnswers[2] || "",
+    chrono_workday_wakeup: additionalQuestionAnswers[3] || "",
+    chrono_workday_alarm: additionalQuestionAnswers[4] || "",
+    chrono_workday_getup_minutes: additionalQuestionAnswers[5] || "",
+    chrono_nonworkday_bedtime: additionalQuestionAnswers[6] || "",
+    chrono_nonworkday_sleeptime: additionalQuestionAnswers[7] || "",
+    chrono_nonworkday_fall_asleep_minutes: additionalQuestionAnswers[8] || "",
+    chrono_nonworkday_wakeup: additionalQuestionAnswers[9] || "",
+    chrono_nonworkday_alarm: additionalQuestionAnswers[10] || "",
+    chrono_nonworkday_getup_minutes: additionalQuestionAnswers[11] || "",
+    
+    // Timestamp
+    timestamp: new Date().toISOString(),
+    
+    // Data type identifier
+    dataType: "chronotype_data"
+  };
 
-  document.getElementById('entry.389458798').value = group;
-  document.getElementById('entry_223455243').value = userName;
-  document.getElementById('entry_2135024330').value = additionalQuestionAnswers[0];
-  document.getElementById('entry_1478644393').value = additionalQuestionAnswers[1];
-  document.getElementById('entry_370821162').value = additionalQuestionAnswers[2];
-  document.getElementById('entry_466025918').value = additionalQuestionAnswers[3];
-  document.getElementById('entry_1343533441').value = additionalQuestionAnswers[4];
-  document.getElementById('entry_1237158535').value = additionalQuestionAnswers[5];
-  document.getElementById('entry_508902244').value = additionalQuestionAnswers[6];
-  document.getElementById('entry_1676515562').value = additionalQuestionAnswers[7];
-  document.getElementById('entry_16998789').value = additionalQuestionAnswers[8];
-  document.getElementById('entry_218193544').value = additionalQuestionAnswers[9];
-  document.getElementById('entry_72257361').value = additionalQuestionAnswers[10];
-  document.getElementById('entry_459874185').value = additionalQuestionAnswers[11];
+  // Send chronotype data to endpoint
+  sendToEndpoint(chronotypeData);
+  console.log("Chronotype data sent:", chronotypeData);
 
-  // Submit the form automatically
-  document.getElementById('cronotipoForm').submit();
+
 }
 </script>
 </body>
 </html>
-
