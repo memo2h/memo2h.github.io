@@ -24,20 +24,22 @@
       align-items: center;
       color: #333;
       line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    /* Full-screen containers */
+    /* Full-screen containers - FIXED */
     .full-screen {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start; /* Changed from center to flex-start */
       min-height: 100vh;
-      padding: 30px 20px;
+      padding: 20px 15px; /* Reduced padding */
       text-align: center;
       width: 100%;
       max-width: 800px;
       margin: 0 auto;
+      overflow-y: auto; /* Allow scrolling if needed */
     }
 
     .hidden { display: none; }
@@ -50,8 +52,8 @@
       border-top: 8px solid #673ab7;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      padding: 30px;
-      margin: 20px 0;
+      padding: 25px; /* Reduced padding */
+      margin: 15px 0; /* Reduced margin */
       box-sizing: border-box;
       font-size: 16px;
       line-height: 1.7;
@@ -103,7 +105,7 @@
 
     /* Input Group */
     .input-group {
-      margin: 25px 0;
+      margin: 20px 0; /* Reduced margin */
       width: 100%;
       max-width: 400px;
     }
@@ -120,16 +122,16 @@
     button {
       background-color: #673ab7;
       color: white;
-      padding: 14px 28px;
+      padding: 12px 24px; /* Slightly reduced */
       border: none;
       border-radius: 8px;
       cursor: pointer;
       font-size: 16px;
       font-weight: 500;
       transition: all 0.3s ease;
-      margin: 8px;
+      margin: 6px; /* Reduced margin */
       font-family: 'Roboto', sans-serif;
-      min-width: 140px;
+      min-width: 130px; /* Slightly reduced */
       letter-spacing: 0.3px;
     }
 
@@ -167,14 +169,14 @@
       background-color: #dc3545; 
     }
 
-    /* Grid for photos */
+    /* Grid for photos - FIXED for better fit */
     .photo-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      max-width: 700px;
+      gap: 12px; /* Reduced gap */
+      max-width: 650px; /* Slightly reduced */
       width: 100%;
-      margin: 20px 0;
+      margin: 15px 0; /* Reduced margin */
     }
 
     .photo {
@@ -183,6 +185,8 @@
       transition: transform 0.3s, box-shadow 0.3s;
       border-radius: 8px;
       box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+      aspect-ratio: 1; /* Keep photos square */
+      object-fit: cover; /* Ensure photos fill properly */
     }
 
     .photo:hover {
@@ -207,18 +211,18 @@
 
     .modal-content {
       background: #fff;
-      padding: 30px;
+      padding: 25px; /* Reduced padding */
       text-align: center;
       border-radius: 12px;
       max-width: 90%;
-      width: 350px;
+      width: 320px; /* Slightly reduced */
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     /* Question Styles */
     .question-text {
-      font-size: 18px;
-      margin-bottom: 25px;
+      font-size: 17px; /* Slightly reduced */
+      margin-bottom: 20px; /* Reduced margin */
       color: #333;
       line-height: 1.6;
       padding: 0 10px;
@@ -229,35 +233,35 @@
       max-width: 600px;
       background: #fff;
       border-radius: 12px;
-      padding: 30px;
+      padding: 25px; /* Reduced padding */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      margin: 20px 0;
+      margin: 15px 0; /* Reduced margin */
     }
 
-    /* Headings */
+    /* Headings - Adjusted sizes */
     h1 {
       color: #673ab7;
-      margin-bottom: 20px;
-      font-size: 32px;
+      margin-bottom: 15px; /* Reduced margin */
+      font-size: 28px; /* Reduced size */
       font-weight: 600;
     }
 
     h2 {
       color: #673ab7;
-      margin-bottom: 25px;
-      font-size: 26px;
+      margin-bottom: 20px; /* Reduced margin */
+      font-size: 24px; /* Reduced size */
       font-weight: 500;
     }
 
     h3 {
       color: #444;
-      margin-bottom: 20px;
-      font-size: 22px;
+      margin-bottom: 15px; /* Reduced margin */
+      font-size: 20px; /* Reduced size */
       font-weight: 500;
     }
 
     p {
-      margin-bottom: 15px;
+      margin-bottom: 12px; /* Reduced margin */
       font-size: 16px;
       color: #555;
     }
@@ -265,11 +269,11 @@
     /* Confidence Section */
     .confidence-section {
       background: #fff;
-      padding: 30px;
+      padding: 25px; /* Reduced padding */
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       width: 100%;
-      max-width: 500px;
+      max-width: 480px; /* Slightly reduced */
     }
 
     /* Button Container */
@@ -277,52 +281,84 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
-      margin: 25px 0;
+      gap: 8px; /* Reduced gap */
+      margin: 20px 0; /* Reduced margin */
     }
 
     /* Progress Indicator */
     .progress-indicator {
-      margin: 20px 0;
+      margin: 15px 0; /* Reduced margin */
       font-size: 14px;
       color: #666;
       font-weight: 500;
     }
 
+    /* Lineup Container Specific Fix */
+    #lineupContainer {
+      padding-top: 15px; /* Add some top padding */
+      justify-content: flex-start;
+    }
+
+    #lineupContainer h2 {
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-size: 22px; /* Smaller for lineup screen */
+    }
+
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
       .full-screen {
-        padding: 20px 15px;
+        padding: 15px 12px; /* Further reduced on mobile */
       }
 
       .text-container {
-        padding: 20px;
+        padding: 18px;
         font-size: 15px;
+        margin: 12px 0;
       }
 
       .photo-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px;
+        max-width: 500px;
       }
 
       button {
-        padding: 12px 20px;
-        min-width: 120px;
-        margin: 5px;
+        padding: 10px 18px;
+        min-width: 110px;
+        margin: 4px;
+        font-size: 15px;
       }
 
       .question-container {
-        padding: 20px;
+        padding: 18px;
+        margin: 12px 0;
       }
 
-      h1 { font-size: 26px; }
-      h2 { font-size: 22px; }
-      h3 { font-size: 19px; }
+      h1 { 
+        font-size: 24px; 
+        margin-bottom: 12px;
+      }
+      
+      h2 { 
+        font-size: 20px; 
+        margin-bottom: 15px;
+      }
+      
+      h3 { 
+        font-size: 18px; 
+        margin-bottom: 12px;
+      }
+
+      #lineupContainer h2 {
+        font-size: 20px; /* Even smaller on mobile */
+      }
     }
 
     @media (max-width: 480px) {
       .photo-grid {
         grid-template-columns: 1fr;
+        max-width: 300px;
       }
 
       .button-container {
@@ -332,7 +368,64 @@
 
       button {
         width: 100%;
-        max-width: 250px;
+        max-width: 220px;
+      }
+
+      .full-screen {
+        padding: 12px 10px;
+      }
+
+      h1 { font-size: 22px; }
+      h2 { font-size: 19px; }
+      h3 { font-size: 17px; }
+
+      #lineupContainer h2 {
+        font-size: 18px;
+      }
+    }
+
+    /* Small height screens fix */
+    @media (max-height: 700px) {
+      .full-screen {
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      #lineupContainer {
+        padding-top: 10px;
+      }
+
+      #lineupContainer h2 {
+        margin-top: 5px;
+        margin-bottom: 8px;
+        font-size: 20px;
+      }
+
+      .photo-grid {
+        margin: 10px 0;
+        gap: 8px;
+      }
+
+      .progress-indicator {
+        margin: 8px 0;
+        font-size: 13px;
+      }
+    }
+
+    /* Very small height screens */
+    @media (max-height: 600px) {
+      #lineupContainer h2 {
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
+
+      .photo-grid {
+        max-width: 550px;
+      }
+
+      .text-container {
+        padding: 15px;
+        margin: 10px 0;
       }
     }
   </style>
@@ -413,7 +506,7 @@
     <!-- Photos will be dynamically added here -->
   </div>
   
-  <div style="margin: 20px 0;">
+  <div style="margin: 15px 0;">
     <button id="opcionCero" class="secondary-button">I don't recognize any</button>
   </div>
 </div>
@@ -422,7 +515,7 @@
   <div class="modal-content">
     <h3>Confirm Selection</h3>
     <p>Are you sure about your choice?</p>
-    <img src="" alt="Selected" id="selectedPhoto" style="width:120px; border-radius:8px; margin:15px 0;">
+    <img src="" alt="Selected" id="selectedPhoto" style="width:110px; border-radius:8px; margin:12px 0;">
     
     <div class="button-container">
       <button class="confirm-button success-button" id="confirmButton">Confirm</button>
