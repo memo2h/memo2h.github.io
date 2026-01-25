@@ -1,123 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Face Recognition Study</title>
+  <title>Ruedas de Reconocimiento</title>
   <style>
     /* Reset */
-    * { 
-      margin: 0; 
-      padding: 0; 
-      box-sizing: border-box; 
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     /* General */
     body, html {
       height: 100%;
-      font-family: 'Roboto', Arial, sans-serif;
-      background-color: #f8f9fa;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: #333;
-      line-height: 1.6;
-      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     }
 
-    /* Full-screen containers - FIXED */
+    /* Full-screen containers */
     .full-screen {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start; /* Changed from center to flex-start */
-      min-height: 100vh;
-      padding: 20px 15px; /* Reduced padding */
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
       text-align: center;
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto;
-      overflow-y: auto; /* Allow scrolling if needed */
     }
 
     .hidden { display: none; }
 
-    /* Improved Text Container */
-    .text-container {
+    /* Grid for photos */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      max-width: 700px;
       width: 100%;
-      background-color: #fff;
-      border: 1px solid #e0e0e0;
-      border-top: 8px solid #673ab7;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      padding: 25px; /* Reduced padding */
-      margin: 15px 0; /* Reduced margin */
-      box-sizing: border-box;
-      font-size: 16px;
-      line-height: 1.7;
-      color: #444;
-      text-align: left;
     }
 
-    .text-container-center {
+    .photo {
+      width: 100%;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .photo:hover {
+      transform: scale(1.05);
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
       text-align: center;
-    }
-
-    /* Improved Input Styles */
-    .form-input {
-      width: 100%;
-      max-width: 400px;
-      padding: 14px 18px;
-      font-size: 16px;
-      border: 2px solid #e0e0e0;
       border-radius: 8px;
-      background-color: #fff;
-      transition: all 0.3s ease;
-      margin: 10px 0;
-      font-family: 'Roboto', sans-serif;
+      max-width: 90%;
+      width: 300px;
     }
-
-    .form-input:focus {
-      outline: none;
-      border-color: #673ab7;
-      box-shadow: 0 0 0 3px rgba(103, 58, 183, 0.1);
-    }
-
-    .form-input::placeholder {
-      color: #888;
-    }
-
-    /* Number input specific */
-    .number-input {
-      width: 150px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: 500;
-    }
-
-    /* Time input specific */
-    .time-input {
-      width: 180px;
-      text-align: center;
-    }
-
-    /* Input Group */
-    .input-group {
-      margin: 20px 0; /* Reduced margin */
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .input-label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 500;
-      color: #555;
-      font-size: 15px;
-    }
-
     /* Buttons */
     button {
       background-color: #673ab7;
@@ -135,457 +91,265 @@
       letter-spacing: 0.3px;
     }
 
-    button:hover {
-      background-color: #5e35b1;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(103, 58, 183, 0.2);
-    }
 
-    button:active {
-      transform: translateY(0);
-    }
 
-    button:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    /* Button Variants */
-    .primary-button { 
-      background-color: #673ab7; 
-    }
-
-    .secondary-button { 
-      background-color: #6c757d; 
-    }
-
-    .success-button { 
-      background-color: #28a745; 
-    }
-
-    .danger-button { 
-      background-color: #dc3545; 
-    }
-
-    /* Grid for photos - FIXED for better fit */
-    .photo-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px; /* Reduced gap */
-      max-width: 650px; /* Slightly reduced */
-      width: 100%;
-      margin: 15px 0; /* Reduced margin */
-    }
-
-    .photo {
-      width: 100%;
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      border-radius: 8px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-      aspect-ratio: 1; /* Keep photos square */
-      object-fit: cover; /* Ensure photos fill properly */
-    }
-
-    .photo:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      display: none;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: #fff;
-      padding: 25px; /* Reduced padding */
-      text-align: center;
+    .text-container {
+            max-width: 600px;
+            width: 100%;
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-top: 8px solid #673ab7;
       border-radius: 12px;
-      max-width: 90%;
-      width: 320px; /* Slightly reduced */
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Question Styles */
-    .question-text {
-      font-size: 17px; /* Slightly reduced */
-      margin-bottom: 20px; /* Reduced margin */
-      color: #333;
-      line-height: 1.6;
-      padding: 0 10px;
-    }
-
-    .question-container {
-      width: 100%;
-      max-width: 600px;
-      background: #fff;
-      border-radius: 12px;
-      padding: 25px; /* Reduced padding */
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 25px; /* Reduced padding */
       margin: 15px 0; /* Reduced margin */
-    }
-
-    /* Headings - Adjusted sizes */
-    h1 {
-      color: #673ab7;
-      margin-bottom: 15px; /* Reduced margin */
-      font-size: 28px; /* Reduced size */
-      font-weight: 600;
-    }
-
-    h2 {
-      color: #673ab7;
-      margin-bottom: 20px; /* Reduced margin */
-      font-size: 24px; /* Reduced size */
-      font-weight: 500;
-    }
-
-    h3 {
-      color: #444;
-      margin-bottom: 15px; /* Reduced margin */
-      font-size: 20px; /* Reduced size */
-      font-weight: 500;
-    }
-
-    p {
-      margin-bottom: 12px; /* Reduced margin */
+      box-sizing: border-box;
       font-size: 16px;
-      color: #555;
-    }
+      line-height: 1.7;
+      color: #444;
+      text-align: left;
+        }
 
-    /* Confidence Section */
-    .confidence-section {
-      background: #fff;
-      padding: 25px; /* Reduced padding */
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    .text-container-center {
+      text-align: center;
+    }
+            /* Improved Input Styles */
+    input {
       width: 100%;
-      max-width: 480px; /* Slightly reduced */
+      max-width: 400px;
+      padding: 14px 18px;
+      font-size: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      background-color: #fff;
+      transition: all 0.3s ease;
+      margin: 10px 0;
+      font-family: 'Roboto', sans-serif;
     }
 
-    /* Button Container */
-    .button-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px; /* Reduced gap */
-      margin: 20px 0; /* Reduced margin */
-    }
 
-    /* Progress Indicator */
-    .progress-indicator {
-      margin: 15px 0; /* Reduced margin */
-      font-size: 14px;
-      color: #666;
-      font-weight: 500;
-    }
 
-    /* Lineup Container Specific Fix */
-    #lineupContainer {
-      padding-top: 15px; /* Add some top padding */
-      justify-content: flex-start;
-    }
-
-    #lineupContainer h2 {
-      margin-top: 10px;
-      margin-bottom: 10px;
-      font-size: 22px; /* Smaller for lineup screen */
-    }
-
-    /* Mobile Responsiveness */
-    @media (max-width: 768px) {
-      .full-screen {
-        padding: 15px 12px; /* Further reduced on mobile */
-      }
-
-      .text-container {
-        padding: 18px;
-        font-size: 15px;
-        margin: 12px 0;
-      }
-
-      .photo-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-        max-width: 500px;
-      }
-
-      button {
-        padding: 10px 18px;
-        min-width: 110px;
-        margin: 4px;
-        font-size: 15px;
-      }
-
-      .question-container {
-        padding: 18px;
-        margin: 12px 0;
-      }
-
-      h1 { 
-        font-size: 24px; 
-        margin-bottom: 12px;
-      }
-      
-      h2 { 
-        font-size: 20px; 
-        margin-bottom: 15px;
-      }
-      
-      h3 { 
-        font-size: 18px; 
-        margin-bottom: 12px;
-      }
-
-      #lineupContainer h2 {
-        font-size: 20px; /* Even smaller on mobile */
-      }
-    }
-
-    @media (max-width: 480px) {
-      .photo-grid {
-        grid-template-columns: 1fr;
-        max-width: 300px;
-      }
-
-      .button-container {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      button {
-        width: 100%;
-        max-width: 220px;
-      }
-
-      .full-screen {
-        padding: 12px 10px;
-      }
-
-      h1 { font-size: 22px; }
-      h2 { font-size: 19px; }
-      h3 { font-size: 17px; }
-
-      #lineupContainer h2 {
-        font-size: 18px;
-      }
-    }
-
-    /* Small height screens fix */
-    @media (max-height: 700px) {
-      .full-screen {
-        padding-top: 10px;
-        padding-bottom: 10px;
-      }
-
-      #lineupContainer {
-        padding-top: 10px;
-      }
-
-      #lineupContainer h2 {
-        margin-top: 5px;
-        margin-bottom: 8px;
-        font-size: 20px;
-      }
-
-      .photo-grid {
-        margin: 10px 0;
-        gap: 8px;
-      }
-
-      .progress-indicator {
-        margin: 8px 0;
-        font-size: 13px;
-      }
-    }
-
-    /* Very small height screens */
-    @media (max-height: 600px) {
-      #lineupContainer h2 {
-        font-size: 18px;
-        margin-bottom: 5px;
-      }
-
-      .photo-grid {
-        max-width: 550px;
-      }
-
-      .text-container {
-        padding: 15px;
-        margin: 10px 0;
-      }
-    }
+    .confirm-button { background-color: #4CAF50; color: white; }
+    .cancel-button { background-color: #d41e1e; color: white; }
   </style>
 </head>
 <body>
 
 <div class="full-screen" id="nameScreen">
-  <h1>Face Recognition Study</h1>
   
-  <div class="text-container">
-    <p>Welcome to the final part of our study. You will now complete a series of tasks that should take approximately 15 minutes.</p>
-    <p><strong>Please pay close attention when reading and responding.</strong></p>
-    <p>It is not possible to go back or modify a response after moving to the next question.</p>
-    <p class="text-container-center">Thank you for your participation!</p>
-  </div>
+  <p class="text-container">We welcome you to the final part of our study. Next you will perform a series of tasks, for an estimated time of 15 minutes. Please, pay close attention when reading and responding. It is not possible to go back or modify an answer after moving to the next question.
+Thank you very much!</p>
+<br>
+<br>
+  <h3>Please, enter your name and surname</h3>
+  <br>
+  <input type="text" id="nameInput" placeholder="Name and surname" required>
+  <br>
+  <br>
+
+
   
-  <h3>Please enter your first and last name</h3>
-  
-  <div class="input-group">
-    <input type="text" id="nameInput" class="form-input" placeholder="First and last name" required>
-  </div>
-  
-  <p>Are you using a computer or mobile phone?</p>
-  
-  <div class="button-container">
-    <button onclick="setDevice('Computer')" class="primary-button">Computer</button>
-    <button onclick="setDevice('Mobile')" class="primary-button">Mobile Phone</button>
-  </div>
+  <br>
+  <p>Are you using a computer or a cell phone?</p>
+  <br>
+  <button onclick="setDevice('Computadora')">Computer</button>
+  <button onclick="setDevice('Celular')">Cell phone</button>
+
+
 </div>
+
+
 
 <div class="full-screen hidden" id="stimScreen">
-  <div class="question-container">
-    <h3>Consumption Information</h3>
-    <p class="question-text">Have you consumed coffee, tea, mate, or other stimulant drinks (for example, energy drinks like Red Bull) in the last six hours?</p>
-    
-    <div class="button-container">
-      <button onclick="setStim('YES')" class="primary-button">YES</button>
-      <button onclick="setStim('NO')" class="secondary-button">NO</button>
-    </div>
-  </div>
+    <br>
+  <p>Did you consume coffee, tea, or another stimulant drink (for example, energy drinks like Red Bull) in the last six hours?</p>
+  <br>
+  <button onclick="setStim('SI')">YES</button>
+  <button onclick="setStim('NO')">NO</button>
 </div>
+
+
+
+
 
 <div class="full-screen hidden" id="napScreen">
-  <div class="question-container">
-    <h3>Sleep Information</h3>
-    <p class="question-text">Did you take a nap today?</p>
-    
-    <div class="button-container">
-      <button onclick="setNap('YES')" class="primary-button">YES</button>
-      <button onclick="setNap('NO')" class="secondary-button">NO</button>
-    </div>
-  </div>
+    <br>
+  <p>Did you take a nap today?</p>
+  <br>
+  <button onclick="setNap('SI')">YES</button>
+  <button onclick="setNap('NO')">NO</button>
+
 </div>
 
-<div class="full-screen hidden" id="instructionsStart">
+
+
+
+
+
+<div class="full-screen hidden" id="instructionsStart" class="text-container" >
   <h2>Instructions</h2>
-  
-  <div class="text-container">
-    <p>Now you will complete a series of recognition tests with six faces each.</p>
-    <p>In each test, you may or may not find one of the faces you saw in previous sessions.</p>
-    <p><strong>Instructions:</strong></p>
-    <ol>
-      <li>Carefully observe the six faces shown.</li>
-      <li>If you recognize any face from previous sessions, click on it.</li>
-      <li>If you don't recognize any, click the "I don't recognize any" button below the photos.</li>
-    </ol>
-    <p>Please take your time to observe each image carefully before responding.</p>
-  </div>
-  
-  <button onclick="showLineup()" class="primary-button">Start</button>
+  <br>
+  <p class="text-container">Now you are going to perform a series of recognition tests with six faces each. In each test you may or may not find one of the faces you saw in the previous sessions.<br>
+    If you recognize it, choose it. If you don't recognize any, click the "I don't recognize any" button that is below the photos.</p>
+  <br>
+  <button onclick="showLineup()">Start</button>
 </div>
 
 <div class="full-screen hidden" id="lineupContainer">
   <h2>Do you recognize any of these faces?</h2>
-  <p class="progress-indicator">Test <span id="currentLineupNum">1</span> of 10</p>
-  
+  <br>
   <div class="photo-grid" id="photoGrid">
     <!-- Photos will be dynamically added here -->
   </div>
-  
-  <div style="margin: 15px 0;">
-    <button id="opcionCero" class="secondary-button">I don't recognize any</button>
-  </div>
+  <button id="opcionCero"> I don't recognize any</button>
 </div>
 
 <div class="modal" id="confirmationModal">
   <div class="modal-content">
-    <h3>Confirm Selection</h3>
-    <p>Are you sure about your choice?</p>
-    <img src="" alt="Selected" id="selectedPhoto" style="width:110px; border-radius:8px; margin:12px 0;">
-    
-    <div class="button-container">
-      <button class="confirm-button success-button" id="confirmButton">Confirm</button>
-      <button class="cancel-button danger-button" id="cancelButton">Cancel</button>
-    </div>
+    <p>Confirm choice?</p>
+    <img src="" alt="Selected" id="selectedPhoto" style="width:100px;">
+    <br>
+    <button class="confirm-button" id="confirmButton">Confirm</button>
+    <button class="cancel-button" id="cancelButton">Cancel</button>
   </div>
 </div>
 
-<div id="confidence" class="full-screen hidden">
-  <div class="confidence-section">
-    <h3>Confidence Level</h3>
-    <p>From 0 to 100, how confident are you in your choice?</p>
-    <p><small>0 = No confidence, 100 = Completely certain</small></p>
-    
-    <div class="input-group">
-      <input type="number" id="confidenceInput" class="form-input number-input" min="0" max="100" placeholder="0-100" required>
-    </div>
-    
-    <button class="confirm-button success-button" id="nextButton">Continue</button>
-  </div>
+<div id="confidence" class="full-screen hidden" >
+<p> From 0 to 100, how confident are you in your choice?</p>
+<br>
+<center>
+<input type="number" id="confidenceInput" min="0" max="100" placeholder="Confidence (0-100)" required>
+<br>
+<button class="confirm-button" id="nextButton">Continue</button>
+</center>
 </div>
 
 <div class="full-screen hidden" id="instructionsQuestions">
   <h2>Questionnaire</h2>
-  
-  <div class="text-container">
-    <p>In the next task, you will answer a series of questions about the video.</p>
-    <p>Use one of the buttons below each question to select your answer.</p>
-    <p>Please answer honestly and accurately.</p>
-  </div>
-  
-  <button onclick="startQuestions()" class="primary-button">Start Questionnaire</button>
+  <br>
+  <br>
+  <p class="text-container">In the next task you are going to answer a series of questions about the video, using one of the three buttons below each question.</p>
+  <br>
+  <button onclick="startQuestions()">Start</button>
 </div>
 
 <div class="full-screen hidden" id="questionContainer">
-  <div class="question-container">
-    <h2>Questions</h2>
-    <p class="progress-indicator">Question <span id="currentQuestionNum">1</span> of 3</p>
-    
-    <div id="questionContent">
-      <!-- Questions will be displayed here -->
-    </div>
+  <h2>Questions</h2>
+  <br>
+  <br>
+  <div id="questionContent">
+    <!-- Questions will be displayed here -->
+  
   </div>
+  <br>
+  <br>
 </div>
 
 <div class="full-screen hidden" id="instructionsAdditionalQuestions">
-  <h2>Final Questionnaire</h2>
-  
-  <div class="text-container">
-    <p>Finally, we would like to know some aspects about your sleep habits.</p>
-    <p>This information will help us better understand the study results.</p>
-    <p>Please answer as accurately as possible.</p>
-  </div>
-  
-  <button onclick="startAdditionalQuestions()" class="primary-button">Start Final Questionnaire</button>
+  <h2>Final questionnaire</h2>
+  <br>
+  <br>
+  <p>Finally, we want to know some things about your sleep habits.</p>
+  <br>
+  <br>
+  <button onclick="startAdditionalQuestions()">Start</button>
 </div>
 
 <div class="full-screen hidden" id="additionalQuestionContainer">
-  <div class="question-container">
-    <h2>Sleep Habits Questions</h2>
-    <p class="progress-indicator">Question <span id="currentAdditionalQuestionNum">1</span> of 12</p>
-    
-    <div id="additionalQuestionContent">
-      <!-- Additional Questions will be displayed here -->
-    </div>
+  <h2>Final Questions</h2>
+    <br>
+  <br>
+  <div id="additionalQuestionContent">
+    <!-- Additional Questions will be displayed here -->
   </div>
 </div>
 
+<form id="googleForm" action="https://docs.google.com/forms/d/e/1FAIpQLSfItb_8yOhwb8zqMy95OdR9RN4nGuptJL8f1A-VtG6gkFgrlQ/formResponse"  target="formTarget" method="POST">
+  <!-- Campos para el formulario de Google -->
+  <input type="hidden" name="entry.1706121057" id="entry.1706121057">
+  <input type="hidden" name="entry.1795197407" id="entry_1795197407">
+  <input type="hidden" name="entry.1108713682" id="entry_1108713682">
+  <input type="hidden" name="entry_120025552" id="entry_120025552">
+  <input type="hidden" name="entry_1035456947" id="entry_1035456947">
+
+
+
+  <input type="hidden" name="entry.1976955927" id="entry_1976955927">
+  <input type="hidden" name="entry.1006823805" id="entry_1006823805">
+  <input type="hidden" name="entry.114523550" id="entry_114523550">
+  <input type="hidden" name="entry.1993344215" id="entry_1993344215">
+
+  <input type="hidden" name="entry.1220245853" id="entry_1220245853">
+  <input type="hidden" name="entry.1511974812" id="entry_1511974812">
+  <input type="hidden" name="entry.591454687" id="entry_591454687">
+  <input type="hidden" name="entry.1654474234" id="entry_1654474234">
+  <input type="hidden" name="entry.1724594370" id="entry_1724594370">
+  <input type="hidden" name="entry.765485932" id="entry_765485932">
+  <input type="hidden" name="entry.2054724147" id="entry_2054724147">
+  <input type="hidden" name="entry.540105700" id="entry_540105700">
+  <input type="hidden" name="entry.1879992819" id="entry_1879992819">
+  <input type="hidden" name="entry.545488488" id="entry_545488488">
+  <input type="hidden" name="entry.1138152553" id="entry_1138152553">
+  <input type="hidden" name="entry.2101045136" id="entry_2101045136">
+  <input type="hidden" name="entry.973497637" id="entry_973497637">
+  <input type="hidden" name="entry.1051167862" id="entry_1051167862">
+  <input type="hidden" name="entry.1619698537" id="entry_1619698537">
+  <input type="hidden" name="entry.2100816218" id="entry_2100816218">
+
+   <!-- Preguntas -->
+
+    <input type="hidden" name="entry.1217020151" id="entry.1217020151">
+  <input type="hidden" name="entry.952803505" id="entry.952803505">
+  <input type="hidden" name="entry.1837406324" id="entry.1837406324"> 
+
+   <!-- Tiempos de reacción -->
+
+<input type="hidden" name="entry.484865147" id="entry.484865147">
+<input type="hidden" name="entry.1733942759" id="entry.1733942759">
+<input type="hidden" name="entry.1399718921" id="entry.1399718921">
+<input type="hidden" name="entry.1591013530" id="entry.1591013530">
+<input type="hidden" name="entry.955137903" id="entry.955137903">
+<input type="hidden" name="entry.791038620" id="entry.791038620">
+<input type="hidden" name="entry.395361839" id="entry.395361839">
+<input type="hidden" name="entry.1269112391" id="entry.1269112391">
+<input type="hidden" name="entry.223898318" id="entry.223898318">
+<input type="hidden" name="entry.1267564744" id="entry.1267564744">
+
+<input type="hidden" name="entry.1292126984" id="identificador">
+
+
+</form>
+
+
+
+<form id="cronotipoForm" action="https://docs.google.com/forms/d/e/1FAIpQLSf7EoYS1PV59UDpnI_E_3TO6MhGejEzX9f9Jc6hEhU6Zy1-IA/formResponse"  method="POST">
+  <!-- Campos para el formulario de Google -->
+  
+  <input type="hidden" name="entry.389458798" id="entry.389458798">
+  <input type="hidden" name="entry.223455243" id="entry_223455243">
+  <input type="hidden" name="entry.2135024330" id="entry_2135024330">
+  <input type="hidden" name="entry.1478644393" id="entry_1478644393">
+  <input type="hidden" name="entry.370821162" id="entry_370821162">
+  <input type="hidden" name="entry.466025918" id="entry_466025918">
+  <input type="hidden" name="entry.1343533441" id="entry_1343533441">
+  <input type="hidden" name="entry.1237158535" id="entry_1237158535">
+  <input type="hidden" name="entry.508902244" id="entry_508902244">
+  <input type="hidden" name="entry.1676515562" id="entry_1676515562">
+  <input type="hidden" name="entry.16998789" id="entry_16998789">
+  <input type="hidden" name="entry.218193544" id="entry_218193544">
+  <input type="hidden" name="entry.72257361" id="entry_72257361">
+  <input type="hidden" name="entry.459874185" id="entry_459874185">
+
+
+</form>
+
+
+
+
+<iframe name="formTarget" style="display:none;"></iframe>
 <script>
-// Variables to store responses
+// Variables para almacenar respuestas
 let userName = "";
 let userDevice = "";
 let userStim = "";
@@ -596,6 +360,7 @@ let firstSetAnswers = [];
 let additionalQuestionAnswers = [];
 
 // Simulated photos for each lineup
+
 const lineups = [
   ["T1.jpg", "T2.jpg", "T3.jpg", "T4.jpg", "T5.jpg", "T6.jpg"],
   ["T11.jpg", "T12.jpg", "T13.jpg", "T14.jpg", "T15.jpg", "T16.jpg"],
@@ -608,34 +373,35 @@ const lineups = [
   ["T81.jpg", "T82.jpg", "T83.jpg", "T84.jpg", "T85.jpg", "T86.jpg"],
   ["T91.jpg", "T92.jpg", "T93.jpg", "T94.jpg", "T95.jpg", "T96.jpg"]
 ];
-
-// Questions for the first questionnaire (translated)
+// Questions for the first questionnaire
 const questions = [
-  { text: "Did you experience any technical problems with the application in any of the 3 parts of the experiment?", type: "binary" },
-  { text: "What problem did you experience?", type: "field" },  
-  { text: "How would you rate your ability to recognize faces in daily life?", type: "points" },
+ { text: "Did you have any technical or functional issues with the application in any of the three parts of the experiment?", type: "binaria" },
+ { text: "What problem did you have?", type: "Campo" },  
+ { text: "How would you rate your ability to recognize faces in everyday life?", type: "puntos" },
+
+
 ];
 
-// Additional questions for the final questionnaire with types (translated)
+// Additional questions for the final questionnaire with types
 const additionalQuestions = [
-  { text: "On workdays, I go to bed at ..:.. hours", type: "time" },
-  { text: "Please note that some people stay awake for a while when in bed! Actually, ON WORKDAYS I am ready to fall asleep at ...:... hours.", type: "time" },
-  { text: "ON WORKDAYS I need ... minutes to fall asleep.", type: "numeric" },
-  { text: "On workdays I wake up at ..:.. hours.", type: "time" },
-  { text: "With or without an alarm clock? (Remember this refers to workdays).", type: "closed" },
-  { text: "ON WORKDAYS I get up after .. minutes.", type: "numeric" },
-  { text: "On NON-workdays I go to bed at ..:.. hours.", type: "time" },
-  { text: "Please note that some people stay awake for a while when in bed! Actually, ON NON-WORKDAYS I am ready to fall asleep at ...:... hours.", type: "time" },
-  { text: "ON NON-WORKDAYS I need ... minutes to fall asleep.", type: "numeric" },
-  { text: "On NON-workdays I wake up at ..:.. hours.", type: "time" },
-  { text: "With or without an alarm clock? (Remember this refers to NON-workdays).", type: "closed" },
-  { text: "ON NON-WORKDAYS I get up after .. minutes.", type: "numeric" }
+  { text: "En dias laborales me acuesto a las ..:.. horas", type: "horario" },
+  { text: "¡Tenga en cuenta que algunas personas permanecen despiertas algún tiempo cuando están en la cama! En realidad, EN DÍAS LABORALES estoy listo/a para dormirme a las ...:... horas.", type: "horario" },
+  { text: "EN DIAS LABORALES Necesito ... minutos para conciliar el sueño.", type: "numerica" },
+  { text: "En días laborales me despierto a las ..:.. horas.", type: "horario" },
+  { text: "¿Con despertador o sin despertador? (Recordá que se refiere a días laborables).", type: "cerrada" },
+  { text: "EN DIAS LABORALES Me levanto después de .. minutos.", type: "numerica" },
+  { text: "En días NO laborales me acuesto a las ..:.. horas.", type: "horario" },
+  { text: "¡Tenga en cuenta que algunas personas permanecen despiertas algún tiempo cuando están en la cama! En realidad, EN DÍAS NO LABORALES estoy listo/a para dormirme a las ...:... horas.", type: "horario" },
+  { text: "EN DIAS NO LABORALES Necesito ... minutos para conciliar el sueño.", type: "numerica" },
+  { text: "En días NO laborales me despierto a las ..:.. horas.", type: "horario" },
+  { text: "¿Con despertador o sin despertador? (Recordá que se refiere a días NO laborables).", type: "cerrada" },
+  { text: "EN DIAS NO LABORALES Me levanto después de .. minutos.", type: "numerica" }
 ];
 
 let currentLineup = 0;
 let currentQuestion = 0;
 let currentAdditionalQuestion = 0;
-let group = "";
+let group="";
 let reactionTimes = [];
 let startTime = 0;
 
@@ -661,42 +427,37 @@ const confidenceInput = document.getElementById("confidenceInput");
 const confidence = document.getElementById("confidence");
 const opcionCero = document.getElementById("opcionCero");
 
-const params = new URLSearchParams(window.location.search);
-const userId = params.get('id') || "unknown";
 
-// Function to get URL parameter by name
-function getParameterByName(name) {
-  const urlParams = new URLSearchParams(window.location.search);
-  return urlParams.get(name);
-}
+    const params = new URLSearchParams(window.location.search);
+    const userId = params.get('id') || "unknown"; // si no hay id, mandamos "unknown"
+document.getElementById('identificador').value = userId;
 
-// Function to handle the group parameter
-function handleGroupParameter() {
-  group = getParameterByName('group');
-  if (group) {
-    console.log("User's group:", group);
-  }
-}
+ // Function to get URL parameter by name
+ function getParameterByName(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
 
-// Run this function when the page loads
-window.onload = handleGroupParameter;
+    // Function to handle the group parameter
+    function handleGroupParameter() {
+      group = getParameterByName('group');
+      if (group) {
+        // Display the group for debugging or save it in your form data
+        console.log("User's group:", group);
+      }
+    }
 
-// Function to update progress indicators
-function updateProgressIndicators() {
-  const currentLineupNum = document.getElementById("currentLineupNum");
-  const currentQuestionNum = document.getElementById("currentQuestionNum");
-  const currentAdditionalQuestionNum = document.getElementById("currentAdditionalQuestionNum");
-  
-  if (currentLineupNum) currentLineupNum.textContent = currentLineup + 1;
-  if (currentQuestionNum) currentQuestionNum.textContent = currentQuestion + 1;
-  if (currentAdditionalQuestionNum) currentAdditionalQuestionNum.textContent = currentAdditionalQuestion + 1;
-}
+    // Run this function when the page loads
+    window.onload = handleGroupParameter;
+
+
+
 
 // Store device info
 function setDevice(device) {
   userName = document.getElementById("nameInput").value;
   if (userName === "") {
-    alert("Please enter your first and last name.");
+    alert("Please, enter your first and last name.");
     return;
   }
   userDevice = device;
@@ -704,19 +465,23 @@ function setDevice(device) {
   stimScreen.classList.remove("hidden");
 }
 
+
 // Store stim info
 function setStim(stim) {
   userStim = stim;
-  stimScreen.classList.add("hidden");
+stimScreen.classList.add("hidden");
   napScreen.classList.remove("hidden");
 }
 
+
 // Store nap info
 function setNap(nap) {
-  userNap = nap;
-  napScreen.classList.add("hidden");
+  userNap= nap;
+napScreen.classList.add("hidden");
   instructionsStart.classList.remove("hidden");
 }
+
+
 
 // Start recognition lineup
 function showLineup() {
@@ -731,9 +496,6 @@ function loadLineup() {
   const photos = lineups[currentLineup];
   let loadedImages = 0;
 
-  // Update progress indicator
-  updateProgressIndicators();
-
   photos.forEach(photo => {
     const img = document.createElement("img");
     img.src = photo;
@@ -741,14 +503,14 @@ function loadLineup() {
     img.onload = () => {
       loadedImages++;
       if (loadedImages === photos.length) {
-        startTime = Date.now(); // Only after all are loaded
+        startTime = Date.now(); // Solo después de que todas se cargaron
       }
     };
     img.onclick = () => openConfirmationModal(photo);
     photoGrid.appendChild(img);
   });
 
-  // DON'T TOUCH THE ZERO OPTION LOGIC
+  // NO SE TOCA LA LÓGICA DE OPCIÓN 0
   opcionCero.onclick = () => openConfirmationModal("none.jpeg");
 }
 
@@ -772,14 +534,14 @@ confirmButton.onclick = () => {
   lineupContainer.classList.add("hidden");
   confidence.classList.remove("hidden");
   userLineupSelections.push(selectedPhoto.src.match(/(\d+)(?=\.jpg$)/)[0]);
-  console.log("Reaction times:", reactionTimes);
+  console.log("Tiempos de reacción:", reactionTimes);
 };
 
-// Next lineup
+// next lineup
 nextButton.onclick = () => {
   const confidenceValue = confidenceInput.value;
   if (confidenceValue < 0 || confidenceValue > 100 || confidenceValue === "") {
-    alert("Please enter a confidence level between 0 and 100.");
+    alert("Please, enter a confidence level between 0 and 100.");
     return;
   }
 
@@ -794,8 +556,9 @@ nextButton.onclick = () => {
     loadLineup(); // Load next lineup
   } else {
     lineupContainer.classList.add("hidden");
-    questionContainer.classList.remove("hidden");
-    showQuestion();
+    //instructionsQuestions.classList.remove("hidden");
+      questionContainer.classList.remove("hidden");
+  showQuestion();
   }
 
   confidenceInput.value = "";
@@ -803,6 +566,7 @@ nextButton.onclick = () => {
 
 // Cancel selection
 cancelButton.onclick = closeConfirmationModal;
+
 
 // Start first question set after instruction screen
 function startQuestions() {
@@ -812,64 +576,60 @@ function startQuestions() {
 }
 
 // Show current question in the first set
+
 function showQuestion() {
-  // Check if we've reached the end
+  // Verificamos que no nos pasamos del final
   if (currentQuestion >= questions.length) {
-    questionContainer.classList.add("hidden");
-    assignResponses();
-    instructionsAdditionalQuestions.classList.remove("hidden");
+   // questionContainer.classList.add("hidden");
+    asignarRespuestas();
+    //instructionsAdditionalQuestions.classList.remove("hidden");
+    questionContainer.innerHTML = "<h2>Thank you for participating!</h2> ";
     return;
   }
 
-  // Update progress indicator
-  updateProgressIndicators();
-
-  // Skip the field question if the previous was "No"
+  // Saltar la pregunta de campo si la anterior fue "No"
   if (
     currentQuestion > 0 &&
-    questions[currentQuestion].type === "field" &&
+    questions[currentQuestion].type === "Campo" &&
     firstSetAnswers[currentQuestion - 1] === "No"
   ) {
-    firstSetAnswers.push("N/A"); // Record that it was skipped
+    firstSetAnswers.push("N/A"); // Registramos que se saltó
     currentQuestion++;
     showQuestion();
     return;
   }
 
   const question = questions[currentQuestion];
-  let html = `<p class="question-text">${question.text}</p>`;
+  let html = `<p>${question.text}</p><br><br>`;
 
-  if (question.type === "binary") {
+  if (question.type === "binaria") {
     html += `
-      <div class="button-container">
-        <button onclick="answerQuestion('Yes')">Yes</button>
-        <button onclick="answerQuestion('No')">No</button>
-      </div>
+      <button onclick="answerQuestion('Sí')">Yes</button>
+      <button onclick="answerQuestion('No')">No</button>
     `;
-  } else if (question.type === "field") {
+  } else if (question.type === "Campo") {
     html += `
-      <div class="input-group">
-        <input type="text" class="form-input" id="fieldInput" placeholder="Write your answer here">
-      </div>
-      <br>
-      <button onclick="answerField()" class="primary-button">Next</button>
+      <input type="text"size="30" id="campoInput" placeholder="Write your answer here.">
+      <br><br>
+      <button onclick="answerCampo()">Next</button>
     `;
-  } else if (question.type === "points") {
-    html += `<p>Rate from 1 (very poor) to 5 (excellent):</p>`;
-    html += `<div class="button-container">`;
+  } else if (question.type === "puntos") {
+    html += `Rate from 1 (very poor) to 5 (excellent):<br><br>`;
     for (let i = 1; i <= 5; i++) {
-      html += `<button onclick="answerQuestion(${i})">${i}</button>`;
+      html += `<button onclick="answerQuestion(${i})">${i}</button> `;
     }
-    html += `</div>`;
   }
 
   questionContent.innerHTML = html;
 }
 
-function answerField() {
-  const input = document.getElementById("fieldInput").value.trim();
+
+
+
+function answerCampo() {
+  const input = document.getElementById("campoInput").value.trim();
   if (input === "") {
-    alert("Please write a response before continuing.");
+    alert("Please, write a response before continuing.");
     return;
   }
   firstSetAnswers.push(input);
@@ -878,9 +638,11 @@ function answerField() {
   showQuestion();
 }
 
-// Answer a question in the first set
+
+
+// Responder una pregunta en el primer conjunto
 function answerQuestion(answer) {
-  firstSetAnswers.push(answer); // Save only the answer value
+  firstSetAnswers.push(answer); // Guardamos solo el valor de la respuesta
   currentQuestion++;
   console.log(firstSetAnswers);
   showQuestion();
@@ -888,6 +650,7 @@ function answerQuestion(answer) {
 
 // Start additional question set
 function startAdditionalQuestions() {
+  
   instructionsAdditionalQuestions.classList.add("hidden");
   additionalQuestionContainer.classList.remove("hidden");
   showAdditionalQuestion();
@@ -895,46 +658,28 @@ function startAdditionalQuestions() {
 
 // Show current question in the additional set
 function showAdditionalQuestion() {
+
   if (currentAdditionalQuestion < additionalQuestions.length) {
     const question = additionalQuestions[currentAdditionalQuestion];
     let inputField = '';
 
-    // Update progress indicator
-    updateProgressIndicators();
-
     // Generate the appropriate input field based on the question type
-    if (question.type === 'time') {
+    if (question.type === 'horario') {
+      inputField = `<label>Selecciona la hora:</label><input type="time" id="timeInput" required>`;
+    } else if (question.type === 'numerica') {
+      inputField = `<label>Ingresa minutos:</label><input type="number" id="numberInput" required>`;
+    } else if (question.type === 'cerrada') {
       inputField = `
-        <div class="input-group">
-          <input type="time" id="timeInput" class="form-input time-input" required>
-        </div>`;
-    } else if (question.type === 'numeric') {
-      inputField = `
-        <div class="input-group">
-          <input type="number" id="numberInput" class="form-input" placeholder="Minutes" required>
-        </div>`;
-    } else if (question.type === 'closed') {
-      inputField = `
-        <div class="button-container">
-          <button onclick="answerAdditionalQuestion('With alarm clock')">With alarm clock</button>
-          <button onclick="answerAdditionalQuestion('Without alarm clock')">Without alarm clock</button>
-        </div>`;
+        <button onclick="answerAdditionalQuestion('Con despertador')">Con despertador</button>
+        <button onclick="answerAdditionalQuestion('Sin despertador')">Sin despertador</button>`;
     }
 
-    additionalQuestionContent.innerHTML = `
-      <p class="question-text">${question.text}</p>
-      ${inputField}
-      <br>
-      <button onclick="nextAdditionalQuestion()" class="primary-button">Next</button>
-    `;
+    additionalQuestionContent.innerHTML = `<p>${question.text}</p><br>${inputField}
+      <button onclick="nextAdditionalQuestion()">Siguiente</button>`;
   } else {
-    additionalQuestionContainer.innerHTML = `
-      <div class="question-container">
-        <h2>Thank you for participating!</h2>
-        <p>We have received all your responses correctly.</p>
-      </div>
-    `;
-    assignChronotypeResponses();
+    additionalQuestionContainer.innerHTML = "<h2>¡Gracias por participar!</h2> ";
+    asignarRespuestasCronotipo();
+
   }
 }
 
@@ -943,9 +688,9 @@ function nextAdditionalQuestion() {
   const question = additionalQuestions[currentAdditionalQuestion];
   let answer = null;
 
-  if (question.type === 'time') {
+  if (question.type === 'horario') {
     answer = document.getElementById("timeInput").value;
-  } else if (question.type === 'numeric') {
+  } else if (question.type === 'numerica') {
     answer = document.getElementById("numberInput").value;
   }
 
@@ -954,7 +699,7 @@ function nextAdditionalQuestion() {
     currentAdditionalQuestion++;
     showAdditionalQuestion();
   } else {
-    alert("Please answer the question before continuing.");
+    alert("Please, answer the question before continuing.");
   }
 }
 
@@ -965,125 +710,96 @@ function answerAdditionalQuestion(answer) {
   showAdditionalQuestion();
 }
 
-// Function to send all data to Google Apps Script endpoint
-function sendToEndpoint(data) {
-  fetch("https://script.google.com/macros/s/AKfycbymxGNkiKmB0nOpLfGRwplvTbBj4XK_5WiEFZiEuf1b4Jw3jf281oZS1cZ8JjX0wheh/exec", {
-    method: "POST",
-    contentType: "application/json",
-    body: JSON.stringify(data)
-  })
-  .then(response => {
-    console.log("Data sent successfully:", response);
-  })
-  .catch(err => {
-    console.error("Error sending data:", err);
-  });
+
+
+
+
+        // Función para asignar las respuestas dinámicamente
+        function asignarRespuestas() {
+
+
+            // Asignar las respuestas a los campos ocultos
+           
+ //iniciales           
+document.getElementById('entry.1706121057').value = group;          
+ document.getElementById('entry_1795197407').value = userName;
+document.getElementById('entry_1108713682').value = userDevice;
+document.getElementById('entry_120025552').value = userStim;
+document.getElementById('entry_1035456947').value = userNap;
+
+//reconocimientos
+document.getElementById('entry_1976955927').value = userLineupSelections [0];
+document.getElementById('entry_1006823805').value = userConfidenceLevels[0];
+document.getElementById('entry_114523550').value = userLineupSelections [1];
+document.getElementById('entry_1993344215').value = userConfidenceLevels[1];
+
+document.getElementById('entry_1220245853').value = userLineupSelections [2];
+document.getElementById('entry_1511974812').value = userConfidenceLevels[2];
+document.getElementById('entry_591454687').value = userLineupSelections [3];
+document.getElementById('entry_1654474234').value = userConfidenceLevels[3];
+document.getElementById('entry_1724594370').value = userLineupSelections [4];
+document.getElementById('entry_765485932').value = userConfidenceLevels[4];
+document.getElementById('entry_2054724147').value = userLineupSelections [5];
+document.getElementById('entry_540105700').value = userConfidenceLevels [5];
+document.getElementById('entry_1879992819').value = userLineupSelections [6];
+document.getElementById('entry_545488488').value = userConfidenceLevels [6];
+document.getElementById('entry_1138152553').value = userLineupSelections [7];
+document.getElementById('entry_2101045136').value = userConfidenceLevels [7];
+document.getElementById('entry_973497637').value = userLineupSelections [8];
+document.getElementById('entry_1051167862').value = userConfidenceLevels [8];
+document.getElementById('entry_1619698537').value = userLineupSelections [9];
+document.getElementById('entry_2100816218').value = userConfidenceLevels[9];
+
+//cuestionario final
+
+document.getElementById('entry.1217020151').value = firstSetAnswers  [0];
+document.getElementById('entry.952803505').value = firstSetAnswers  [1];
+document.getElementById('entry.1837406324').value = firstSetAnswers  [2];
+
+//Cronotipo
+document.getElementById('entry.484865147').value = reactionTimes[0];
+document.getElementById('entry.1733942759').value = reactionTimes[1];
+document.getElementById('entry.1399718921').value = reactionTimes[2];
+document.getElementById('entry.1591013530').value = reactionTimes[3];
+document.getElementById('entry.955137903').value = reactionTimes[4];
+document.getElementById('entry.791038620').value = reactionTimes[5];
+document.getElementById('entry.395361839').value = reactionTimes[6];
+document.getElementById('entry.1269112391').value = reactionTimes[7];
+document.getElementById('entry.223898318').value = reactionTimes[8];
+document.getElementById('entry.1267564744').value = reactionTimes[9];
+
+
+
+
+
+            // Enviar el formulario automáticamente
+            document.getElementById('googleForm').submit();
+        }
+
+function asignarRespuestasCronotipo(){
+  console.log( additionalQuestionAnswers);
+
+
+document.getElementById('entry.389458798').value = group;
+document.getElementById('entry_223455243').value = userName;
+document.getElementById('entry_2135024330').value = additionalQuestionAnswers[0];
+document.getElementById('entry_1478644393').value = additionalQuestionAnswers[1];
+document.getElementById('entry_370821162').value = additionalQuestionAnswers[2];
+document.getElementById('entry_466025918').value = additionalQuestionAnswers[3];
+document.getElementById('entry_1343533441').value = additionalQuestionAnswers[4];
+document.getElementById('entry_1237158535').value = additionalQuestionAnswers[5];
+document.getElementById('entry_508902244').value = additionalQuestionAnswers[6];
+document.getElementById('entry_1676515562').value = additionalQuestionAnswers[7];
+document.getElementById('entry_16998789').value = additionalQuestionAnswers[8];
+document.getElementById('entry_218193544').value = additionalQuestionAnswers[9];
+document.getElementById('entry_72257361').value = additionalQuestionAnswers[10];
+document.getElementById('entry_459874185').value = additionalQuestionAnswers[11];
+
+           // Enviar el formulario automáticamente
+           document.getElementById('cronotipoForm').submit();
 }
 
-// Function to assign responses and send to endpoint
-function assignResponses() {
-  const data = {
-    // User information (individual values)
-    group: group,
-    userName: userName,
-    userDevice: userDevice,
-    userStim: userStim,
-    userNap: userNap,
-    userId: userId,
-    userAgent: navigator.userAgent,
-    
-    // Recognition data (individual values for each lineup)
-    lineup1_selection: userLineupSelections[0] || "",
-    lineup1_confidence: userConfidenceLevels[0] || "",
-    lineup1_reactionTime: reactionTimes[0] || "",
-    
-    lineup2_selection: userLineupSelections[1] || "",
-    lineup2_confidence: userConfidenceLevels[1] || "",
-    lineup2_reactionTime: reactionTimes[1] || "",
-    
-    lineup3_selection: userLineupSelections[2] || "",
-    lineup3_confidence: userConfidenceLevels[2] || "",
-    lineup3_reactionTime: reactionTimes[2] || "",
-    
-    lineup4_selection: userLineupSelections[3] || "",
-    lineup4_confidence: userConfidenceLevels[3] || "",
-    lineup4_reactionTime: reactionTimes[3] || "",
-    
-    lineup5_selection: userLineupSelections[4] || "",
-    lineup5_confidence: userConfidenceLevels[4] || "",
-    lineup5_reactionTime: reactionTimes[4] || "",
-    
-    lineup6_selection: userLineupSelections[5] || "",
-    lineup6_confidence: userConfidenceLevels[5] || "",
-    lineup6_reactionTime: reactionTimes[5] || "",
-    
-    lineup7_selection: userLineupSelections[6] || "",
-    lineup7_confidence: userConfidenceLevels[6] || "",
-    lineup7_reactionTime: reactionTimes[6] || "",
-    
-    lineup8_selection: userLineupSelections[7] || "",
-    lineup8_confidence: userConfidenceLevels[7] || "",
-    lineup8_reactionTime: reactionTimes[7] || "",
-    
-    lineup9_selection: userLineupSelections[8] || "",
-    lineup9_confidence: userConfidenceLevels[8] || "",
-    lineup9_reactionTime: reactionTimes[8] || "",
-    
-    lineup10_selection: userLineupSelections[9] || "",
-    lineup10_confidence: userConfidenceLevels[9] || "",
-    lineup10_reactionTime: reactionTimes[9] || "",
-    
-    // Questionnaire data (individual values)
-    question1_answer: firstSetAnswers[0] || "",
-    question2_answer: firstSetAnswers[1] || "",
-    question3_answer: firstSetAnswers[2] || "",
-    
-    // Timestamp
-    timestamp: new Date().toISOString(),
-    
-    // Data type identifier
-    dataType: "main_study_data"
-  };
-
-  // Send data to endpoint
-  sendToEndpoint(data);
-  console.log("Main data sent:", data);
-}
-
-function assignChronotypeResponses() {
-  const chronotypeData = {
-    group: group,
-    userName: userName,
-    userId: userId,
-    userAgent: navigator.userAgent,
-    
-    // Chronotype questions (individual values)
-    chrono_workday_bedtime: additionalQuestionAnswers[0] || "",
-    chrono_workday_sleeptime: additionalQuestionAnswers[1] || "",
-    chrono_workday_fall_asleep_minutes: additionalQuestionAnswers[2] || "",
-    chrono_workday_wakeup: additionalQuestionAnswers[3] || "",
-    chrono_workday_alarm: additionalQuestionAnswers[4] || "",
-    chrono_workday_getup_minutes: additionalQuestionAnswers[5] || "",
-    chrono_nonworkday_bedtime: additionalQuestionAnswers[6] || "",
-    chrono_nonworkday_sleeptime: additionalQuestionAnswers[7] || "",
-    chrono_nonworkday_fall_asleep_minutes: additionalQuestionAnswers[8] || "",
-    chrono_nonworkday_wakeup: additionalQuestionAnswers[9] || "",
-    chrono_nonworkday_alarm: additionalQuestionAnswers[10] || "",
-    chrono_nonworkday_getup_minutes: additionalQuestionAnswers[11] || "",
-    
-    // Timestamp
-    timestamp: new Date().toISOString(),
-    
-    // Data type identifier
-    dataType: "chronotype_data"
-  };
-
-  // Send chronotype data to endpoint
-  sendToEndpoint(chronotypeData);
-  console.log("Chronotype data sent:", chronotypeData);
-
-
-}
+   
 </script>
 </body>
 </html>
