@@ -260,9 +260,9 @@
 </head>
 <body>
 
-    <div class="form-container" id="contenedorForm">
+    <div class="form-container" id="contenedorForm" >
         <div class="title">Formulario de Participación</div>
-        <div class="sub">
+        <div class="sub" id="sub">
             <h2 style="font-size: 24px; margin-bottom: 10px;">¡Hola!</h2>
             <p style="margin-bottom: 12px;">Este estudio forma parte de una investigación sobre memoria del Laboratorio de Sueño y Memoria (ITBA). Podes participar usando computadora, tablet o teléfono.</p>
             <ul style="margin: 12px 0; padding-left: 20px;">
@@ -273,9 +273,20 @@
             <p style="margin-bottom: 12px;">Este Protocolo fue aprobado por el Comité de Ética Humana (CEH), de la Facultad de Medicina UBA.</p>
             <p style="margin-bottom: 12px;">Para consultas específicas comunicate con la Lic. Candela Leon, al mail: cleon@itba.edu.ar, o la Dra Cecilia Forcato, al mail: cforcato@itba.edu.ar.</p>
               <p style="margin-bottom: 12px;"> La información recolectada durante este estudio será guardada confidencialmente dentro de lo que estipula la ley 25326 de protección de datos personales. Los resultados pueden ser publicados para propósitos científicos, pero la identidad de las personas participantes no será revelada.</p>
+              
+              <center>
+<button onclick="
+  document.getElementById('mainForm').style.display='block';
+  document.getElementById('sub').style.display='none';
+  this.style.display='none';
+">
+  Empezar
+</button>
+              </center>
+              
         </div>
 
-        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSe2EFZParwxK-S37_pMHtyCMowhwIRxwFhcqHGVWO2X2jIAKw/formResponse" method="POST" >
+        <form id="mainForm" action="https://docs.google.com/forms/d/e/1FAIpQLSe2EFZParwxK-S37_pMHtyCMowhwIRxwFhcqHGVWO2X2jIAKw/formResponse" method="POST" style="display: none;" >
             <div class="question-block">
                 <label class="question" for="email">Dirección de correo electrónico</label>
                 <input type="email" id="email" name="entry.1190073540" placeholder="Ingresa tu correo electrónico" required>
