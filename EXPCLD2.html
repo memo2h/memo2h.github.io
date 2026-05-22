@@ -484,7 +484,8 @@
 let grupoUsuario =0;
   
     // Asignar grupo aleatorio (1-4)
-    grupoUsuario = Math.floor(Math.random() * 4) + 1;    
+   const grupos = [1, 2, 3, 4, 6, 7];
+grupoUsuario = grupos[Math.floor(Math.random() * grupos.length)]; 
     
     document.getElementById('grupo').value = grupoUsuario;
     
@@ -966,7 +967,7 @@ if (imageResponses.length >= 10) {
         }
 
 
-         if (localStorage.getItem("HizoLaParte2?") === "YaHizoparte2CL") {
+         if (localStorage.getItem("HizoLaParte2?") === "YaHizoparte2CLPrueba") {
             document.getElementById("contenedorForm").style.display = "none";
             document.getElementById("instrucciones").style.display = "none";
             document.getElementById("instrucciones1").style.display = "none";
